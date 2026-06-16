@@ -1,0 +1,34 @@
+services:
+  # ─── Backend: Node.js API ───────────────────────────────────────────────────
+  - type: web
+    name: jobconnect-backend
+    env: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true          # Render auto-generates a secure secret
+      - key: DATABASE_URL
+        value: ""                    # ← Paste your Render PostgreSQL URL here
+
+  # ─── Frontend: Next.js ──────────────────────────────────────────────────────
+  - type: web
+    name: jobconnect-frontend
+    env: node
+    plan: free
+    region: singapore
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://jobconnect-backend.onrender.com  # Backend URL (update if renamed)
