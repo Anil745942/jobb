@@ -1,0 +1,10 @@
+node_modules/
+.env
+.gemini/
+*.log
+.system_generated/
+.DS_Store
+dist/
+build/
+.tempmediaStorage/
+task-*.log

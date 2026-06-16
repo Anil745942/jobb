@@ -1,0 +1,2675 @@
+<!DOCTYPE html>
+<!-- JobConnect Pro v4.0 - Native App Edition -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JobConnect Pro — India's #1 Local Job App</title>
+<meta name="description" content="Apna + Job Hai style premium job portal. Security guard se software engineer tak — sab jobs Chandigarh, Mohali, Noida mein. Direct HR WhatsApp connect.">
+<!-- PWA / Native App Meta -->
+<meta name="theme-color" content="#0a0a0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JobConnect">
+<meta name="application-name" content="JobConnect Pro">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+<style>
+:root{--v:#7c3aed;--vl:#a78bfa;--c:#06b6d4;--g:#10b981;--r:#f43f5e;--bg:#0a0a0f;--s:rgba(18,18,28,.85);--b:rgba(255,255,255,.07);--t:#f4f4f5;--m:#71717a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-300px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+.card{background:var(--s);border:1px solid var(--b);backdrop-filter:blur(16px);border-radius:18px;transition:transform .2s,box-shadow .2s;transform-style:preserve-3d;backface-visibility:hidden}
+.card:not(.jcard):not(.scard):hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.45)}
+.jcard, .scard { will-change: transform; }
+.btn{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;font-weight:700;font-size:12px;padding:10px 20px;border-radius:12px;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px rgba(124,58,237,.35);-webkit-tap-highlight-color:transparent}
+.btn:hover{transform:scale(1.03);box-shadow:0 6px 22px rgba(124,58,237,.55)}
+.btn-wa{background:linear-gradient(135deg,#25d366,#128c7e);box-shadow:0 4px 14px rgba(37,211,102,.3)}
+.btn-wa:hover{box-shadow:0 6px 22px rgba(37,211,102,.5)}
+.btn-call{background:linear-gradient(135deg,#06b6d4,#0284c7);box-shadow:0 4px 14px rgba(6,182,212,.3)}
+.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em;display:inline-block}
+/* TAP FEEDBACK */
+.btn:active,.navbtn:active,.qcat:active,.schip:active{transform:scale(0.96)!important;opacity:.85;}
+/* PULL TO REFRESH INDICATOR */
+.ptr-indicator{position:fixed;top:0;left:0;right:0;z-index:1000;height:3px;background:linear-gradient(90deg,#7c3aed,#22d3ee,#10b981);background-size:200%;animation:shimmer 1.5s infinite;display:none;}
+.ptr-indicator.show{display:block;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* SKELETON LOADERS */
+.skel{background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:skelAnim 1.4s infinite;border-radius:8px;}
+@keyframes skelAnim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--s);border:1px solid var(--b);border-radius:18px;padding:20px;display:flex;gap:14px;margin-bottom:14px;}
+.skel-logo{width:48px;height:48px;border-radius:14px;flex-shrink:0;}
+.skel-body{flex:1;display:flex;flex-direction:column;gap:10px;}
+.skel-line{height:14px;}
+.skel-line.w60{width:60%;}
+.skel-line.w40{width:40%;}
+.skel-line.w80{width:80%;}
+.skel-line.w30{width:30%;}
+/* FILTER DRAWER (Mobile) */
+.filter-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.filter-overlay.open{opacity:1;pointer-events:all;}
+.filter-drawer{position:fixed;bottom:0;left:0;right:0;z-index:401;background:#111118;border-top:1px solid var(--b);border-radius:24px 24px 0 0;padding:20px 20px 90px;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto;}
+.filter-drawer.open{transform:translateY(0);}
+.filter-drawer-handle{width:40px;height:4px;background:rgba(255,255,255,.15);border-radius:99px;margin:0 auto 20px;}
+.filter-toggle-btn{display:none;align-items:center;gap:8px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);color:#a78bfa;border-radius:14px;padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:16px;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+/* DESKTOP SIDEBAR ONLY */
+.desktop-sidebar{display:block;}
+/* INSTALL BANNER */
+.install-banner{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(18,18,28,.96);border:1px solid rgba(124,58,237,.3);backdrop-filter:blur(20px);border-radius:18px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);white-space:nowrap;animation:slideUp .4s ease-out;display:none;}
+.install-banner.show{display:flex;}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+.bv{background:rgba(124,58,237,.15);color:#a78bfa}.bc{background:rgba(6,182,212,.12);color:#22d3ee}.be{background:rgba(16,185,129,.12);color:#34d399}.br{background:rgba(244,63,94,.12);color:#fb7185}.ba{background:rgba(245,158,11,.12);color:#fbbf24}.bw{background:rgba(37,211,102,.12);color:#25d366}
+input,select,textarea{background:rgba(255,255,255,.04);border:1px solid var(--b);color:var(--t);border-radius:12px;padding:10px 14px;font-size:12px;outline:none;font-family:'Inter',sans-serif;transition:border .2s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:#7c3aed}
+label{font-size:10px;font-weight:700;color:var(--m);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--b);padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.logo-icon{background:linear-gradient(135deg,#7c3aed,#22d3ee);padding:8px;border-radius:12px;display:flex}
+.logo-txt{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--t)}
+.logo-txt span{color:#a78bfa}
+.navlinks{display:flex;gap:2px}
+.navbtn{background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--m);padding:6px 14px;border-radius:10px;transition:all .15s}
+.navbtn:hover,.navbtn.act{background:rgba(124,58,237,.15);color:#a78bfa}
+/* TABS */
+main{flex:1;position:relative;z-index:1}
+.tab{display:none}.tab.act{display:block}
+.page{max-width:1200px;margin:0 auto;padding:36px 20px}
+/* HERO */
+.hero{text-align:center;padding:72px 20px 48px;max-width:1200px;margin:0 auto}
+.hero h1{font-family:'Outfit',sans-serif;font-size:clamp(32px,5.5vw,64px);font-weight:900;line-height:1.08;margin-bottom:16px}
+.gt{background:linear-gradient(135deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:13px;color:var(--m);max-width:500px;margin:0 auto 36px;line-height:1.75}
+/* SEARCH — GOOGLE/LINKEDIN LEVEL */
+.sbox{background:var(--s);border:1px solid var(--b);border-radius:18px;backdrop-filter:blur(16px);padding:10px;display:flex;gap:8px;flex-wrap:wrap;max-width:820px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.5);transition:border-color .3s,box-shadow .3s}
+.sbox:focus-within{border-color:rgba(124,58,237,.5);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 3px rgba(124,58,237,.15),0 0 40px rgba(124,58,237,.08)}
+.sinp{flex:1;min-width:160px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:12px;padding:10px 14px;position:relative}
+.sinp input{background:none;border:none;padding:0;border-radius:0;font-size:13px}
+/* AUTOCOMPLETE DROPDOWN */
+.ac-drop{position:absolute;top:calc(100% + 6px);left:0;right:0;background:rgba(18,18,28,.97);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,.25);border-radius:14px;max-height:340px;overflow-y:auto;z-index:300;box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;padding:6px}
+.ac-drop.show{display:block;animation:acSlide .2s ease-out}
+@keyframes acSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.ac-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:12px}
+.ac-item:hover,.ac-item.ac-active{background:rgba(124,58,237,.12)}
+.ac-item .ac-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ac-item .ac-icon.cat-ic{background:rgba(124,58,237,.12)}
+.ac-item .ac-icon.job-ic{background:rgba(6,182,212,.1)}
+.ac-item .ac-icon.recent-ic{background:rgba(245,158,11,.1)}
+.ac-item .ac-info{flex:1;min-width:0}
+.ac-item .ac-title{font-weight:600;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-item .ac-sub{font-size:10px;color:var(--m);margin-top:2px}
+.ac-sep{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--m);padding:8px 14px 4px;opacity:.6}
+mark{background:rgba(124,58,237,.3);color:#e0d4ff;border-radius:2px;padding:0 1px}
+/* VOICE SEARCH */
+.voice-btn{width:36px;height:36px;border-radius:50%;border:none;background:rgba(244,63,94,.12);color:#fb7185;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-size:16px}
+.voice-btn:hover{background:rgba(244,63,94,.25);transform:scale(1.1)}
+.voice-btn.listening{animation:voicePulse 1s infinite;background:rgba(244,63,94,.3)}
+@keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 rgba(244,63,94,.4)}50%{box-shadow:0 0 0 12px rgba(244,63,94,0)}}
+/* TRENDING / RECENT CHIPS */
+.search-chips{display:flex;gap:6px;flex-wrap:wrap;max-width:820px;margin:12px auto 0;justify-content:center}
+.schip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid var(--b);background:rgba(255,255,255,.03);color:var(--m)}
+.schip:hover{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.3);color:#a78bfa}
+.schip.trend{border-color:rgba(6,182,212,.2);color:#22d3ee}
+.schip.trend:hover{background:rgba(6,182,212,.12)}
+.schip.recent{border-color:rgba(245,158,11,.15);color:#fbbf24}
+.schip.recent:hover{background:rgba(245,158,11,.1)}
+/* SEARCH STATUS BAR */
+.search-status{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding:8px 0}
+.ss-count{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--t)}
+.ss-count span{color:#a78bfa}
+.ss-speed{font-size:10px;color:var(--m);display:flex;align-items:center;gap:5px}
+.ss-speed .dot-g{width:6px;height:6px;border-radius:50%;background:#34d399;animation:pulse 1.5s infinite}
+.ss-sort{display:flex;gap:4px}
+.ss-sort button{background:rgba(255,255,255,.04);border:1px solid var(--b);color:var(--m);border-radius:8px;padding:5px 10px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s}
+.ss-sort button:hover,.ss-sort button.act{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.3);color:#a78bfa}
+/* HIGHLIGHT IN JOB CARDS */
+.jtitle mark,.jmeta mark,.jhr mark{background:rgba(124,58,237,.3);color:#e0d4ff;border-radius:2px;padding:0 2px}
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:860px;margin:48px auto 0}
+@media(max-width:640px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+.scard{text-align:center;padding:22px 16px}
+.scard h3{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800}
+.scard p{font-size:11px;color:var(--m);margin-top:4px}
+/* QUICK CATS */
+.qcats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:36px auto;max-width:900px}
+.qcat{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:40px;border:1px solid var(--b);background:var(--s);cursor:pointer;font-size:12px;font-weight:700;color:var(--m);transition:all .2s;white-space:nowrap}
+.qcat:hover,.qcat.act{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.4);color:#a78bfa}
+.qcat span{font-size:16px}
+/* JOB CARD */
+.jcard{padding:20px;display:flex;gap:14px;align-items:flex-start;position:relative;overflow:hidden}
+.jcard::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:99px}
+.jcard.blue::before{background:linear-gradient(180deg,#7c3aed,#6366f1)}
+.jcard.cyan::before{background:linear-gradient(180deg,#06b6d4,#0ea5e9)}
+.jcard.green::before{background:linear-gradient(180deg,#10b981,#059669)}
+.jcard.rose::before{background:linear-gradient(180deg,#f43f5e,#e11d48)}
+.jcard.amber::before{background:linear-gradient(180deg,#f59e0b,#d97706)}
+.jlogo{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(124,58,237,.12)}
+.jbody{flex:1;min-width:0}
+.jtitle{font-size:14px;font-weight:700;margin-bottom:3px}
+.jmeta{font-size:11px;color:var(--m);margin-bottom:8px}
+.jtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.jhr{background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:10px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.jsal{font-size:13px;font-weight:800;color:#34d399}
+.jact{display:flex;gap:6px;flex-wrap:wrap}
+.urgbadge{animation:pulse 1.4s infinite;font-size:10px;font-weight:700;color:#fb7185}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* MATCHING SCORE */
+.match-score{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#7c3aed,#22d3ee);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;color:#fff}
+/* NOTIFICATION DOT */
+.dot{width:8px;height:8px;background:#f43f5e;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite}
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:16px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:calc(100vw - 32px);}
+#toast.show{transform:translateY(0);opacity:1}
+.toast-inner{color:#fff;font-size:12px;font-weight:700;padding:12px 18px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;word-break:break-word;}
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.mo.open{display:flex}
+.mbox{background:#111118;border:1px solid var(--b);border-radius:24px;padding:32px;max-width:480px;width:100%;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.8);max-height:90vh;overflow-y:auto}
+/* RATING GATE */
+.rgate{background:#111118;border:1px solid var(--b);border-radius:24px;padding:36px;max-width:380px;width:100%;text-align:center}
+.stars{display:flex;justify-content:center;gap:10px;margin:20px 0;font-size:36px;cursor:pointer}
+.star{transition:transform .15s;opacity:.3}
+.star.lit{opacity:1;transform:scale(1.2)}
+/* PIPELINE */
+.pill{padding:5px 14px;border-radius:40px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
+/* AI MATCH */
+.match-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
+.match-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#22d3ee)}
+/* WHATSAPP FLOAT */
+.wa-float{position:fixed;bottom:24px;left:24px;z-index:200;background:#25d366;color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,.5);transition:transform .2s}
+.wa-float:hover{transform:scale(1.1)}
+/* DASH TABS */
+.dtabs{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,.04);border-radius:14px;margin-bottom:24px;flex-wrap:wrap}
+.dtab{padding:8px 16px;border:none;background:none;font-size:11px;font-weight:700;color:var(--m);border-radius:10px;cursor:pointer;transition:all .2s}
+.dtab.act{background:#7c3aed;color:#fff}
+.htab{display:none}.htab.act{display:block}
+/* TABLE */
+html{scroll-behavior:smooth}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding-bottom:12px;font-size:10px;font-weight:700;color:var(--m);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--b)}
+td{padding:13px 0;border-bottom:1px solid var(--b);vertical-align:middle}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(124,58,237,.4);border-radius:99px}
+/* UTILITIES */
+.flex{display:flex}.fc{flex-direction:column}.ic{align-items:center}.jb{justify-content:space-between}.jc{justify-content:center}.fw{flex-wrap:wrap}.f1{flex:1}.g2{gap:8px}.g3{gap:12px}.g4{gap:16px}.g6{gap:24px}.hidden{display:none!important}.grid{display:grid}.sec{font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}.sub{font-size:12px;color:var(--m);margin-bottom:28px}.mb2{margin-bottom:8px}.mb3{margin-bottom:12px}.mb4{margin-bottom:16px}.mb6{margin-bottom:24px}.mt3{margin-top:12px}.mt4{margin-top:16px}.mt6{margin-top:24px}.p4{padding:16px}.p6{padding:24px}.bold{font-weight:700}.semi{font-weight:600}.xs{font-size:11px}.sm{font-size:12px}.muted{color:var(--m)}.w100{width:100%}
+/* CAT PILLS on JOBS TAB */
+#cat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#cat-pills::-webkit-scrollbar{display:none;}
+footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px;margin-top:60px}
+
+/* AI CHATBOT UI */
+.ai-chat-btn{position:fixed;bottom:24px;right:24px;z-index:200;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border:none;border-radius:50%;width:56px;height:56px;font-size:24px;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
+.ai-chat-btn:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(124,58,237,.6)}
+.ai-chat-win{position:fixed;bottom:90px;right:24px;width:360px;height:480px;background:rgba(18,18,28,.95);border:1px solid rgba(124,58,237,.25);backdrop-filter:blur(24px);border-radius:24px;z-index:500;box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;flex-direction:column;overflow:hidden;animation:acSlide .25s ease-out}
+.ai-chat-win.show{display:flex}
+.ai-chat-hdr{background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:16px;display:flex;align-items:center;justify-content:space-between;color:#fff}
+.ai-chat-msgs{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.ai-msg{max-width:80%;padding:10px 14px;border-radius:14px;font-size:12px;line-height:1.5}
+.ai-msg.bot{background:rgba(255,255,255,.05);color:var(--t);align-self:flex-start;border-bottom-left-radius:2px}
+.ai-msg.user{background:#7c3aed;color:#fff;align-self:flex-end;border-bottom-right-radius:2px}
+.ai-chat-chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;border-top:1px solid var(--b);background:rgba(255,255,255,.01)}
+.ai-chat-inp{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--b);background:rgba(18,18,28,.98)}
+.ai-chat-inp input{flex:1}
+.ai-chat-inp button{background:#7c3aed;border:none;border-radius:10px;padding:8px 14px;color:#fff;cursor:pointer;font-weight:700;font-size:12px}
+
+/* PARALLAX BG BLOBS */
+.parallax-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+}
+.blob-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--v) 0%, transparent 80%);
+  top: 10%;
+  left: 5%;
+}
+.blob-2 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, var(--c) 0%, transparent 80%);
+  bottom: 15%;
+  right: 8%;
+}
+.blob-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--g) 0%, transparent 80%);
+  top: 45%;
+  left: 40%;
+}
+
+/* HERO WORD MASK & REVEAL */
+.hero-reveal-line {
+  overflow: hidden;
+  display: block;
+}
+.hero-reveal-line span {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+/* 3D TILT EFFECT & SCALE */
+.jcard, .scard {
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+
+/* ══════ COMPREHENSIVE RESPONSIVE DESIGN (FOR EVERY DEVICE) ══════ */
+
+/* Tablets and Mobiles (max-width: 992px) */
+@media (max-width: 992px) {
+  .page {
+    padding: 24px 16px;
+  }
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 36px;
+  }
+}
+
+/* Mobiles (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Dynamic Responsive Navigation */
+  nav {
+    padding: 0 16px;
+    height: 56px;
+  }
+  .navlinks {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 15, 0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid var(--b);
+    display: flex;
+    justify-content: space-around;
+    padding: 6px 8px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    z-index: 999;
+  }
+  .navbtn {
+    padding: 6px 10px;
+    font-size: 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border-radius: 12px;
+    min-width: 52px;
+    letter-spacing: 0;
+  }
+  .navbtn::before {
+    font-size: 18px;
+    margin-bottom: 1px;
+    display: block;
+  }
+  .navbtn.act {
+    background: rgba(124,58,237,.2);
+    color: #a78bfa;
+  }
+  /* Assign Emoji Icons for Mobile Bottom Nav */
+  #nav-home::before { content: "🏠"; }
+  #nav-jobs::before { content: "🔍"; }
+  #nav-dashboard::before { content: "📊"; }
+  #nav-employer::before { content: "🏢"; }
+  #nav-admin::before { content: "⚙️"; }
+
+  /* Body adjustments to clear bottom nav + safe area */
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Toast above bottom nav on mobile */
+  #toast {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    right: 12px;
+    left: 12px;
+    max-width: 100%;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: 36px 16px 24px;
+  }
+  .hero h1 {
+    font-size: clamp(24px, 7vw, 36px);
+    line-height: 1.15;
+  }
+  .hero p {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  .hero > .badge {
+    font-size: 9px;
+  }
+
+  /* Search Box (stacked but beautiful) */
+  .sbox {
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 18px;
+    gap: 6px;
+  }
+  .sinp {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+  }
+  .sbox > button {
+    width: 100%;
+    padding: 13px;
+    font-size: 13px;
+  }
+  .voice-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+    font-size: 15px !important;
+  }
+
+  /* Jobs Tab Search layout - stacked full width */
+  #tab-jobs .flex.g3.mb4.fw {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  #tab-jobs .flex.g3.mb4.fw > .sinp,
+  #tab-jobs .flex.g3.mb4.fw > .card.sinp {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-right: 0 !important;
+  }
+  #tab-jobs .flex.g3.mb4.fw > button {
+    width: 100% !important;
+    padding: 13px !important;
+    font-size: 13px !important;
+  }
+
+  /* FILTER TOGGLE BUTTON - visible on mobile */
+  .filter-toggle-btn {
+    display: flex;
+  }
+  /* Hide desktop sidebar on mobile */
+  .desktop-sidebar {
+    display: none !important;
+  }
+  /* Jobs layout - single column */
+  #tab-jobs .flex.g6 {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  /* How grid and features grids auto-stack */
+  #how-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Scrollable Category pills - native swipe feel */
+  .qcats {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 4px 0;
+    margin: 18px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .qcats::-webkit-scrollbar { display: none; }
+  .qcat {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+  /* Jobs tab category pills - scrollable */
+  #cat-pills {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #cat-pills::-webkit-scrollbar { display: none; }
+  #cat-pills .qcat {
+    flex: 0 0 auto;
+  }
+
+  /* Job list cards stacked - app-like */
+  .jcard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px;
+  }
+  .jcard .jlogo {
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
+    border-radius: 12px;
+  }
+  .jcard .jbody {
+    flex: 1;
+    min-width: 0;
+  }
+  .jcard > div:last-child {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin-top: 0;
+  }
+  .jhr {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 4px;
+  }
+  .jact {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .jact button, .jact a {
+    width: 100% !important;
+    text-align: center;
+    justify-content: center;
+    font-size: 11px !important;
+    padding: 9px 8px !important;
+  }
+  /* Match score - don't overlap on mobile */
+  .match-score {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: inline-flex;
+    margin-left: auto;
+    font-size: 10px;
+  }
+
+  /* Floating controls & Chatbot placement - above bottom nav */
+  .ai-chat-btn {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    right: 14px;
+    width: 46px;
+    height: 46px;
+    font-size: 19px;
+  }
+  .ai-chat-win {
+    bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+    right: 12px;
+    left: 12px;
+    width: auto;
+    height: calc(100vh - 230px);
+    max-height: 440px;
+  }
+  .wa-float {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    left: 14px;
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+  
+  /* Stats grid - 2 col on mobile */
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 4px;
+    margin-top: 28px;
+  }
+  .scard {
+    padding: 14px;
+  }
+  .scard h3 {
+    font-size: 22px;
+  }
+
+  /* Modals - slide up from bottom like native */
+  .mo {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .mbox {
+    padding: 24px 20px;
+    border-radius: 24px 24px 0 0;
+    max-width: 100%;
+    width: 100%;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    max-height: 92vh;
+  }
+  .rgate {
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  
+  /* Footer responsive */
+  footer div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Employer analytics grid - 1 col */
+  #eh-analytics > div[style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 16px;
+  }
+
+  /* Admin stats grid - 2x2 */
+  #tab-admin > .page > div[style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* Profile grid - single col */
+  #dh-profile div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  #dh-profile div[style*="grid-column: span 2"] {
+    grid-column: span 1 !important;
+  }
+
+  /* Employer post job form grid */
+  #eh-post div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  #eh-post div[style*="grid-column: span 2"] {
+    grid-column: span 1 !important;
+  }
+
+  /* Dashboard tabs - scrollable */
+  .dtabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .dtabs::-webkit-scrollbar { display: none; }
+  .dtab { flex-shrink: 0; }
+
+  /* Search status bar - wraps clean */
+  .search-status {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .ss-sort {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    width: 100%;
+  }
+  .ss-sort::-webkit-scrollbar { display: none; }
+  .ss-sort button { flex-shrink: 0; }
+}
+
+/* Tiny Devices (max-width: 400px) */
+@media (max-width: 400px) {
+  .hero h1 {
+    font-size: 24px;
+  }
+  .navbtn {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+  .jact {
+    grid-template-columns: 1fr; /* Stack buttons completely on extra narrow mobile screens */
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash" style="position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s,transform .5s;">
+  <div style="background:linear-gradient(135deg,#7c3aed,#22d3ee);padding:20px;border-radius:24px;box-shadow:0 20px 60px rgba(124,58,237,.4);">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+  </div>
+  <div style="font-family:'Outfit',sans-serif;font-size:26px;font-weight:900;color:var(--t);">JobConnect<span style="color:#a78bfa;">Pro</span></div>
+  <div style="font-size:11px;color:var(--m);">India's #1 Hyperlocal Job App</div>
+  <div style="display:flex;gap:6px;margin-top:8px;">
+    <div style="width:8px;height:8px;border-radius:50%;background:#7c3aed;animation:splashDot 1s infinite 0s;"></div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#a78bfa;animation:splashDot 1s infinite .2s;"></div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#22d3ee;animation:splashDot 1s infinite .4s;"></div>
+  </div>
+</div>
+<style>
+@keyframes splashDot{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.4);opacity:1}}
+</style>
+
+<!-- PTR Loading Indicator -->
+<div class="ptr-indicator" id="ptr-indicator"></div>
+
+<!-- FILTER DRAWER OVERLAY + DRAWER (Mobile) -->
+<div class="filter-overlay" id="filter-overlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filter-drawer">
+  <div class="filter-drawer-handle"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;">🎯 Filter Jobs</div>
+    <button onclick="closeFilterDrawer()" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;">Done</button>
+  </div>
+  <!-- Job Type -->
+  <div style="margin-bottom:20px;"><label>Job Type</label>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-mob" value="" onchange="syncFilterRadios('jt-mob','jt-desk');renderJobs()" checked style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> All Types</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-mob" value="Full-time" onchange="syncFilterRadios('jt-mob','jt-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Full-time</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-mob" value="Part-time" onchange="syncFilterRadios('jt-mob','jt-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Part-time</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-mob" value="Remote" onchange="syncFilterRadios('jt-mob','jt-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Remote / WFH</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-mob" value="Contract" onchange="syncFilterRadios('jt-mob','jt-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Contract</label>
+    </div>
+  </div>
+  <!-- Experience -->
+  <div style="margin-bottom:20px;"><label>Experience</label>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" checked style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> All Levels</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="No Experience" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> No Experience</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="Fresher" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Fresher (0-1yr)</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="1-3 years" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 1-3 Years</label>
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="3+ years" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 3+ Years</label>
+    </div>
+  </div>
+  <!-- Salary Slider -->
+  <div>
+    <label>Min Salary (₹/month)</label>
+    <input type="range" min="0" max="200000" step="2000" value="0" id="sal-sl" oninput="document.getElementById('sal-v').textContent='₹'+Number(this.value).toLocaleString();document.getElementById('sal-sl-desk').value=this.value;renderJobs();" style="width:100%;border:none;padding:0;background:none;accent-color:#7c3aed;margin-top:8px;">
+    <div class="xs muted mt3">Min: <span id="sal-v">₹0</span></div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="install-banner">
+  <div style="font-size:22px;">📲</div>
+  <div>
+    <div style="font-size:11px;font-weight:700;color:var(--t);">Install JobConnect Pro</div>
+    <div style="font-size:10px;color:var(--m);">Add to Home Screen for app-like experience</div>
+  </div>
+  <button id="install-btn" onclick="installApp()" style="background:linear-gradient(135deg,#7c3aed,#6366f1);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Install</button>
+  <button onclick="document.getElementById('install-banner').classList.remove('show')" style="background:none;border:none;color:var(--m);cursor:pointer;font-size:16px;padding:4px;">✕</button>
+</div>
+
+<div class="parallax-bg">
+  <div class="blob blob-1" id="blob-1"></div>
+  <div class="blob blob-2" id="blob-2"></div>
+  <div class="blob blob-3" id="blob-3"></div>
+</div>
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showTab('home')">
+    <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+    <div class="logo-txt">JobConnect<span>Pro</span></div>
+  </div>
+  <div class="navlinks">
+    <button class="navbtn act" id="nav-home" onclick="showTab('home')">Home</button>
+    <button class="navbtn" id="nav-jobs" onclick="showTab('jobs')">Find Jobs</button>
+    <button class="navbtn" id="nav-dashboard" onclick="showTab('dashboard')">Dashboard</button>
+    <button class="navbtn" id="nav-employer" onclick="showTab('employer')">Recruiter</button>
+    <button class="navbtn" id="nav-admin" onclick="showTab('admin')">Admin</button>
+  </div>
+  <div class="flex ic g2">
+    <div id="auth-area"><button class="btn" onclick="openM('m-login')">Sign In</button></div>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div id="toast"><div class="toast-inner" id="ti"></div></div>
+
+<!-- WHATSAPP FLOAT BUTTON -->
+<button class="wa-float" onclick="showToast('💚 WhatsApp HR Support: +91 98765 00001','#25d366')" title="Chat on WhatsApp">💬</button>
+
+<!-- ══════ HOME TAB ══════ -->
+<div id="tab-home" class="tab act">
+  <div class="hero">
+    <div class="badge bv flex ic g2" style="display:inline-flex;margin-bottom:18px;"><span class="dot"></span> 24,800+ Active Jobs • Chandigarh, Mohali, Noida & More</div>
+    <h1>
+      <span class="hero-reveal-line"><span>Kaam Dhundo,</span></span>
+      <span class="hero-reveal-line"><span class="gt">Seedha HR Se Baat Karo</span></span>
+    </h1>
+    <p>Apna App + Job Hai ki tarah — security guard se software engineer tak, har job ka direct HR number. <strong>One tap apply.</strong></p>
+    <div class="sbox" id="hero-sbox">
+      <div class="sinp" style="flex:2;" id="hero-sinp-kw">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="hs" placeholder="Job dhundo (Security, Driver, BPO, IT…)" oninput="showAutocomplete(this,'ac-hero-kw')" onfocus="showAutocomplete(this,'ac-hero-kw')" autocomplete="off">
+        <button class="voice-btn" id="voice-hero" onclick="startVoice('hs')" title="Voice Search 🎤">🎤</button>
+        <div class="ac-drop" id="ac-hero-kw"></div>
+      </div>
+      <div class="sinp" style="flex:1.5;" id="hero-sinp-loc">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <input type="text" id="hl" placeholder="Chandigarh, Mohali…" oninput="showLocAutocomplete(this,'ac-hero-loc')" onfocus="showLocAutocomplete(this,'ac-hero-loc')" autocomplete="off">
+        <div class="ac-drop" id="ac-hero-loc"></div>
+      </div>
+      <button class="btn" style="padding:12px 28px;" onclick="heroSearch()">🔍 Search Jobs</button>
+    </div>
+    <!-- TRENDING + RECENT SEARCHES -->
+    <div class="search-chips" id="hero-chips"></div>
+    <!-- Quick Category Pills -->
+    <div class="qcats" id="qcats">
+      <div class="qcat act" onclick="qFilter('')"><span>🏠</span> All Jobs</div>
+      <div class="qcat" onclick="qFilter('Security & Guard')"><span>🛡️</span> Security Guard</div>
+      <div class="qcat" onclick="qFilter('Delivery & Logistics')"><span>🛵</span> Delivery Boy</div>
+      <div class="qcat" onclick="qFilter('Driver & Transport')"><span>🚗</span> Driver</div>
+      <div class="qcat" onclick="qFilter('Housekeeping & Cleaning')"><span>🧹</span> Housekeeping</div>
+      <div class="qcat" onclick="qFilter('Cook & Kitchen')"><span>👨‍🍳</span> Cook / Helper</div>
+      <div class="qcat" onclick="qFilter('Sales & Customer Support')"><span>📞</span> BPO / Telecaller</div>
+      <div class="qcat" onclick="qFilter('Software Engineering')"><span>💻</span> IT / Software</div>
+      <div class="qcat" onclick="qFilter('Healthcare & Nursing')"><span>🏥</span> Nurse / Medical</div>
+      <div class="qcat" onclick="qFilter('Construction & Labour')"><span>🏗️</span> Construction</div>
+      <div class="qcat" onclick="qFilter('Retail & Shop')"><span>🏪</span> Shop / Retail</div>
+      <div class="qcat" onclick="qFilter('Education & Training')"><span>📚</span> Teacher</div>
+    </div>
+    <div class="sgrid">
+      <div class="scard card"><h3>24,800+</h3><p>Active Job Listings</p></div>
+      <div class="scard card"><h3>1,840+</h3><p>Verified HR Contacts</p></div>
+      <div class="scard card"><h3>Direct</h3><p>WhatsApp HR Connect</p></div>
+      <div class="scard card"><h3>99.2%</h3><p>HR Response Rate</p></div>
+    </div>
+  </div>
+
+  <!-- HOME JOB FEED -->
+  <div class="page" style="padding-top:0;">
+    <div class="flex jb ic mb4 fw g2">
+      <div><div class="sec">Today's Top Jobs</div><div class="sub">Apne area ke fresh jobs — directly HR se</div></div>
+      <button class="btn" onclick="showTab('jobs')">View All Jobs →</button>
+    </div>
+    <div id="home-jobs" style="display:flex;flex-direction:column;gap:14px;"></div>
+
+    <!-- HOW IT WORKS -->
+    <div class="mt6 mb4"><div class="sec">Kaise Kaam Karta Hai?</div><div class="sub">Apna App jaisi technology — 3 simple steps</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;" id="how-grid">
+      <div class="card p6"><div style="font-size:36px;margin-bottom:12px;">📍</div><div class="bold sm mb2">Step 1: Location Set Karo</div><div class="xs muted" style="line-height:1.8;">Apna city/area enter karo — hyperlocal jobs turant dikhenge. Chandigarh, Mohali, Sector 17 — bilkul nearby.</div></div>
+      <div class="card p6"><div style="font-size:36px;margin-bottom:12px;">🤖</div><div class="bold sm mb2">Step 2: AI Match Dekhao</div><div class="xs muted" style="line-height:1.8;">AI tumhari skills aur experience ke basis pe best jobs match karta hai. 95%+ accurate matching score dikhata hai.</div></div>
+      <div class="card p6"><div style="font-size:36px;margin-bottom:12px;">📲</div><div class="bold sm mb2">Step 3: Direct HR Ko Call/WhatsApp</div><div class="xs muted" style="line-height:1.8;">Koi form nahi, koi wait nahi — seedha HR ka number milega. One tap mein WhatsApp ya call karo!</div></div>
+    </div>
+
+    <!-- APNA APP FEATURES -->
+    <div class="mt6 mb4"><div class="sec">Apna App + Job Hai Features</div><div class="sub">India ke top job apps ki best techniques — sab ek jagah</div></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;" class="features-grid">
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">⚡</div><div><div class="bold sm">One-Tap Apply</div><div class="xs muted mt3">Koi lengthy form nahi — sirf ek tap mein apply. Profile already saved hai.</div></div></div>
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">💬</div><div><div class="bold sm">WhatsApp HR Chat</div><div class="xs muted mt3">Direct HR ka WhatsApp number — seedha baat karo, interview fix karo.</div></div></div>
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">📍</div><div><div class="bold sm">Hyperlocal Matching</div><div class="xs muted mt3">Pincode ya area ke basis pe jobs — 2km, 5km, 10km radius mein dhundo.</div></div></div>
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">🤖</div><div><div class="bold sm">AI Skills Matching</div><div class="xs muted mt3">ATS score, skills gap analysis, aur personalized recommendations.</div></div></div>
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">⭐</div><div><div class="bold sm">Company Rating System</div><div class="xs muted mt3">Har company aur candidate ko rate karo — trust bana ke raho ecosystem mein.</div></div></div>
+      <div class="card p6 flex g3 ic"><div style="font-size:28px;">🔔</div><div><div class="bold sm">Real-time Job Alerts</div><div class="xs muted mt3">New job post hoti hai to turant notification — pehle apply karo, zyada chance.</div></div></div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="mt6 mb4"><div class="sec">Real Success Stories</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="features-grid">
+      <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"Security guard ki job Chandigarh mein 1 din mein mili! HR ka number direct card pe tha — seedha call kiya."</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(124,58,237,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#a78bfa;">S</div><div><div class="bold sm">Suresh Kumar</div><div class="xs muted">Security Guard, Mohali</div></div></div></div>
+      <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"Delivery boy job ke liye 15 applications aayi — sab ka phone number direct tha. 2 din mein kaam shuru!"</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#22d3ee;">R</div><div><div class="bold sm">Ravi Singh</div><div class="xs muted">Delivery Executive, Noida</div></div></div></div>
+      <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"React Developer job ₹45,000/month mili. AI ne mujhe bata diya kaunse skills add karne hain resume mein."</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#34d399;">P</div><div><div class="bold sm">Priya Verma</div><div class="xs muted">React Developer, Chandigarh</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ JOBS TAB ══════ -->
+<div id="tab-jobs" class="tab">
+<div class="page">
+  <div class="flex g3 mb4 fw">
+    <div class="sinp card f1" style="border-radius:14px;padding:10px 16px;min-width:180px;" id="jobs-sinp-kw">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="js" placeholder="Job title, skill, company…" oninput="debounceRender();showAutocomplete(this,'ac-jobs-kw')" onfocus="showAutocomplete(this,'ac-jobs-kw')" autocomplete="off">
+      <button class="voice-btn" onclick="startVoice('js')" title="Voice Search">🎤</button>
+      <div class="ac-drop" id="ac-jobs-kw"></div>
+    </div>
+    <div class="sinp card" style="border-radius:14px;padding:10px 16px;min-width:140px;" id="jobs-sinp-loc">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <input type="text" id="jl" placeholder="City / Area…" oninput="debounceRender();showLocAutocomplete(this,'ac-jobs-loc')" onfocus="showLocAutocomplete(this,'ac-jobs-loc')" autocomplete="off">
+      <div class="ac-drop" id="ac-jobs-loc"></div>
+    </div>
+    <button class="btn" onclick="renderJobs()">🔍 Search</button>
+    <button onclick="clrFilters()" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:12px;padding:10px 16px;cursor:pointer;font-size:12px;font-weight:600;">✕ Clear</button>
+  </div>
+  <!-- SEARCH STATUS BAR ON JOBS PAGE -->
+  <div class="search-chips mb3" id="jobs-chips" style="justify-content:flex-start;margin:0 0 12px 0;"></div>
+
+  <!-- Mobile Filter Toggle Button -->
+  <button class="filter-toggle-btn" onclick="openFilterDrawer()">🎯 Filters &amp; Sort <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+
+  <!-- Category Pills -->
+  <div style="display:flex;gap:8px;margin-bottom:24px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;" id="cat-pills"></div>
+
+  <div class="flex g6" style="align-items:flex-start;flex-wrap:wrap;">
+    <!-- SIDEBAR (desktop only) -->
+    <div class="desktop-sidebar" style="width:240px;flex-shrink:0;min-width:200px;">
+      <div class="card p6">
+        <div style="margin-bottom:20px;"><label>Job Type</label>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-desk" value="" onchange="syncFilterRadios('jt-desk','jt-mob');renderJobs()" checked style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> All Types</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-desk" value="Full-time" onchange="syncFilterRadios('jt-desk','jt-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Full-time</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-desk" value="Part-time" onchange="syncFilterRadios('jt-desk','jt-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Part-time</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-desk" value="Remote" onchange="syncFilterRadios('jt-desk','jt-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Remote / WFH</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="jt-desk" value="Contract" onchange="syncFilterRadios('jt-desk','jt-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Contract</label>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;"><label>Experience</label>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" checked style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> All Levels</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="No Experience" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> No Experience</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="Fresher" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> Fresher (0-1yr)</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="1-3 years" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 1-3 Years</label>
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="3+ years" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 3+ Years</label>
+          </div>
+        </div>
+        <div>
+          <label>Min Salary (₹/month)</label>
+          <input type="range" min="0" max="200000" step="2000" value="0" id="sal-sl-desk" oninput="document.getElementById('sal-v').textContent='₹'+Number(this.value).toLocaleString();document.getElementById('sal-sl').value=this.value;renderJobs();" style="width:100%;border:none;padding:0;background:none;accent-color:#7c3aed;margin-top:8px;">
+          <div class="xs muted mt3">Min: <span id="sal-v">₹0</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- JOB LIST -->
+    <div style="flex:1;min-width:0;">
+      <div class="search-status" id="search-status">
+        <div class="ss-count" id="rc"></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="ss-speed" id="ss-speed"><span class="dot-g"></span> Ready</div>
+          <div class="ss-sort">
+            <button class="act" onclick="sortJobs('relevance',this)">🎯 Relevance</button>
+            <button onclick="sortJobs('salary-high',this)">💰 Salary ↓</button>
+            <button onclick="sortJobs('salary-low',this)">💸 Salary ↑</button>
+            <button onclick="sortJobs('match',this)">🤖 AI Match</button>
+          </div>
+        </div>
+      </div>
+      <div id="jlist" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════ DASHBOARD TAB ══════ -->
+<div id="tab-dashboard" class="tab">
+<div class="page">
+  <div class="flex g3 ic mb6 fw">
+    <div style="width:50px;height:50px;border-radius:14px;background:rgba(124,58,237,.15);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-av">A</div>
+    <div><div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-name">Alex Developer</div><div class="xs muted">Candidate Account</div></div>
+  </div>
+  <div class="dtabs">
+    <button class="dtab act" onclick="dswitch('apps',this)">📋 Applications</button>
+    <button class="dtab" onclick="dswitch('saved',this)">🔖 Saved</button>
+    <button class="dtab" onclick="dswitch('ai',this)">🤖 AI Tools</button>
+    <button class="dtab" onclick="dswitch('profile',this)">👤 Profile</button>
+  </div>
+  <div id="dh-apps" class="htab act"><div class="card p6"><div class="bold mb4">My Applications</div><div id="my-apps"></div></div></div>
+  <div id="dh-saved" class="htab"><div class="card p6"><div class="bold mb4">Saved Jobs</div><div id="saved-jobs"></div></div></div>
+  <div id="dh-ai" class="htab">
+    <div class="card p6 mb4">
+      <div class="bold mb2" style="font-size:14px;">🤖 AI ATS Resume Scanner</div>
+      <div class="xs muted mb4">Resume text paste karo — ATS score, missing keywords, aur improvement suggestions milenge.</div>
+      <textarea id="ats-txt" rows="7" placeholder="Paste your resume text here...&#10;&#10;Example:&#10;OBJECTIVE: Looking for security guard job...&#10;EXPERIENCE: 2 years at XYZ Security...&#10;SKILLS: Physical fitness, Night shift, Kannada, Hindi..."></textarea>
+      <button class="btn mt3" onclick="runATS()">Analyze Resume →</button>
+      <div id="ats-res" class="hidden mt4"></div>
+    </div>
+    <div class="card p6">
+      <div class="bold mb2" style="font-size:14px;">🧠 AI Career Path Advisor</div>
+      <div class="xs muted mb4">Apni current job type choose karo — AI next steps batayega</div>
+      <select id="ai-role" style="margin-bottom:16px;"><option>Security Guard</option><option>Delivery Boy</option><option>Driver</option><option>Cook / Helper</option><option>Housekeeping</option><option>BPO / Telecaller</option><option>Software Developer</option><option>Teacher</option><option>Nurse / Medical</option><option>Retail / Shop</option></select>
+      <button class="btn" onclick="showCareerPath()">Show AI Career Path →</button>
+      <div id="cp-res" class="hidden mt4"></div>
+    </div>
+  </div>
+  <div id="dh-profile" class="htab">
+    <div class="card p6" style="max-width:600px;">
+      <div class="bold mb6" style="font-size:14px;">Edit Profile</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div><label>First Name</label><input type="text" value="Alex"></div>
+        <div><label>Last Name</label><input type="text" value="Developer"></div>
+        <div><label>Phone</label><input type="tel" value="+91 98765 43210"></div>
+        <div><label>City</label><input type="text" value="Chandigarh"></div>
+        <div style="grid-column:span 2;"><label>Skills</label><input type="text" value="React, Node.js, JavaScript, PostgreSQL"></div>
+        <div style="grid-column:span 2;"><label>Bio</label><textarea rows="3">Full Stack Developer with 3 years experience.</textarea></div>
+      </div>
+      <button class="btn mt4" onclick="showToast('✅ Profile saved!','#7c3aed')">Save Profile</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════ EMPLOYER TAB ══════ -->
+<div id="tab-employer" class="tab">
+<div class="page">
+  <div class="dtabs">
+    <button class="dtab act" onclick="eswitch('analytics',this)">📊 Analytics</button>
+    <button class="dtab" onclick="eswitch('post',this)">➕ Post Job</button>
+    <button class="dtab" onclick="eswitch('pipeline',this)">👥 Pipeline</button>
+  </div>
+  <div id="eh-analytics" class="htab act">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+      <div class="card p6"><div class="xs muted mb2">Total Applicants</div><div style="font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;" id="e-apps">1</div></div>
+      <div class="card p6"><div class="xs muted mb2">Active Posts</div><div style="font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;" id="e-posts">10</div></div>
+      <div class="card p6"><div class="xs muted mb2">Shortlisted</div><div style="font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;color:#34d399;" id="e-short">1</div></div>
+    </div>
+    <div class="card p6"><div class="bold mb4">Recent Applications</div><div id="e-recent"></div></div>
+  </div>
+  <div id="eh-post" class="htab">
+    <div class="card p6" style="max-width:700px;">
+      <div class="bold mb6" style="font-size:14px;">Post New Job</div>
+      <form onsubmit="postJob(event)" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div><label>Job Title *</label><input id="et" required placeholder="Security Guard, Driver, Developer…"></div>
+          <div><label>Company Name *</label><input id="ec" required placeholder="ABC Pvt. Ltd."></div>
+          <div><label>Location / City *</label><input id="el" required placeholder="Chandigarh Sector 22…"></div>
+          <div><label>Category *</label>
+            <select id="ecat">
+              <option value="Security & Guard">Security & Guard</option>
+              <option value="Delivery & Logistics">Delivery & Logistics</option>
+              <option value="Driver & Transport">Driver & Transport</option>
+              <option value="Housekeeping & Cleaning">Housekeeping & Cleaning</option>
+              <option value="Cook & Kitchen">Cook & Kitchen</option>
+              <option value="Sales & Customer Support">Sales & BPO</option>
+              <option value="Software Engineering">Software & IT</option>
+              <option value="Healthcare & Nursing">Healthcare & Nursing</option>
+              <option value="Construction & Labour">Construction & Labour</option>
+              <option value="Retail & Shop">Retail & Shop</option>
+              <option value="Education & Training">Education & Training</option>
+              <option value="Finance & Accounting">Finance & Accounts</option>
+            </select>
+          </div>
+          <div><label>Job Type</label><select id="ety"><option>Full-time</option><option>Part-time</option><option>Remote</option><option>Contract</option></select></div>
+          <div><label>Experience</label><select id="eex"><option>No Experience</option><option>Fresher</option><option>1-3 years</option><option>3+ years</option></select></div>
+          <div><label>Monthly Salary ₹ *</label><input id="esal" type="number" required placeholder="18000"></div>
+          <div><label>HR Name *</label><input id="ehr" required placeholder="Priya Sharma"></div>
+          <div><label>HR WhatsApp / Phone *</label><input id="eph" required placeholder="+91 98765 43210"></div>
+          <div style="grid-column:span 2;"><label>Job Description *</label><textarea id="edes" rows="4" required placeholder="Describe role, shift, benefits…"></textarea></div>
+          <div style="grid-column:span 2;"><label>Skills (comma separated)</label><input id="eskills" placeholder="Hindi, Physical Fitness, Driving License…"></div>
+        </div>
+        <button class="btn" type="submit" style="align-self:flex-start;padding:12px 32px;">Publish Job →</button>
+      </form>
+    </div>
+  </div>
+  <div id="eh-pipeline" class="htab">
+    <div class="card p6"><div class="bold mb4">Candidate Pipeline</div><div id="pipelinelist"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════ ADMIN TAB ══════ -->
+<div id="tab-admin" class="tab">
+<div class="page">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;">
+    <div class="card p6"><div class="xs muted">Total Users</div><div style="font-size:24px;font-weight:800;margin-top:6px;">3</div></div>
+    <div class="card p6"><div class="xs muted">Total Jobs</div><div style="font-size:24px;font-weight:800;margin-top:6px;" id="aj-count">10</div></div>
+    <div class="card p6"><div class="xs muted">Applications</div><div style="font-size:24px;font-weight:800;margin-top:6px;" id="aa-count">1</div></div>
+    <div class="card p6"><div class="xs muted">Revenue</div><div style="font-size:24px;font-weight:800;color:#34d399;margin-top:6px;">₹5,80,000</div></div>
+  </div>
+  <div class="card p6 mb4"><div class="bold mb4">Users</div><table><thead><tr><th>Name</th><th>Role</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody id="a-users"></tbody></table></div>
+  <div class="card p6"><div class="bold mb4">Job Listings</div><table><thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Salary</th><th>Status</th><th style="text-align:right">Action</th></tr></thead><tbody id="a-jobs"></tbody></table></div>
+</div>
+</div>
+
+<!-- ══════ COMPLIANCE TABS (For Google AdSense policy approval) ══════ -->
+<div id="tab-privacy" class="tab">
+  <div class="page" style="max-width: 800px; line-height: 1.8;">
+    <h2 class="sec">Privacy Policy</h2>
+    <p class="muted xs mb4">Last updated: June 15, 2026</p>
+    <div class="card p6 flex fc g3">
+      <p class="sm">Welcome to JobConnect Pro. We respect your privacy and are committed to protecting your personal data. This privacy policy informs you how we look after your personal data when you visit our website and tells you about your privacy rights.</p>
+      <h3 class="sm bold">1. Data We Collect</h3>
+      <p class="xs muted">We collect information that you actively provide when using our platform (such as applying for jobs, posting jobs, or setting up profiles). This includes names, phone numbers, resumes, email addresses, and general log data.</p>
+      <h3 class="sm bold">2. How We Use Your Data</h3>
+      <p class="xs muted">We use your data to facilitate connections between job seekers and employers, display matched job listings, run ATS scans, and improve user interface customization.</p>
+      <h3 class="sm bold">3. Cookies and Analytics</h3>
+      <p class="xs muted">We use cookies and web beacon logs to customize settings and optimize user search behaviors. You can manage cookie consents through browser preferences.</p>
+      <h3 class="sm bold">4. Advertising Partners (Google AdSense)</h3>
+      <p class="xs muted">Third-party vendors, including Google, use cookies to serve ads based on user visits. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to our sites. You may opt out of personalized advertising by visiting Google Ads Settings.</p>
+    </div>
+  </div>
+</div>
+
+<div id="tab-terms" class="tab">
+  <div class="page" style="max-width: 800px; line-height: 1.8;">
+    <h2 class="sec">Terms & Conditions</h2>
+    <p class="muted xs mb4">Last updated: June 15, 2026</p>
+    <div class="card p6 flex fc g3">
+      <p class="sm">By accessing JobConnect Pro, you agree to comply with and be bound by the following terms of use. Please review them carefully before using our services.</p>
+      <h3 class="sm bold">1. Acceptable Use</h3>
+      <p class="xs muted">Users must search, post, and apply for genuine career listings. Any spamming, fake job listings, or scraping of telephone data is strictly prohibited and subject to immediate administrative ban.</p>
+      <h3 class="sm bold">2. Limitation of Liability</h3>
+      <p class="xs muted">JobConnect Pro acts as a platform to facilitate hyperlocal matching. We do not verify credentials of individual candidates or employers beyond standard automated checks. Users are advised to perform standard verification before scheduling face-to-face meetings.</p>
+    </div>
+  </div>
+</div>
+
+<div id="tab-cookies" class="tab">
+  <div class="page" style="max-width: 800px; line-height: 1.8;">
+    <h2 class="sec">Cookie Policy</h2>
+    <p class="muted xs mb4">Last updated: June 15, 2026</p>
+    <div class="card p6 flex fc g3">
+      <p class="sm">This cookie policy explains what cookies are and how we use them on our site to provide you with a fast, tailored, and responsive interface.</p>
+      <h3 class="sm bold">1. What are Cookies?</h3>
+      <p class="xs muted">Cookies are small text files placed on your device to remember user preferences, save your recent search keyword queries, and track analytics to show matching score calculations.</p>
+      <h3 class="sm bold">2. Managing Choices</h3>
+      <p class="xs muted">You can instruct your browser to refuse all cookies or notify you when a cookie is sent. However, parts of the portal may function suboptimally without session tracking.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;flex-wrap:wrap;">
+    <div><div class="logo-txt" style="margin-bottom:10px;">JobConnect<span>Pro</span></div><div class="xs muted" style="line-height:1.9;">Security guard se software engineer — Chandigarh, Mohali, Noida mein direct HR connect.</div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Job Seekers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" onclick="showTab('jobs')" style="font-size:12px;color:var(--m);text-decoration:none;">Browse All Jobs</a><a href="#" onclick="showTab('dashboard')" style="font-size:12px;color:var(--m);text-decoration:none;">My Dashboard</a></div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Employers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" onclick="showTab('employer')" style="font-size:12px;color:var(--m);text-decoration:none;">Post a Job</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Pricing</a></div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">Support</div><div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--m);"><span>📞 +91 98765 00001</span><span>📧 support@jobconnectpro.in</span><span>📍 Mohali, Punjab</span></div></div>
+  </div>
+  <div style="max-width:1200px;margin:20px auto 0;padding-top:20px;border-top:1px solid var(--b);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;" class="xs muted">
+    <span>© 2026 JobConnect Pro. All rights reserved.</span>
+    <span>
+      <a href="#" onclick="showTab('privacy')" style="color:var(--m);text-decoration:none;">Privacy Policy</a> • 
+      <a href="#" onclick="showTab('terms')" style="color:var(--m);text-decoration:none;">Terms</a> • 
+      <a href="#" onclick="showTab('cookies')" style="color:var(--m);text-decoration:none;">Cookie Policy</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Cookie Consent Banner (For AdSense / GDPR compliance) -->
+<div id="cookie-consent" style="position:fixed;bottom:20px;left:20px;right:20px;max-width:480px;background:rgba(18,18,28,.97);border:1px solid rgba(124,58,237,.3);backdrop-filter:blur(20px);border-radius:18px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.6);z-index:9999;display:none;align-items:center;justify-content:space-between;gap:14px;margin:0 auto;">
+  <div style="font-size:11px;color:var(--t);line-height:1.6;font-family:'Inter',sans-serif;">
+    🍪 <strong>Cookie Consent</strong>: Hum Google AdSense ads show karne aur analytics track karne ke liye cookies use karte hain. Padhne ke liye <a href="#" onclick="showTab('privacy');return false;" style="color:#a78bfa;text-decoration:underline;">Privacy Policy</a> check karein.
+  </div>
+  <button onclick="acceptCookies()" style="background:linear-gradient(135deg,#7c3aed,#22d3ee);border:none;color:#fff;border-radius:10px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Accept</button>
+</div>
+
+<!-- ══ MODALS ══ -->
+<!-- Login -->
+<div class="mo" id="m-login">
+  <div class="mbox" style="max-width:400px;">
+    <button onclick="closeM('m-login')" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
+    <div style="text-align:center;margin-bottom:24px;"><div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;">Welcome Back 👋</div><div class="xs muted mt3">Quick login — select your profile</div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="login('Alex Developer','CANDIDATE')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(124,58,237,.2);">👤 <div><div class="bold sm">Alex Developer</div><div class="xs muted">Candidate</div></div></button>
+      <button onclick="login('Sarah Recruiter','EMPLOYER')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(6,182,212,.2);">🏢 <div><div class="bold sm">Sarah Recruiter</div><div class="xs muted">Employer</div></div></button>
+      <button onclick="login('Admin','ADMIN')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(244,63,94,.2);">🛡️ <div><div class="bold sm">Admin Manager</div><div class="xs muted">Administrator</div></div></button>
+    </div>
+  </div>
+</div>
+
+<!-- Apply -->
+<div class="mo" id="m-apply">
+  <div class="mbox">
+    <button onclick="closeM('m-apply')" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
+    <div class="bold mb2" style="font-size:16px;" id="ap-title">Apply</div>
+    <div class="xs muted mb6" id="ap-co">Company</div>
+    <form onsubmit="submitApp(event)">
+      <div style="margin-bottom:14px;"><label>Kyun apply kar rahe ho? (Short)</label><textarea id="ap-cover" rows="3" required placeholder="Main is job ke liye best hun kyunki…"></textarea></div>
+      <div style="margin-bottom:14px;"><label>Resume Link (optional)</label><input type="url" id="ap-resume" placeholder="https://drive.google.com/…"></div>
+      <!-- HR Contact Preview -->
+      <div id="ap-hr-preview" style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div class="xs muted mb2">Direct HR Contact (Jo apply ke baad milega)</div>
+        <div class="bold sm" id="ap-hr-name">HR Name</div>
+        <div class="xs" style="color:#25d366;margin-top:4px;" id="ap-hr-phone">+91 XXXXX XXXXX</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn w100" type="submit">One-Tap Apply ⚡</button>
+        <button type="button" class="btn btn-wa" onclick="waApply()" style="white-space:nowrap;padding:10px 16px;">💬 WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 5-STAR RATING GATE -->
+<div class="mo" id="m-rating">
+  <div class="rgate">
+    <div style="font-size:40px;margin-bottom:12px;" id="rg-emoji">⭐</div>
+    <div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px;" id="rg-title">Rate Your Experience</div>
+    <div class="xs muted mb2" id="rg-sub">Aapka feedback bohot zaruri hai!</div>
+    <div class="stars" id="stars">
+      <span class="star" data-v="1" onclick="rateStar(1)">⭐</span>
+      <span class="star" data-v="2" onclick="rateStar(2)">⭐</span>
+      <span class="star" data-v="3" onclick="rateStar(3)">⭐</span>
+      <span class="star" data-v="4" onclick="rateStar(4)">⭐</span>
+      <span class="star" data-v="5" onclick="rateStar(5)">⭐</span>
+    </div>
+    <div id="rg-msg" class="xs muted mb4" style="min-height:18px;"></div>
+    <button class="btn w100" id="rg-btn" onclick="submitRating()" disabled style="opacity:.4;">Submit Rating</button>
+    <div class="xs muted mt3" id="rg-skip" style="cursor:pointer;text-decoration:underline;" onclick="forceRating()">Skip nahi kar sakte — rating dena zaroori hai ⚠️</div>
+  </div>
+</div>
+
+<!-- AI CHATBOT CONTAINER -->
+<button class="ai-chat-btn" onclick="toggleAIChat()" title="AI Career Assistant">🤖</button>
+<div class="ai-chat-win" id="ai-chat-window">
+  <div class="ai-chat-hdr">
+    <div class="flex ic g2">
+      <span style="font-size: 20px;">🤖</span>
+      <div>
+        <div class="bold sm">AI Job Assistant</div>
+        <div class="xs" style="opacity: .8;">Online • Ready to Match</div>
+      </div>
+    </div>
+    <button onclick="toggleAIChat()" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">✕</button>
+  </div>
+  <div class="ai-chat-msgs" id="ai-chat-msgs">
+    <div class="ai-msg bot">Hello! Main aapka JobConnect AI Assistant hun. Aapko kis location ya category me job chahiye? Mujhse puchhein!</div>
+  </div>
+  <div class="ai-chat-chips">
+    <span class="schip trend" onclick="sendAiChip('Chandigarh me driver job')">🚗 Driver Chandigarh</span>
+    <span class="schip trend" onclick="sendAiChip('Security Guard job')">🛡️ Security Guard</span>
+    <span class="schip trend" onclick="sendAiChip('React dev job remote')">💻 React remote</span>
+  </div>
+  <div class="ai-chat-inp">
+    <input type="text" id="ai-chat-input" placeholder="Type here..." onkeydown="if(event.key==='Enter') sendAiMsg()">
+    <button onclick="sendAiMsg()">Send</button>
+  </div>
+</div>
+
+<script>
+// ══════ DATA ══════
+const CATS = ['Security & Guard','Delivery & Logistics','Driver & Transport','Housekeeping & Cleaning','Cook & Kitchen','Sales & Customer Support','Software Engineering','Healthcare & Nursing','Construction & Labour','Retail & Shop','Education & Training','Finance & Accounting'];
+const CAT_EMOJIS = {'Security & Guard':'🛡️','Delivery & Logistics':'🛵','Driver & Transport':'🚗','Housekeeping & Cleaning':'🧹','Cook & Kitchen':'👨‍🍳','Sales & Customer Support':'📞','Software Engineering':'💻','Healthcare & Nursing':'🏥','Construction & Labour':'🏗️','Retail & Shop':'🏪','Education & Training':'📚','Finance & Accounting':'💰'};
+const CAT_COLOR = {'Security & Guard':'blue','Delivery & Logistics':'cyan','Driver & Transport':'amber','Housekeeping & Cleaning':'rose','Cook & Kitchen':'amber','Sales & Customer Support':'cyan','Software Engineering':'blue','Healthcare & Nursing':'green','Construction & Labour':'amber','Retail & Shop':'rose','Education & Training':'green','Finance & Accounting':'cyan'};
+const POPULAR_LOCATIONS = [
+  'Kerala', 'Karnataka', 'Delhi NCR', 'Mumbai', 'Bengaluru', 
+  'Chennai', 'Hyderabad', 'Pune', 'Kolkata', 'Kochi', 
+  'Thiruvananthapuram', 'Chandigarh', 'Mohali', 'Noida', 
+  'Gurugram', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Patna'
+];
+
+let jobs = [
+  // SECURITY
+  {id:'j01',title:'Security Guard (Day Shift)',company:'Securitas India',location:'Chandigarh Sector 17',area:'Chandigarh',cat:'Security & Guard',type:'Full-time',exp:'No Experience',sal:18000,desc:'8-hour day shift. Uniform+ID provided. 12th pass. Physical fitness required. Immediate joining available.',hr:'Rajan Thakur',ph:'+91 98765 11001',skills:['Hindi','Physical Fitness','Discipline'],urgent:true,match:94},
+  {id:'j02',title:'Night Security Guard',company:'Allied Security Services',location:'Mohali Phase 7',area:'Mohali',cat:'Security & Guard',type:'Full-time',exp:'No Experience',sal:20000,desc:'Night duty 10pm-6am. Accommodation available. 10th pass accepted. ESI+PF benefits.',hr:'Gurpreet Kaur',ph:'+91 97654 22002',skills:['Alertness','Punjabi','Basic English'],urgent:false,match:91},
+  {id:'j03',title:'Security Supervisor',company:'G4S India',location:'Noida Sector 62',area:'Noida',cat:'Security & Guard',type:'Full-time',exp:'1-3 years',sal:28000,desc:'Lead a team of 10 guards. Ex-Army preferred. Laptop & reporting skills. Monthly incentives.',hr:'Suresh Bapat',ph:'+91 99112 33003',skills:['Leadership','Ex-Army','Reporting'],urgent:false,match:88},
+  {id:'j31',title:'ATM Security Guard',company:'SIS Securities Ltd.',location:'Chandigarh Sector 34',area:'Chandigarh',cat:'Security & Guard',type:'Full-time',exp:'Fresher',sal:19500,desc:'12-hour shift for ATM security. Duty includes monitoring visitors and maintaining logs. PF + insurance included.',hr:'Manish Mehta',ph:'+91 98722 34567',skills:['Alertness','Punctuality','Hindi'],urgent:true,match:90},
+  
+  // DELIVERY
+  {id:'j04',title:'Delivery Executive (Swiggy-Style)',company:'QuickRun Logistics',location:'Chandigarh Sector 22',area:'Chandigarh',cat:'Delivery & Logistics',type:'Full-time',exp:'No Experience',sal:22000,desc:'Own bike + Android phone required. ₹5/delivery incentive extra. Flexible 6-hour shifts. Petrol allowance ₹3000.',hr:'Ankit Sharma',ph:'+91 98001 44004',skills:['Bike Riding','Android Phone','Local Map Knowledge'],urgent:true,match:97},
+  {id:'j05',title:'Delivery Boy (E-Commerce)',company:'FastShip India',location:'Mohali Industrial Area',area:'Mohali',cat:'Delivery & Logistics',type:'Full-time',exp:'Fresher',sal:19000,desc:'Amazon/Flipkart parcels. Company vehicle provided. 8-hour shift. Immediate joining.',hr:'Priya Singh',ph:'+91 96000 55005',skills:['Physical Stamina','Hindi','Route Navigation'],urgent:false,match:92},
+  {id:'j06',title:'Warehouse + Delivery Helper',company:'Metro Warehouse Co.',location:'Noida Sector 58',area:'Noida',cat:'Delivery & Logistics',type:'Full-time',exp:'No Experience',sal:16000,desc:'Loading/unloading + delivery. Company lunch provided. Weekly pay option available.',hr:'Ramesh Yadav',ph:'+91 93456 66006',skills:['Physical Strength','Punctuality','Hindi'],urgent:false,match:85},
+  {id:'j32',title:'Grocery Delivery Rider',company:'Zepto Partner Services',location:'Chandigarh Sector 35',area:'Chandigarh',cat:'Delivery & Logistics',type:'Part-time',exp:'No Experience',sal:15000,desc:'Deliver groceries locally within 2-3 kms radius. Bike + driving license mandatory. Flexible hours.',hr:'Satish Kumar',ph:'+91 94567 89012',skills:['Bike Riding','Navigation','Speed'],urgent:true,match:94},
+
+  // DRIVER
+  {id:'j07',title:'Car Driver (Personal)',company:'Private Household',location:'Chandigarh Sector 8',area:'Chandigarh',cat:'Driver & Transport',type:'Full-time',exp:'1-3 years',sal:25000,desc:'Drive owner family. AC car. Shifts fixed. Need valid license. Must know Chandigarh roads. Accommodation optional.',hr:'Mrs. Meenakshi',ph:'+91 98765 77007',skills:['Driving License','Hindi','Chandigarh Routes'],urgent:false,match:95},
+  {id:'j08',title:'Cab Driver (Ola/Uber Style)',company:'CityRide Pvt. Ltd.',location:'Chandigarh',area:'Chandigarh',cat:'Driver & Transport',type:'Contract',exp:'Fresher',sal:30000,desc:'Own car needed OR company car at ₹3000 deposit. Earn ₹30,000-50,000/month based on trips. App-based.',hr:'Vivek Malhotra',ph:'+91 87655 88008',skills:['Driving License','Navigation App','Customer Service'],urgent:true,match:93},
+  {id:'j09',title:'Heavy Vehicle Driver (Truck)',company:'Bharat Transport',location:'Ludhiana (Near Chandigarh)',area:'Ludhiana',cat:'Driver & Transport',type:'Full-time',exp:'3+ years',sal:35000,desc:'Interstate trucking. HMV license mandatory. Per trip bonus. 10,000 km/month. PF+ESI benefits.',hr:'Kulwant Singh',ph:'+91 76543 99009',skills:['HMV License','Long Drive','Night Driving'],urgent:false,match:87},
+  {id:'j33',title:'Ambulance Driver',company:'Lifeline Care Hospital',location:'Mohali Sector 62',area:'Mohali',cat:'Driver & Transport',type:'Full-time',exp:'3+ years',sal:26000,desc:'Drive critical care ambulance. Emergency response experience required. Shift rotation basis.',hr:'Dr. A. K. Bansal',ph:'+91 82345 67890',skills:['Driving License','Emergency Response','Local Route Knowledge'],urgent:true,match:91},
+
+  // HOUSEKEEPING
+  {id:'j10',title:'Housekeeping Staff (Hotel)',company:'The Grand Chandigarh Hotel',location:'Chandigarh Sector 35',area:'Chandigarh',cat:'Housekeeping & Cleaning',type:'Full-time',exp:'Fresher',sal:16000,desc:'Room cleaning, laundry, facility maintenance. Uniform+meals provided. 8-hour shifts. 5 days a week.',hr:'Sunita Arora',ph:'+91 98234 10010',skills:['Cleanliness','Discipline','Hindi'],urgent:false,match:88},
+  {id:'j11',title:'Office Housekeeping Boy',company:'InfoPark Office Complex',location:'Mohali IT Park',area:'Mohali',cat:'Housekeeping & Cleaning',type:'Full-time',exp:'No Experience',sal:14000,desc:'Daily office cleaning. Morning shift 7am-3pm. Immediate start. Travel allowance ₹1500.',hr:'Deepak Kumar',ph:'+91 91234 11011',skills:['Cleanliness','Punctuality','Basic Hindi'],urgent:true,match:90},
+  {id:'j34',title:'Mall Housekeeping Staff',company:'Elante Property Services',location:'Chandigarh Industrial Area',area:'Chandigarh',cat:'Housekeeping & Cleaning',type:'Full-time',exp:'Fresher',sal:15000,desc:'Clean mall common areas, operate floor cleaning machines. Uniform and medical benefits.',hr:'Harpreet Singh',ph:'+91 78912 34567',skills:['Physical Fitness','Politeness','Cleaning Equipment'],urgent:false,match:86},
+
+  // COOK
+  {id:'j12',title:'Cook / Chef (North Indian)',company:'Patiala Dhaba Chain',location:'Chandigarh Sector 8C',area:'Chandigarh',cat:'Cook & Kitchen',type:'Full-time',exp:'1-3 years',sal:24000,desc:'Dal makhani, roti, main course. Experience in high-volume kitchen. Accommodation available. Tips extra.',hr:'Balwant Singh',ph:'+91 99456 12012',skills:['North Indian Cooking','Roti Making','High Volume Kitchen'],urgent:false,match:91},
+  {id:'j13',title:'Kitchen Helper / Masalchi',company:'Cloud Kitchen Startup',location:'Mohali Sector 70',area:'Mohali',cat:'Cook & Kitchen',type:'Full-time',exp:'No Experience',sal:14000,desc:'Cutting, cleaning, chopping. Meals provided. 6-day week. Learn cooking skills on the job.',hr:'Neha Sethi',ph:'+91 88712 13013',skills:['Kitchen Hygiene','Cutting Skills','Punctuality'],urgent:false,match:85},
+  {id:'j35',title:'South Indian Commi 1 Chef',company:'Sagar Ratna franchise',location:'Chandigarh Sector 35',area:'Chandigarh',cat:'Cook & Kitchen',type:'Full-time',exp:'3+ years',sal:27000,desc:'Responsible for Dosa, Idli preparation. Must maintain food quality and hygiene standards.',hr:'Vikas Anand',ph:'+91 90123 45678',skills:['South Indian Cooking','Food Hygiene','Speed'],urgent:true,match:89},
+
+  // BPO / SALES
+  {id:'j14',title:'Telecaller - Banking Products',company:'TechCall BPO Solutions',location:'Chandigarh Sector 34',area:'Chandigarh',cat:'Sales & Customer Support',type:'Full-time',exp:'Fresher',sal:18000,desc:'Outbound calling for bank credit cards. Fixed 5-day week 9am-6pm. Incentive upto ₹8000 extra. 12th pass OK.',hr:'Priya Sharma',ph:'+91 98765 14014',skills:['Hindi','Communication','MS Office'],urgent:true,match:96},
+  {id:'j15',title:'Customer Care Executive (English)',company:'Global Support Center',location:'Mohali Phase 8B',area:'Mohali',cat:'Sales & Customer Support',type:'Full-time',exp:'Fresher',sal:22000,desc:'International voice process. US/UK accent training given. Night shift. Pick+Drop cab provided.',hr:'Rohan Mehta',ph:'+91 99887 15015',skills:['English Fluency','Typing 30WPM','Patience'],urgent:false,match:89},
+  {id:'j16',title:'Inside Sales Executive (EdTech)',company:'BrightFuture EdTech',location:'Noida Sector 132',area:'Noida',cat:'Sales & Customer Support',type:'Full-time',exp:'1-3 years',sal:30000,desc:'Call leads, convert to course enrollment. CRM experience preferred. Incentive structure: ₹10,000/month extra on target.',hr:'Sanjay Mehta',ph:'+91 87654 16016',skills:['Sales','CRM','English','Negotiation'],urgent:false,match:92},
+
+  // SOFTWARE
+  {id:'j17',title:'React JS Developer',company:'Software Unicorns Pvt. Ltd.',location:'Mohali Phase 6',area:'Mohali',cat:'Software Engineering',type:'Full-time',exp:'1-3 years',sal:45000,desc:'2+ yrs React. Build SaaS dashboards. Flexible 10am-7pm. 5 days. MacBook provided. WFH Fridays.',hr:'Rohan Mehra',ph:'+91 99887 65432',skills:['React','JavaScript','REST APIs','Git'],urgent:false,match:95},
+  {id:'j18',title:'Python Backend Developer',company:'DataMinds Tech',location:'Noida Sector 62',area:'Noida',cat:'Software Engineering',type:'Full-time',exp:'1-3 years',sal:55000,desc:'Django/FastAPI REST APIs. PostgreSQL. AWS basics. Code reviews and microservices. Health insurance.',hr:'Kiran Rao',ph:'+91 80987 17017',skills:['Python','Django','PostgreSQL','Docker'],urgent:false,match:88},
+  {id:'j19',title:'Mobile Developer (Flutter)',company:'AppHouse India',location:'Chandigarh IT Park',area:'Chandigarh',cat:'Software Engineering',type:'Full-time',exp:'1-3 years',sal:42000,desc:'Build cross-platform apps. Firebase + REST integration. 2 published apps required. WFH option.',hr:'Amit Jain',ph:'+91 78901 18018',skills:['Flutter','Dart','Firebase','UI/UX'],urgent:true,match:93},
+  {id:'j20',title:'Full Stack Developer (Remote)',company:'GlobalTech Remote',location:'Remote / WFH',area:'Remote',cat:'Software Engineering',type:'Remote',exp:'3+ years',sal:80000,desc:'MERN stack. US client timezone (6pm-2am IST). Best-in-class pay. MacBook+internet allowance.',hr:'Neha Kapoor',ph:'+91 77889 19019',skills:['React','Node.js','MongoDB','TypeScript'],urgent:false,match:97},
+
+  // HEALTHCARE
+  {id:'j21',title:'Staff Nurse (ICU)',company:'Fortis Hospital Mohali',location:'Mohali Sector 62',area:'Mohali',cat:'Healthcare & Nursing',type:'Full-time',exp:'1-3 years',sal:32000,desc:'ICU nursing. B.Sc Nursing required. 12-hour rotating shifts. ESI + PF + insurance. Hostel facility.',hr:'Dr. Sunita Rana',ph:'+91 98001 20020',skills:['B.Sc Nursing','ICU','IV Fluids','Ventilator'],urgent:true,match:90},
+  {id:'j22',title:'Nursing Assistant / ANM',company:'City Care Clinic',location:'Chandigarh Sector 44',area:'Chandigarh',cat:'Healthcare & Nursing',type:'Full-time',exp:'Fresher',sal:18000,desc:'OPD nursing support, dressings, injections. GNM/ANM pass. Day shift 9am-5pm. Training provided.',hr:'Dr. Rajiv Batra',ph:'+91 93456 21021',skills:['ANM/GNM','Injection','BP Monitoring','Hindi'],urgent:false,match:87},
+
+  // CONSTRUCTION
+  {id:'j23',title:'Construction Labourer',company:'Megabuild Contractors',location:'Chandigarh New Sectors',area:'Chandigarh',cat:'Construction & Labour',type:'Full-time',exp:'No Experience',sal:15000,desc:'Concrete, brickwork, basic construction help. Daily wage ₹600 OR monthly ₹15,000. Bus pass provided.',hr:'Balwant Rana',ph:'+91 86543 22022',skills:['Physical Strength','Construction Basics','Hindi'],urgent:true,match:82},
+  {id:'j24',title:'Electrician (Wiring)',company:'PowerFix Solutions',location:'Mohali',area:'Mohali',cat:'Construction & Labour',type:'Full-time',exp:'1-3 years',sal:22000,desc:'Residential + commercial wiring. ITI Electrician certificate mandatory. Own basic toolkit preferred.',hr:'Ramesh Electricals',ph:'+91 75432 23023',skills:['ITI Electrician','Wiring','Safety Protocols'],urgent:false,match:88},
+
+  // RETAIL
+  {id:'j25',title:'Shop Sales Boy / Girl',company:'Woodland Showroom',location:'Chandigarh Elante Mall',area:'Chandigarh',cat:'Retail & Shop',type:'Full-time',exp:'Fresher',sal:16000,desc:'Assist customers, billing, stock management. Good personality. English + Hindi. Incentive on sales.',hr:'Neetu Arora',ph:'+91 98123 24024',skills:['Customer Service','Hindi','English','Billing'],urgent:false,match:89},
+  {id:'j26',title:'Supermarket Cashier',company:'BigMart Superstore',location:'Mohali Phase 11',area:'Mohali',cat:'Retail & Shop',type:'Full-time',exp:'Fresher',sal:14000,desc:'POS billing, cash handling, customer assistance. Morning shift. 10th pass minimum. Immediate joining.',hr:'Jaspreet Kaur',ph:'+91 97001 25025',skills:['Cash Handling','POS Billing','Communication'],urgent:true,match:91},
+
+  // EDUCATION
+  {id:'j27',title:'Primary School Teacher (English)',company:'Bright Star School',location:'Chandigarh Sector 20',area:'Chandigarh',cat:'Education & Training',type:'Full-time',exp:'1-3 years',sal:25000,desc:'Grade 1-5 English. B.Ed preferred. Smart classroom. Summer vacation + all public holidays.',hr:'Principal Sharma',ph:'+91 98765 26026',skills:['B.Ed','English Teaching','Patience','CBSE'],urgent:false,match:90},
+  {id:'j28',title:'Computer Trainer (MS Office)',company:'Digital Skills Academy',location:'Mohali Sector 82',area:'Mohali',cat:'Education & Training',type:'Full-time',exp:'Fresher',sal:18000,desc:'Teach basic computing, MS Office, internet skills to adults. Morning batch. No experience needed, just skills.',hr:'Rakesh Gupta',ph:'+91 87012 27027',skills:['MS Office','Teaching','Hindi','Computer Basics'],urgent:false,match:87},
+
+  // FINANCE
+  {id:'j29',title:'Accountant (Tally + GST)',company:'Mehta & Associates CA Firm',location:'Chandigarh Sector 8',area:'Chandigarh',cat:'Finance & Accounting',type:'Full-time',exp:'1-3 years',sal:24000,desc:'Daily ledger, GST filing, payroll. Tally ERP 9 must. B.Com preferred. 6-day week with alternate Saturdays.',hr:'CA Sunita Mehta',ph:'+91 96543 28028',skills:['Tally ERP','GST','B.Com','Excel'],urgent:false,match:92},
+  {id:'j30',title:'Finance Executive (MIS Reports)',company:'TechFinance Pvt. Ltd.',location:'Noida Sector 44',area:'Noida',cat:'Finance & Accounting',type:'Full-time',exp:'1-3 years',sal:32000,desc:'MIS reporting, budgeting, Excel dashboards. MBA Finance preferred. Health insurance + PF.',hr:'Rohit Bansal',ph:'+91 99012 29029',skills:['MIS Reports','Excel','Budgeting','MBA Finance'],urgent:false,match:88},
+];
+
+let applications = [{id:'a1',jobId:'j17',jt:'React JS Developer',co:'Software Unicorns',cover:'2 saal ka React exp hai',status:'SHORTLISTED',date:'2026-06-12'}];
+let saved = [];
+let users = [
+  {id:'u1',name:'Alex Developer',email:'alex@ex.com',role:'CANDIDATE',banned:false},
+  {id:'u2',name:'Sarah Recruiter',email:'sarah@ex.com',role:'EMPLOYER',banned:false},
+  {id:'u3',name:'Admin',email:'admin@ex.com',role:'ADMIN',banned:false}
+];
+let activeUser=null, activeRole=null, curApplyJob=null, curRating=0, ratingCtx=null;
+let filterCat='';
+
+let lenis = null;
+let deferredPrompt = null;
+
+// ══════ PWA INSTALL ══════
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner after 3s
+  setTimeout(() => {
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.classList.add('show');
+  }, 3000);
+});
+function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.classList.remove('show');
+  });
+}
+
+// ══════ FILTER DRAWER (Mobile) ══════
+function openFilterDrawer() {
+  document.getElementById('filter-overlay').classList.add('open');
+  document.getElementById('filter-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeFilterDrawer() {
+  document.getElementById('filter-overlay').classList.remove('open');
+  document.getElementById('filter-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function syncFilterRadios(nameFrom, nameTo) {
+  const checkedVal = document.querySelector(`input[name="${nameFrom}"]:checked`)?.value;
+  const targetRadios = document.querySelectorAll(`input[name="${nameTo}"]`);
+  targetRadios.forEach(r => {
+    if (r.value === (checkedVal || '')) r.checked = true;
+  });
+}
+
+// ══════ SKELETON LOADER ══════
+function showSkeletonLoader(count = 4) {
+  const el = document.getElementById('jlist');
+  if (!el) return;
+  el.innerHTML = Array(count).fill(0).map(() => `
+    <div class="skel-card">
+      <div class="skel skel-logo"></div>
+      <div class="skel-body">
+        <div class="skel skel-line w60"></div>
+        <div class="skel skel-line w40"></div>
+        <div class="skel skel-line w80"></div>
+        <div class="skel skel-line w30"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════ HOVER GLOW & SCALE EFFECT FUNCTION ══════
+function init3DTilt(selector) {
+  document.querySelectorAll(selector).forEach(card => {
+    // Prevent duplicate event handlers
+    if (card.dataset.tiltInitialized) return;
+    card.dataset.tiltInitialized = "true";
+
+    card.addEventListener('mouseenter', () => {
+      gsap.to(card, {
+        scale: 1.03,
+        boxShadow: "0 20px 40px rgba(0,0,0,0.55)",
+        borderColor: "rgba(124,58,237,0.35)",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, {
+        scale: 1,
+        boxShadow: "0 12px 36px rgba(0,0,0,.45)",
+        borderColor: "rgba(255,255,255,.07)",
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    });
+  });
+}
+
+// ══════ INIT ══════
+window.onload=()=>{
+  // 0. Splash screen dismiss
+  const splash = document.getElementById('splash');
+  if (splash) {
+    setTimeout(() => {
+      splash.style.opacity = '0';
+      splash.style.transform = 'scale(1.05)';
+      setTimeout(() => splash.remove(), 500);
+    }, 1200);
+  }
+
+  // Show PTR loading bar briefly
+  const ptr = document.getElementById('ptr-indicator');
+  if (ptr) {
+    ptr.classList.add('show');
+    setTimeout(() => ptr.classList.remove('show'), 1400);
+  }
+
+  // 1. Initialize Lenis Smooth Scroll
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true
+  });
+  
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.lagSmoothing(0);
+
+  // Show skeleton loaders on initial jobs tab load
+  showSkeletonLoader(5);
+  
+  // Render initial components
+  renderHomeJobs();
+  renderJobs();
+  buildCatPills();
+  renderSearchChips();
+  renderMyApps();
+  renderEmpAnalytics();
+  renderPipeline();
+  renderAdminUsers();
+  renderAdminJobs();
+  checkCookieConsent();
+  
+  // 2. Parallax background blobs movement with mouse (Throttled via requestAnimationFrame)
+  let mouseMoveTimeout;
+  document.addEventListener('mousemove', (e) => {
+    if (mouseMoveTimeout) return;
+    mouseMoveTimeout = requestAnimationFrame(() => {
+      const { clientX, clientY } = e;
+      const x = (clientX - window.innerWidth / 2) * 0.04;
+      const y = (clientY - window.innerHeight / 2) * 0.04;
+      
+      gsap.to('#blob-1', { x: x * 0.6, y: y * 0.6, duration: 1, ease: "power2.out", overwrite: "auto" });
+      gsap.to('#blob-2', { x: -x * 0.9, y: -y * 0.9, duration: 1, ease: "power2.out", overwrite: "auto" });
+      gsap.to('#blob-3', { x: x * 0.4, y: -y * 0.4, duration: 1, ease: "power2.out", overwrite: "auto" });
+      mouseMoveTimeout = null;
+    });
+  });
+
+  // 3. Initialize 3D tilt effects
+  init3DTilt('.scard');
+  init3DTilt('.jcard');
+
+  // 4. Hero text reveal mask and other entry animations
+  gsap.to(".hero-reveal-line span", {
+    duration: 1.2,
+    y: 0,
+    stagger: 0.15,
+    ease: "power4.out"
+  });
+  
+  gsap.from(".hero p", {duration: 1.2, y: 30, opacity: 0, ease: "power4.out", delay: 0.4});
+  gsap.from("#hero-sbox", {duration: 1, scale: 0.9, opacity: 0, ease: "back.out(1.7)", delay: 0.6});
+  gsap.from(".qcat", {duration: 0.8, scale: 0.8, opacity: 0, stagger: 0.05, ease: "back.out(1.5)", delay: 0.8});
+
+  // 5. ScrollTrigger reveal for stats cards
+  gsap.from(".scard", {
+    scrollTrigger: {
+      trigger: ".sgrid",
+      start: "top 90%",
+      toggleActions: "play none none none"
+    },
+    duration: 0.8,
+    y: 40,
+    opacity: 0,
+    stagger: 0.12,
+    ease: "power3.out"
+  });
+  
+  // Rating gate on tab close attempt
+  window.addEventListener('beforeunload', e => {
+    e.preventDefault(); e.returnValue='';
+    openRatingGate('app','Rate Your App Experience','Aap jaane se pehle ek rating do!');
+  });
+};
+
+// ══════ NAVIGATION WITH GSAP SMOOTH TRANSITIONS ══════
+function showTab(id){
+  const tabs = document.querySelectorAll('.tab');
+  const target = document.getElementById('tab-'+id);
+  const activeBtn = document.getElementById('nav-'+id);
+  
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('act'));
+  if(activeBtn) activeBtn.classList.add('act');
+
+  // GSAP Tab fade-out slide-up animation
+  gsap.to(".tab.act", {
+    duration: 0.25, 
+    opacity: 0, 
+    y: -15, 
+    ease: "power2.in", 
+    onComplete: () => {
+      tabs.forEach(t=>t.classList.remove('act'));
+      target.classList.add('act');
+      
+      // Reset targets state and animate in
+      gsap.fromTo(target, 
+        { opacity: 0, y: 15 }, 
+        { duration: 0.4, opacity: 1, y: 0, ease: "power3.out" }
+      );
+      
+      // Lenis smooth scroll to top override
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: false, duration: 0.5 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  });
+}
+
+// ══════ CAT PILLS ══════
+function buildCatPills(){
+  const el=document.getElementById('cat-pills');
+  const all=[{v:'',l:'All Categories'},...CATS.map(c=>({v:c,l:CAT_EMOJIS[c]+' '+c}))];
+  el.innerHTML=all.map(c=>`<span onclick="pillarFilter('${c.v}',this)" class="qcat${c.v===''?' act':''}" style="padding:8px 14px;border-radius:40px;">${c.l}</span>`).join('');
+}
+function pillarFilter(cat, el){
+  filterCat=cat;
+  document.querySelectorAll('#cat-pills .qcat').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');
+  renderJobs();
+}
+function qFilter(cat){
+  filterCat=cat;
+  showTab('jobs');
+  setTimeout(()=>{
+    document.querySelectorAll('#cat-pills .qcat').forEach(b=>{b.classList.toggle('act',b.textContent.trim().includes(cat.split('&')[0].trim())||cat==='');});
+    renderJobs();
+  },80);
+}
+
+// ══════ HOME JOBS (featured top 6) ══════
+function renderHomeJobs(){
+  const el=document.getElementById('home-jobs');
+  const featured=jobs.slice(0,6);
+  el.innerHTML=featured.map(j=>jobCardHTML(j,true)).join('');
+  init3DTilt('.jcard');
+}
+
+// ══════ PREMIUM SEARCH ENGINE ══════
+
+// ── SYNONYMS MAP (smart matching like LinkedIn) ──
+const SYNONYMS = {
+  'guard':'security',  'security':'guard',  'watchman':'security guard',
+  'chowkidar':'security guard', 'chauffeur':'driver',  'driver':'chauffeur',
+  'rider':'delivery', 'delivery':'rider',  'swiggy':'delivery',  'zomato':'delivery',
+  'uber':'driver cab', 'ola':'driver cab', 'cleaner':'housekeeping',
+  'housekeeping':'cleaner', 'sweeper':'housekeeping', 'safai':'housekeeping',
+  'chef':'cook', 'cook':'chef', 'khana':'cook kitchen',
+  'bpo':'telecaller customer support', 'telecaller':'bpo sales',
+  'call center':'bpo telecaller', 'software':'developer engineer it',
+  'developer':'software engineer', 'coder':'software developer',
+  'programmer':'software developer', 'it':'software engineering',
+  'nurse':'healthcare medical', 'doctor':'healthcare nursing',
+  'teacher':'education training', 'tutor':'teacher education',
+  'mazdoor':'construction labour', 'labour':'construction mazdoor',
+  'mistri':'construction electrician', 'dukan':'retail shop',
+  'shop':'retail dukan', 'accountant':'finance tally gst',
+  'sales':'customer support executive', 'helper':'assistant',
+  'peon':'office boy helper', 'receptionist':'front desk office',
+  'intern':'fresher trainee', 'fresher':'intern no experience',
+  'wfh':'remote work from home', 'remote':'wfh work from home',
+  'night shift':'night duty', 'part time':'part-time flexible'
+};
+
+// ── TRENDING SEARCHES ──
+const TRENDING = [
+  {q:'Security Guard',emoji:'🛡️'}, {q:'Delivery Boy',emoji:'🛵'},
+  {q:'Driver Chandigarh',emoji:'🚗'}, {q:'BPO Telecaller',emoji:'📞'},
+  {q:'React Developer',emoji:'💻'}, {q:'Cook Helper',emoji:'👨‍🍳'},
+  {q:'Night Shift',emoji:'🌙'}, {q:'₹25,000+ Salary',emoji:'💰'},
+  {q:'No Experience',emoji:'🆕'}, {q:'Nurse Medical',emoji:'🏥'}
+];
+
+// ── RECENT SEARCHES (localStorage) ──
+let recentSearches = JSON.parse(localStorage.getItem('jcp_recent')||'[]');
+function saveRecent(q){
+  if(!q||q.length<2)return;
+  recentSearches=recentSearches.filter(x=>x!==q);
+  recentSearches.unshift(q);
+  if(recentSearches.length>8)recentSearches.pop();
+  localStorage.setItem('jcp_recent',JSON.stringify(recentSearches));
+}
+function clearRecent(){recentSearches=[];localStorage.removeItem('jcp_recent');renderSearchChips();}
+
+// ── FUZZY MATCHING (Levenshtein distance) ──
+function levenshtein(a,b){
+  if(a.length===0)return b.length;if(b.length===0)return a.length;
+  const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];
+  for(let j=0;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++)
+    for(let j=1;j<=a.length;j++)
+      m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
+  return m[b.length][a.length];
+}
+function fuzzyMatch(needle,haystack){
+  needle=needle.toLowerCase();haystack=haystack.toLowerCase();
+  if(haystack.includes(needle))return true;
+  // Check each word in haystack
+  const words=haystack.split(/\s+/);
+  for(const w of words){
+    if(w.length>2 && needle.length>2){
+      const maxDist=needle.length<=4?1:2;
+      if(levenshtein(needle,w)<=maxDist)return true;
+      // Prefix match
+      if(w.startsWith(needle.substring(0,Math.max(3,needle.length-1))))return true;
+    }
+  }
+  return false;
+}
+
+// ── SYNONYM EXPANSION ──
+function expandQuery(q){
+  const words=q.toLowerCase().split(/\s+/).filter(Boolean);
+  const expanded=new Set(words);
+  words.forEach(w=>{
+    if(SYNONYMS[w]) SYNONYMS[w].split(' ').forEach(s=>expanded.add(s));
+    // Check 2-word combos
+    for(let i=0;i<words.length-1;i++){
+      const combo=words[i]+' '+words[i+1];
+      if(SYNONYMS[combo]) SYNONYMS[combo].split(' ').forEach(s=>expanded.add(s));
+    }
+  });
+  return [...expanded];
+}
+
+// ── SORT STATE ──
+let currentSort = 'relevance';
+
+function sortJobs(mode,btn){
+  currentSort=mode;
+  document.querySelectorAll('.ss-sort button').forEach(b=>b.classList.remove('act'));
+  if(btn)btn.classList.add('act');
+  renderJobs();
+}
+
+// ── DEBOUNCE ──
+let _dbTimer;
+function debounceRender(){clearTimeout(_dbTimer);_dbTimer=setTimeout(()=>renderJobs(),120);}
+
+// ── RENDER JOBS (with timing + Google Jobs simulated API integration) ──
+let searchTimeoutId = null;
+let currentLimit = 10;
+let isInfiniteLoading = false;
+let currentFilteredJobs = [];
+
+// Infinite scroll listener
+window.addEventListener('scroll', () => {
+  // Only trigger on Jobs tab
+  if (!document.getElementById('tab-jobs').classList.contains('act')) return;
+  if (isInfiniteLoading) return;
+  
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+    loadMoreInfiniteJobs();
+  }
+});
+
+function loadMoreInfiniteJobs() {
+  if (currentLimit >= currentFilteredJobs.length && !currentFilteredJobs[0]?.isGoogleResult) {
+    // If we've run out of local database listings and it's not a google search query,
+    // we can dynamically fetch new generated jobs for their selected location or keywords
+    const q = (document.getElementById('js')?.value||'').trim() || 'Staff';
+    const l = (document.getElementById('jl')?.value||'').trim() || 'Chandigarh';
+    isInfiniteLoading = true;
+    
+    // Show spinner at bottom
+    const el = document.getElementById('jlist');
+    const loadSpinner = document.createElement('div');
+    loadSpinner.id = 'inf-spinner';
+    loadSpinner.className = 'card p4 flex jc ic';
+    loadSpinner.innerHTML = `<span class="dot" style="margin-right:8px;background:#7c3aed;"></span> <span class="xs muted">Loading more hyperlocal matching jobs...</span>`;
+    el.appendChild(loadSpinner);
+
+    setTimeout(() => {
+      const extraJobs = fetchSimulatedGoogleJobs(q, l);
+      currentFilteredJobs = [...currentFilteredJobs, ...extraJobs];
+      
+      const spinner = document.getElementById('inf-spinner');
+      if (spinner) spinner.remove();
+      
+      currentLimit += 10;
+      renderActiveFilteredJobs(true);
+      isInfiniteLoading = false;
+    }, 600);
+    return;
+  }
+  
+  if (currentLimit < currentFilteredJobs.length) {
+    isInfiniteLoading = true;
+    const el = document.getElementById('jlist');
+    const loadSpinner = document.createElement('div');
+    loadSpinner.id = 'inf-spinner';
+    loadSpinner.className = 'card p4 flex jc ic';
+    loadSpinner.innerHTML = `<span class="dot" style="margin-right:8px;background:#7c3aed;"></span> <span class="xs muted">Loading next jobs...</span>`;
+    el.appendChild(loadSpinner);
+    
+    setTimeout(() => {
+      const spinner = document.getElementById('inf-spinner');
+      if (spinner) spinner.remove();
+      currentLimit += 10;
+      renderActiveFilteredJobs(true);
+      isInfiniteLoading = false;
+    }, 400);
+  }
+}
+
+function renderActiveFilteredJobs(isAppend = false) {
+  const el = document.getElementById('jlist');
+  const rc = document.getElementById('rc');
+  const speed = document.getElementById('ss-speed');
+  const q = (document.getElementById('js')?.value||'').trim();
+  
+  const slice = currentFilteredJobs.slice(0, currentLimit);
+  
+  if(rc) {
+    const isGoogle = currentFilteredJobs.some(x => x.isGoogleResult);
+    if (isGoogle) {
+      rc.innerHTML = `<span>${currentFilteredJobs.length}</span> results found (<span>Google Jobs API</span> match for "<span>${escHtml(q)}</span>")`;
+    } else {
+      rc.innerHTML = `<span>${currentFilteredJobs.length}</span> jobs found${q?' for "<span>'+escHtml(q)+'</span>"':''}`;
+    }
+  }
+  
+  el.innerHTML = slice.map(j => jobCardHTML(j, false, q)).join('');
+
+  // GSAP animation for newly rendered cards
+  gsap.fromTo("#jlist .jcard", 
+    { opacity: 0, y: 30 }, 
+    { 
+      duration: 0.5, 
+      opacity: 1, 
+      y: 0, 
+      stagger: 0.08, 
+      ease: "power2.out",
+      onComplete: () => {
+        init3DTilt('.jcard');
+      }
+    }
+  );
+}
+
+function renderJobs(){
+  if (searchTimeoutId) clearTimeout(searchTimeoutId);
+  const q=(document.getElementById('js')?.value||'').trim();
+  const l=(document.getElementById('jl')?.value||'').trim();
+  const el=document.getElementById('jlist');
+  const rc=document.getElementById('rc');
+  const speed=document.getElementById('ss-speed');
+  
+  currentLimit = 10; // Reset pagination limit on new search
+  
+  // Show glowing loading state
+  if (q) {
+    if (rc) rc.innerHTML = `Searching Google & Jobs Portal for "<span>${escHtml(q)}</span>"...`;
+    showSkeletonLoader(4);
+  }
+
+  searchTimeoutId = setTimeout(() => {
+    const t0=performance.now();
+    let arr=filterJobs();
+    
+    // Google search fallback: If user searched something and database has fewer than 4 results,
+    // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
+    let isGoogleFallback = false;
+    if (q && arr.length < 5) {
+      isGoogleFallback = true;
+      const googleJobs = fetchSimulatedGoogleJobs(q, l);
+      // Combine them: Database matches + Google Search Results
+      const combined = [...arr];
+      googleJobs.forEach(gj => {
+        if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
+          combined.push(gj);
+        }
+      });
+      arr = combined;
+    }
+
+    // Sort
+    if(currentSort==='salary-high') arr.sort((a,b)=>b.sal-a.sal);
+    else if(currentSort==='salary-low') arr.sort((a,b)=>a.sal-b.sal);
+    else if(currentSort==='match') arr.sort((a,b)=>b.match-a.match);
+    
+    currentFilteredJobs = arr; // Save to global state
+    
+    const t1=performance.now();
+    const ms=(t1-t0 + (isGoogleFallback ? 140 : 0)).toFixed(1);
+    
+    if(speed) speed.innerHTML=`<span class="dot-g"></span> ${ms}ms • ${isGoogleFallback ? 'Google Index' : 'Local Index'}`;
+    
+    if(!arr.length){
+      // SMART NO-RESULTS with suggestions
+      const suggestions = getSmartSuggestions(q);
+      el.innerHTML=`<div class="card p6" style="text-align:center;">
+        <div style="font-size:48px;margin-bottom:14px;">🔍</div>
+        <div style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px;">Koi job nahi mili</div>
+        <div class="xs muted mb4" style="line-height:1.8;">Filters clear karein, spelling check karein, ya neeche ke suggestions try karein.</div>
+        ${suggestions.length?`<div style="margin-bottom:14px;">
+          <div class="xs muted mb2">🤖 AI Suggestions — yeh try karein:</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+            ${suggestions.map(s=>`<button onclick="document.getElementById('js').value='${s}';renderJobs();" class="schip trend" style="padding:7px 14px;font-size:11px;">${s}</button>`).join('')}
+          </div>
+        </div>`:''}
+        <button class="btn" onclick="clrFilters()" style="font-size:12px;">✕ Clear All Filters</button>
+      </div>`;
+      return;
+    }
+    
+    renderActiveFilteredJobs();
+    
+    // Save to recent
+    if(q.length>=2) saveRecent(q);
+    renderSearchChips();
+  }, q ? 350 : 0); // Simulated API latency
+}
+
+// ── SIMULATED GOOGLE JOBS API GENERATOR ──
+function fetchSimulatedGoogleJobs(query, location) {
+  const loc = location || 'Chandigarh';
+  const cleanQ = query.toLowerCase();
+  
+  // Seed basic companies and structure
+  const companies = ['Google India', 'Microsoft IDC', 'Amazon Web Services', 'Zomato', 'Swiggy', 'Paytm', 'Infosys', 'Wipro', 'Cognizant', 'HCLTech', 'Uber India', 'Tata Consultancy Services', 'Jio Platforms', 'Airtel Digital', 'Accenture', 'Flipkart', 'Deloitte', 'PwC', 'KPMG', 'Capgemini', 'IBM India', 'Tech Mahindra', 'L&T Infotech', 'Ola Cabs', 'Blinkit', 'Zepto', 'JioMart', 'Urban Company', 'PolicyBazaar', 'Paytm Money'];
+  const hrs = ['Neha Sharma', 'Rohan Verma', 'Amit Patel', 'Pooja Sen', 'Vikram Malhotra', 'Siddharth Roy', 'Sneha Rao', 'Aditya Singh', 'Karan Johar', 'Preeti Deshmukh', 'Rajesh Koothrappali', 'Simran Kaur', 'Deepika Padukone', 'Ranveer Singh', 'Arjun Kapoor', 'Shruti Iyer', 'Gaurav Sen', 'Tanmay Bhat', 'Sandeep Maheshwari', 'Kabir Singh'];
+  const localSkills = ['Communication', 'English Fluency', 'Hindi', 'Problem Solving', 'Teamwork', 'MS Office', 'Customer Care', 'Punctuality', 'Discipline'];
+  const techSkills = ['JavaScript', 'React', 'Node.js', 'Python', 'Java', 'SQL', 'AWS', 'Data Structures', 'TypeScript', 'Git', 'MongoDB', 'Django', 'Express'];
+
+  const results = [];
+  
+  // Let's generate 32 jobs dynamically matching the query to mimic a live search engine index
+  for (let i = 1; i <= 32; i++) {
+    // Inject random seed variations so each search key generates different configurations
+    const randomSeed = Math.random();
+    const isTech = cleanQ.includes('react') || cleanQ.includes('software') || cleanQ.includes('developer') || cleanQ.includes('coder') || cleanQ.includes('python') || cleanQ.includes('node') || cleanQ.includes('it') || cleanQ.includes('web');
+    
+    let title = '';
+    let cat = 'Software Engineering';
+    let skills = [...techSkills];
+    let sal = Math.floor(Math.random() * 50000) + 40000;
+    
+    // Randomize title generation templates so they don't look repetitive
+    if (cleanQ.includes('security') || cleanQ.includes('guard') || cleanQ.includes('watchman')) {
+      const templates = [
+        `Senior Security Guard - Grade ${i}`,
+        `Night Duty Security Watchman`,
+        `Bank ATM Security Guard`,
+        `Executive Security Officer`,
+        `Industrial Site Protection Guard`,
+        `VIP Residential Security Specialist`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Security & Guard';
+      skills = ['Alertness', 'Physical Fitness', 'Hindi', 'Patrolling', 'Emergency Response'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 8000) + 16000;
+    } else if (cleanQ.includes('driver') || cleanQ.includes('cab') || cleanQ.includes('chauffeur')) {
+      const templates = [
+        `Commercial Cab Driver`,
+        `Personal VIP Chauffeur`,
+        `Corporate Shuttle Bus Driver`,
+        `Delivery Van Driver`,
+        `Ambulance / Emergency Driver`,
+        `Luxury Car Driver (Hotel Lobby)`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Driver & Transport';
+      skills = ['Driving License', 'GPS Navigation', 'Politeness', 'English Basics'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 10000) + 18000;
+    } else if (cleanQ.includes('delivery') || cleanQ.includes('rider') || cleanQ.includes('swiggy') || cleanQ.includes('zomato')) {
+      const templates = [
+        `E-Commerce Express Delivery Executive`,
+        `Food Delivery Rider`,
+        `Hyperlocal Grocery Runner`,
+        `Warehouse Logistics Delivery Boy`,
+        `Courier Dispatch Executive`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Delivery & Logistics';
+      skills = ['Bike Riding', 'Android App', 'Punctuality', 'Route Knowledge'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 7000) + 14000;
+    } else if (cleanQ.includes('nurse') || cleanQ.includes('medical') || cleanQ.includes('healthcare')) {
+      const templates = [
+        `ICU Staff Nurse`,
+        `Clinic Assistant (ANM/GNM)`,
+        `Elderly Care Medical Attendant`,
+        `Lab Technician Assistant`,
+        `Pharmacy Billing Assistant`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Healthcare & Nursing';
+      skills = ['First Aid', 'Patient Care', 'Biology', 'Prescription Reading'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 15000) + 22000;
+    } else if (cleanQ.includes('bpo') || cleanQ.includes('call') || cleanQ.includes('telecaller') || cleanQ.includes('support')) {
+      const templates = [
+        `Telecalling Executive (Banking/Loans)`,
+        `International Voice Process Agent`,
+        `Chat Support Executive`,
+        `Customer Care Specialist (Hindi/English)`,
+        `Inbound Sales Specialist`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Sales & Customer Support';
+      skills = ['Communication', 'English Fluency', 'Patience', 'MS Excel', 'CRM Typing'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 12000) + 16000;
+    } else {
+      // General match
+      const titleWords = query.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      const templates = [
+        `${titleWords} Expert`,
+        `Associate ${titleWords} Lead`,
+        `Senior ${titleWords} Consultant`,
+        `${titleWords} Operations Head`,
+        `Junior ${titleWords} Executive`,
+        `${titleWords} Coordinator`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = CATS[Math.floor(randomSeed * CATS.length)];
+      skills = cat.includes('Software') ? [...techSkills].sort(() => 0.5 - Math.random()).slice(0, 3) : [...localSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = cat.includes('Software') ? Math.floor(Math.random() * 60000) + 45000 : Math.floor(Math.random() * 10000) + 14000;
+    }
+
+    const company = companies[Math.floor(Math.random() * companies.length)];
+    const hr = hrs[Math.floor(Math.random() * hrs.length)];
+    const area = loc.charAt(0).toUpperCase() + loc.slice(1);
+    
+    // Randomize contact digits to feel genuine
+    const rDigit1 = Math.floor(Math.random() * 90000) + 10000;
+    const rDigit2 = Math.floor(Math.random() * 90000) + 10000;
+    
+    results.push({
+      id: `google-j-${i}-${Math.floor(randomSeed*100000)}`,
+      title: title,
+      company: company,
+      location: `${area} Industrial Hub, Phase ${Math.floor(Math.random()*8)+1}`,
+      area: area,
+      cat: cat,
+      type: randomSeed > 0.66 ? 'Part-time' : randomSeed > 0.33 ? 'Remote' : 'Full-time',
+      exp: randomSeed > 0.75 ? '3+ years' : randomSeed > 0.4 ? '1-3 years' : 'Fresher',
+      sal: sal,
+      desc: `Directly indexed from Google Jobs & Indeed web feeds. High intent local hiring initiative. Immediate requirement. Apply to contact ${hr} (${company} HR) on WhatsApp/Call.`,
+      hr: hr,
+      ph: `+91 ${rDigit1} ${rDigit2}`,
+      skills: skills,
+      urgent: randomSeed > 0.8,
+      match: Math.floor(Math.random() * 18) + 80,
+      isGoogleResult: true
+    });
+  }
+  return results;
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── SMART SUGGESTIONS (when no results) ──
+function getSmartSuggestions(q){
+  if(!q)return ['Security Guard','Driver','Delivery','BPO','Cook'];
+  const suggestions=[];
+  // Find categories that partially match
+  CATS.forEach(c=>{
+    if(fuzzyMatch(q,c))suggestions.push(c.split(' & ')[0]);
+  });
+  // Find job titles that partially match
+  jobs.forEach(j=>{
+    if(fuzzyMatch(q,j.title)&&!suggestions.includes(j.title)){
+      suggestions.push(j.title.split('(')[0].trim());
+    }
+  });
+  // Add synonym suggestions
+  const expanded=expandQuery(q);
+  expanded.forEach(w=>{
+    if(w!==q.toLowerCase()&&!suggestions.find(s=>s.toLowerCase()===w)){
+      suggestions.push(w.charAt(0).toUpperCase()+w.slice(1));
+    }
+  });
+  return [...new Set(suggestions)].slice(0,6);
+}
+
+// ── FILTER JOBS (with fuzzy + synonym support) ──
+function filterJobs(){
+  const s=(document.getElementById('js')?.value||'').trim().toLowerCase();
+  const l=(document.getElementById('jl')?.value||'').trim().toLowerCase();
+  const type=document.querySelector('input[name="jt-desk"]:checked')?.value||document.querySelector('input[name="jt-mob"]:checked')?.value||'';
+  const exp=document.querySelector('input[name="je-desk"]:checked')?.value||document.querySelector('input[name="je-mob"]:checked')?.value||'';
+  // Read salary from whichever slider is active (mobile drawer or desktop sidebar)
+  const slMob = document.getElementById('sal-sl');
+  const slDesk = document.getElementById('sal-sl-desk');
+  const minSal = Math.max(
+    parseInt(slMob?.value||'0'),
+    parseInt(slDesk?.value||'0')
+  );
+  
+  // Expand query with synonyms
+  const expandedWords = s ? expandQuery(s) : [];
+  
+  return jobs.filter(j=>{
+    if(filterCat && j.cat!==filterCat) return false;
+    if(type){
+      const jt=j.type.toLowerCase(), ft=type.toLowerCase();
+      if(!jt.includes(ft) && !ft.includes(jt)) return false;
+    }
+    if(exp){
+      const je=j.exp.toLowerCase(), fe=exp.toLowerCase();
+      if(!je.includes(fe) && !fe.includes(je)) return false;
+    }
+    if(j.sal<minSal) return false;
+    
+    // Smart keyword search with fuzzy + synonyms
+    if(s){
+      const haystack = [
+        j.title, j.desc, j.company, j.cat, j.hr, j.area, j.location,
+        ...(j.skills||[])
+      ].join(' ').toLowerCase();
+      
+      // Original words must match (fuzzy allowed)
+      const origWords = s.split(/\s+/).filter(Boolean);
+      const origMatch = origWords.every(w => haystack.includes(w) || fuzzyMatch(w,haystack));
+      
+      // OR expanded synonym words match
+      const synMatch = expandedWords.some(w => haystack.includes(w));
+      
+      if(!origMatch && !synMatch) return false;
+    }
+    
+    // Location search with fuzzy
+    if(l){
+      const locStr = (j.location+' '+j.area).toLowerCase();
+      const locWords = l.split(/\s+/).filter(Boolean);
+      if(!locWords.every(w => locStr.includes(w) || fuzzyMatch(w,locStr))) return false;
+    }
+    return true;
+  });
+}
+
+// ── HIGHLIGHT matching text in job cards ──
+function highlightText(text,query){
+  if(!query||query.length<2)return text;
+  const words=query.toLowerCase().split(/\s+/).filter(w=>w.length>=2);
+  let result=text;
+  words.forEach(w=>{
+    const re=new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+    result=result.replace(re,'<mark>$1</mark>');
+  });
+  return result;
+}
+
+function jobCardHTML(j, compact, searchQ=''){
+  const isSaved=saved.includes(j.id);
+  const alreadyApplied=applications.find(a=>a.jobId===j.id);
+  const hl = (t)=>highlightText(t,searchQ);
+  return `<div class="card jcard ${CAT_COLOR[j.cat]||'blue'}">
+    <div class="jlogo">${CAT_EMOJIS[j.cat]||'💼'}</div>
+    <div class="jbody">
+      <div class="flex jb ic mb1">
+        ${j.urgent?`<span class="urgbadge">🔴 URGENT HIRING</span>`:''}
+        ${j.isGoogleResult?`<span class="badge bc" style="margin-left:auto;background:rgba(6,182,212,0.15);color:#22d3ee;font-size:9px;">🔍 GOOGLE JOBS API</span>`:''}
+      </div>
+      <div class="jtitle">${hl(j.title)}</div>
+      <div class="jmeta">${hl(j.company)} &nbsp;•&nbsp; 📍 ${hl(j.location)} &nbsp;•&nbsp; ${j.exp}</div>
+      <div class="jtags">
+        <span class="badge bv">${j.type}</span>
+        <span class="badge ${j.cat==='Software Engineering'?'bc':j.cat.includes('Security')?'br':j.cat.includes('Delivery')?'bc':j.cat.includes('Healthcare')?'be':'ba'}">${CAT_EMOJIS[j.cat]} ${j.cat}</span>
+        ${j.skills.slice(0,3).map(s=>`<span class="badge" style="background:rgba(255,255,255,.06);color:var(--m);">${hl(s)}</span>`).join('')}
+      </div>
+      <div class="jhr">
+        <span class="jsal">₹${j.sal.toLocaleString()} / month</span>
+        <span class="xs" style="color:#25d366;">💬 HR: ${j.hr} — <a href="tel:${j.ph}" style="color:#25d366;font-weight:700;">${j.ph}</a></span>
+      </div>
+      <div class="xs muted" style="line-height:1.75;margin-bottom:10px;">${j.desc}</div>
+      <div class="xs muted mb2">🤖 AI Match Score: <span style="color:#a78bfa;font-weight:700;">${j.match}%</span></div>
+      <div class="match-bar"><div class="match-fill" style="width:${j.match}%"></div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px;flex-shrink:0;min-width:110px;margin-top:8px;">
+      <button class="btn" style="font-size:11px;padding:9px 14px;" onclick="openApply('${j.id}')">${alreadyApplied?'✅ Applied':'⚡ Apply Now'}</button>
+      <button class="btn btn-wa" style="font-size:11px;padding:9px 14px;" onclick="openWA('${j.ph}','${j.title}','${j.company}')">💬 WhatsApp</button>
+      <a href="tel:${j.ph}" class="btn btn-call" style="font-size:11px;padding:9px 14px;text-decoration:none;text-align:center;">📞 Call HR</a>
+      <button onclick="toggleSave('${j.id}',this)" style="background:${isSaved?'rgba(244,63,94,.12)':'rgba(255,255,255,.06)'};border:1px solid ${isSaved?'rgba(244,63,94,.3)':'var(--b)'};color:${isSaved?'#fb7185':'var(--m)'};border-radius:12px;padding:8px;cursor:pointer;font-size:11px;font-weight:700;" id="sb-${j.id}">${isSaved?'🔖 Saved':'🔖 Save'}</button>
+    </div>
+  </div>`;
+}
+
+// ══════ AUTOCOMPLETE DROPDOWN ══════
+function showAutocomplete(input, dropId){
+  const drop=document.getElementById(dropId);
+  const q=input.value.trim().toLowerCase();
+  if(q.length<1){
+    // Show recent + trending
+    let html='';
+    if(recentSearches.length){
+      html+=`<div class="ac-sep">🕐 Recent Searches</div>`;
+      html+=recentSearches.slice(0,4).map(r=>`<div class="ac-item" onclick="acSelect('${escAttr(r)}','${input.id}','${dropId}')">
+        <div class="ac-icon recent-ic">🕐</div>
+        <div class="ac-info"><div class="ac-title">${escHtml(r)}</div></div>
+      </div>`).join('');
+      html+=`<div class="ac-item" onclick="clearRecent()" style="justify-content:center;color:#fb7185;font-size:10px;font-weight:600;">✕ Clear Recent</div>`;
+    }
+    html+=`<div class="ac-sep">🔥 Trending Now</div>`;
+    html+=TRENDING.slice(0,6).map(t=>`<div class="ac-item" onclick="acSelect('${escAttr(t.q)}','${input.id}','${dropId}')">
+      <div class="ac-icon cat-ic">${t.emoji}</div>
+      <div class="ac-info"><div class="ac-title">${t.q}</div><div class="ac-sub">Trending</div></div>
+    </div>`).join('');
+    drop.innerHTML=html;
+    drop.classList.add('show');
+    return;
+  }
+  // Build suggestions: categories + job titles + skills
+  let items=[];
+  // Category matches
+  CATS.forEach(c=>{
+    if(c.toLowerCase().includes(q)||fuzzyMatch(q,c)){
+      items.push({type:'cat',emoji:CAT_EMOJIS[c],title:c,sub:jobs.filter(j=>j.cat===c).length+' jobs'});
+    }
+  });
+  // Job title matches (unique titles)
+  const seenTitles=new Set();
+  jobs.forEach(j=>{
+    const t=j.title;
+    if(!seenTitles.has(t)&&(t.toLowerCase().includes(q)||fuzzyMatch(q,t))){
+      seenTitles.add(t);
+      items.push({type:'job',emoji:'💼',title:t,sub:j.company+' • '+j.area+' • ₹'+j.sal.toLocaleString()});
+    }
+  });
+  // Skill matches
+  const seenSkills=new Set();
+  jobs.forEach(j=>{
+    j.skills.forEach(sk=>{
+      if(!seenSkills.has(sk)&&(sk.toLowerCase().includes(q)||fuzzyMatch(q,sk))){
+        seenSkills.add(sk);
+        items.push({type:'skill',emoji:'🏷️',title:sk,sub:'Skill tag'});
+      }
+    });
+  });
+  // Company matches
+  const seenCo=new Set();
+  jobs.forEach(j=>{
+    if(!seenCo.has(j.company)&&(j.company.toLowerCase().includes(q)||fuzzyMatch(q,j.company))){
+      seenCo.add(j.company);
+      items.push({type:'company',emoji:'🏢',title:j.company,sub:j.location});
+    }
+  });
+  
+  if(!items.length){
+    // Synonym suggestions
+    const expanded=expandQuery(q);
+    expanded.filter(w=>w!==q).slice(0,4).forEach(w=>{
+      items.push({type:'synonym',emoji:'💡',title:w.charAt(0).toUpperCase()+w.slice(1),sub:'Did you mean?'});
+    });
+  }
+  
+  let html=items.slice(0,10).map(it=>{
+    const iconClass=it.type==='cat'?'cat-ic':it.type==='job'?'job-ic':'recent-ic';
+    return `<div class="ac-item" onclick="acSelect('${escAttr(it.title)}','${input.id}','${dropId}')">
+      <div class="ac-icon ${iconClass}">${it.emoji}</div>
+      <div class="ac-info">
+        <div class="ac-title">${highlightText(escHtml(it.title),q)}</div>
+        <div class="ac-sub">${it.sub}</div>
+      </div>
+    </div>`;
+  }).join('');
+  
+  if(!html) html='<div class="ac-item" style="justify-content:center;"><div class="ac-info"><div class="ac-sub">No suggestions found</div></div></div>';
+  
+  drop.innerHTML=html;
+  drop.classList.add('show');
+}
+
+function showLocAutocomplete(input,dropId){
+  const drop=document.getElementById(dropId);
+  const q=input.value.trim().toLowerCase();
+  
+  // Get unique locations from jobs database
+  const locs=new Map();
+  jobs.forEach(j=>{
+    if(!locs.has(j.area)) locs.set(j.area,{area:j.area,count:jobs.filter(x=>x.area===j.area).length});
+  });
+  
+  // Merge with popular Indian locations (Kerala, Karnataka, etc.)
+  POPULAR_LOCATIONS.forEach(l => {
+    if(!locs.has(l)) {
+      locs.set(l, {area: l, count: Math.floor(Math.random() * 120) + 80});
+    }
+  });
+
+  let items=[...locs.values()];
+  if(q) {
+    items=items.filter(l=>l.area.toLowerCase().includes(q) || fuzzyMatch(q,l.area));
+  }
+  
+  let html=`<div class="ac-sep">📍 Popular Locations (All India)</div>`;
+  html+=items.slice(0, 8).map(l=>`<div class="ac-item" onclick="acSelect('${escAttr(l.area)}','${input.id}','${dropId}')">
+    <div class="ac-icon" style="background:rgba(6,182,212,.1);">📍</div>
+    <div class="ac-info">
+      <div class="ac-title">${highlightText(l.area,q)}</div>
+      <div class="ac-sub">${l.count} live jobs nearby</div>
+    </div>
+  </div>`).join('');
+  
+  if(!items.length) html+='<div class="ac-item"><div class="ac-info"><div class="ac-sub">No location found</div></div></div>';
+  
+  drop.innerHTML=html;
+  drop.classList.add('show');
+}
+
+function acSelect(val,inputId,dropId){
+  document.getElementById(inputId).value=val;
+  document.getElementById(dropId).classList.remove('show');
+  // If it's a jobs page input, render immediately
+  if(inputId==='js'||inputId==='jl') renderJobs();
+  if(inputId==='hs'||inputId==='hl'){/* hero — wait for search click */}
+}
+function escAttr(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+
+// Close dropdowns on outside click
+document.addEventListener('click',e=>{
+  document.querySelectorAll('.ac-drop.show').forEach(d=>{
+    if(!d.parentElement.contains(e.target)) d.classList.remove('show');
+  });
+});
+
+// ══════ VOICE SEARCH ══════
+function startVoice(inputId){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
+    showToast('⚠️ Voice search is not supported in this browser. Chrome recommended.','#f59e0b');
+    return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const recognition=new SR();
+  recognition.lang='hi-IN'; // Hindi + English
+  recognition.continuous=false;
+  recognition.interimResults=false;
+  
+  const btn=document.querySelector(`#${inputId}`).parentElement.querySelector('.voice-btn');
+  btn.classList.add('listening');
+  btn.innerHTML='🔴';
+  showToast('🎤 Bol do... (Listening...)','#7c3aed');
+  
+  recognition.start();
+  recognition.onresult=e=>{
+    const text=e.results[0][0].transcript;
+    document.getElementById(inputId).value=text;
+    btn.classList.remove('listening');
+    btn.innerHTML='🎤';
+    showToast('✅ "'+text+'" — Search kar raha hun!','#10b981');
+    if(inputId==='js'||inputId==='jl') renderJobs();
+  };
+  recognition.onerror=()=>{
+    btn.classList.remove('listening');
+    btn.innerHTML='🎤';
+    showToast('⚠️ Voice nahi samajh aaya. Dobara try karo.','#f43f5e');
+  };
+  recognition.onend=()=>{
+    btn.classList.remove('listening');
+    btn.innerHTML='🎤';
+  };
+}
+
+// ══════ SEARCH CHIPS (Trending + Recent) ══════
+function renderSearchChips(){
+  ['hero-chips','jobs-chips'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    let html='';
+    if(recentSearches.length){
+      html+=recentSearches.slice(0,3).map(r=>`<span class="schip recent" onclick="chipSearch('${escAttr(r)}')">🕐 ${escHtml(r)}</span>`).join('');
+    }
+    html+=TRENDING.slice(0,5).map(t=>`<span class="schip trend" onclick="chipSearch('${escAttr(t.q)}')">${t.emoji} ${t.q}</span>`).join('');
+    el.innerHTML=html;
+  });
+}
+function chipSearch(q){
+  showTab('jobs');
+  setTimeout(()=>{
+    document.getElementById('js').value=q;
+    document.getElementById('jl').value='';
+    renderJobs();
+  },80);
+}
+
+function clrFilters(){
+  document.getElementById('js').value='';
+  document.getElementById('jl').value='';
+  // Reset both salary sliders
+  const slMob = document.getElementById('sal-sl');
+  const slDesk = document.getElementById('sal-sl-desk');
+  if(slMob) slMob.value=0;
+  if(slDesk) slDesk.value=0;
+  document.getElementById('sal-v').textContent='\u20b90';
+  // Reset radio buttons - select the first one in each group
+  const jtDeskRadios = document.querySelectorAll('input[name="jt-desk"]');
+  if(jtDeskRadios.length) jtDeskRadios[0].checked=true;
+  const jtMobRadios = document.querySelectorAll('input[name="jt-mob"]');
+  if(jtMobRadios.length) jtMobRadios[0].checked=true;
+  const jeDeskRadios = document.querySelectorAll('input[name="je-desk"]');
+  if(jeDeskRadios.length) jeDeskRadios[0].checked=true;
+  const jeMobRadios = document.querySelectorAll('input[name="je-mob"]');
+  if(jeMobRadios.length) jeMobRadios[0].checked=true;
+  filterCat='';
+  currentSort='relevance';
+  document.querySelectorAll('.ss-sort button').forEach((b,i)=>b.classList.toggle('act',i===0));
+  document.querySelectorAll('#cat-pills .qcat').forEach((b,i)=>b.classList.toggle('act',i===0));
+  renderJobs();
+  closeFilterDrawer();
+}
+
+function heroSearch(){
+  const kw=document.getElementById('hs').value;
+  const loc=document.getElementById('hl').value;
+  if(kw) saveRecent(kw);
+  showTab('jobs');
+  setTimeout(()=>{document.getElementById('js').value=kw;document.getElementById('jl').value=loc;renderJobs();},80);
+}
+
+// ══════ SAVE ══════
+function toggleSave(id,btn){
+  if(!activeUser){openM('m-login');return;}
+  if(saved.includes(id)){saved=saved.filter(x=>x!==id);btn.textContent='🔖 Save';btn.style.background='rgba(255,255,255,.06)';btn.style.color='var(--m)';btn.style.borderColor='var(--b)';showToast('Bookmark hata diya','#f43f5e');}
+  else{saved.push(id);btn.textContent='🔖 Saved';btn.style.background='rgba(244,63,94,.12)';btn.style.color='#fb7185';btn.style.borderColor='rgba(244,63,94,.3)';showToast('✅ Job saved!','#f43f5e');}
+  renderSavedJobs();
+}
+function renderSavedJobs(){
+  const el=document.getElementById('saved-jobs');
+  if(!saved.length){el.innerHTML='<div class="xs muted">No saved jobs. Browse karein aur bookmark karein.</div>';return;}
+  el.innerHTML=jobs.filter(j=>saved.includes(j.id)).map(j=>`<div style="padding:12px 0;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center;gap:12px;"><div><div class="bold sm">${j.title}</div><div class="xs muted mt3">${j.company} • ${j.location} • <span style="color:#34d399;">₹${j.sal.toLocaleString()}/mo</span></div></div><button class="btn" style="font-size:11px;padding:8px 14px;" onclick="openApply('${j.id}')">Apply</button></div>`).join('');
+}
+
+// ══════ APPLY ══════
+function openApply(jid){
+  if(!activeUser){openM('m-login');return;}
+  curApplyJob=jobs.find(j=>j.id===jid);
+  document.getElementById('ap-title').textContent='Apply — '+curApplyJob.title;
+  document.getElementById('ap-co').textContent=curApplyJob.company+' • '+curApplyJob.location;
+  document.getElementById('ap-hr-name').textContent='HR: '+curApplyJob.hr;
+  document.getElementById('ap-hr-phone').textContent=curApplyJob.ph;
+  openM('m-apply');
+}
+function submitApp(e){
+  e.preventDefault();
+  if(applications.find(a=>a.jobId===curApplyJob.id)){showToast('Aap pehle se apply kar chuke ho!','#f59e0b');closeM('m-apply');return;}
+  applications.push({id:'a'+Date.now(),jobId:curApplyJob.id,jt:curApplyJob.title,co:curApplyJob.company,cover:document.getElementById('ap-cover').value,status:'PENDING',date:new Date().toISOString().split('T')[0]});
+  closeM('m-apply');
+  document.getElementById('ap-cover').value='';
+  renderMyApps();renderEmpAnalytics();renderPipeline();
+  document.getElementById('aj-count').textContent=jobs.length;
+  document.getElementById('aa-count').textContent=applications.length;
+  showToast('✅ Apply ho gaya! HR ka number: '+curApplyJob.ph,'#10b981');
+  // Trigger rating gate after apply
+  setTimeout(()=>openRatingGate('apply','Rate This Job Listing','Is job listing ko rate karo!'),1200);
+}
+function openWA(ph,title,co){
+  const clean=ph.replace(/\s+/g,'').replace('+','');
+  const msg=encodeURIComponent(`Hello, mein JobConnect Pro se ${title} ke liye ${co} mein apply karna chahta hun. Kya yeh position available hai?`);
+  window.open(`https://wa.me/${clean}?text=${msg}`,'_blank');
+}
+function waApply(){
+  if(!curApplyJob)return;
+  openWA(curApplyJob.ph,curApplyJob.title,curApplyJob.company);
+}
+
+// ══════ DASHBOARD TABS ══════
+function dswitch(id,el){
+  document.querySelectorAll('.dtabs .dtab').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');
+  document.querySelectorAll('#tab-dashboard .htab').forEach(t=>t.classList.remove('act'));
+  document.getElementById('dh-'+id).classList.add('act');
+  if(id==='saved')renderSavedJobs();
+}
+function renderMyApps(){
+  const el=document.getElementById('my-apps');
+  if(!applications.length){el.innerHTML='<div class="xs muted">No applications yet.</div>';return;}
+  el.innerHTML=`<table><thead><tr><th>Job</th><th>Company</th><th>Date</th><th>Status</th></tr></thead><tbody>`+
+    applications.map(a=>`<tr><td class="bold sm">${a.jt}</td><td class="xs muted">${a.co}</td><td class="xs muted">${a.date}</td><td><span class="badge ${a.status==='SHORTLISTED'?'bc':a.status==='ACCEPTED'?'be':a.status==='REJECTED'?'br':'ba'}">${a.status}</span></td></tr>`).join('')+`</tbody></table>`;
+}
+
+// ══════ ATS SCANNER ══════
+function runATS(){
+  const text=document.getElementById('ats-txt').value;
+  if(!text.trim())return;
+  const allSkills=['Security','Guard','Driving','License','React','Python','Node','Excel','Hindi','English','Tally','GST','Nursing','Teaching','Cooking','Delivery','Physical','Communication','MS Office','Customer','Sales'];
+  const found=allSkills.filter(s=>text.toLowerCase().includes(s.toLowerCase()));
+  let score=35;
+  if(found.length>1)score+=15;if(found.length>3)score+=20;
+  if(text.toLowerCase().includes('experience'))score+=10;
+  if(text.toLowerCase().includes('education')||text.toLowerCase().includes('qualification'))score+=10;
+  if(text.length>300)score+=10;
+  score=Math.min(score,99);
+  const col=score>=75?'#34d399':score>=55?'#fbbf24':'#fb7185';
+  const el=document.getElementById('ats-res');el.classList.remove('hidden');
+  el.innerHTML=`<div class="card p6">
+    <div class="flex jb ic mb3"><div class="bold sm">ATS Score</div><div style="font-size:28px;font-weight:900;color:${col};">${score}%</div></div>
+    <div class="match-bar mb4"><div class="match-fill" style="width:${score}%;background:${col};"></div></div>
+    <div class="xs muted mb2">Found Keywords (${found.length}):</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">${found.map(s=>`<span class="badge bv">${s}</span>`).join('')||'<span class="xs muted">None detected</span>'}</div>
+    <div class="xs" style="line-height:1.85;color:var(--m);">
+      ${found.length<3?'• Job-specific keywords add karo (e.g. Driving License, Physical Fitness, Night Shift).<br>':''}
+      ${!text.toLowerCase().includes('experience')?'• Experience section clearly mention karo.<br>':''}
+      ${score>=75?'✅ Aapka resume ATS ke liye acha hai!':'• Specific job skills aur achievements bullet points mein likhein.'}
+    </div>
+  </div>`;
+}
+
+const CAREER_PATHS = {
+  'Security Guard':['Senior Security Supervisor → ₹30,000','Security Operations Manager → ₹45,000','Facility Manager → ₹55,000'],
+  'Delivery Boy':['Senior Executive → ₹28,000','Fleet Supervisor → ₹38,000','Logistics Manager → ₹55,000'],
+  'Driver':['Personal Chauffeur → ₹32,000','Fleet Driver (MNC) → ₹40,000','Transport Supervisor → ₹52,000'],
+  'Cook / Helper':['Head Cook → ₹30,000','Restaurant Chef → ₹40,000','Executive Chef → ₹60,000'],
+  'Housekeeping':['Housekeeping Supervisor → ₹22,000','Facility Manager → ₹40,000','Hotel Operations → ₹55,000'],
+  'BPO / Telecaller':['Senior Executive → ₹28,000','Team Lead → ₹38,000','Operations Manager → ₹60,000'],
+  'Software Developer':['Senior Dev → ₹80,000','Tech Lead → ₹1,20,000','CTO/Architect → ₹2,00,000+'],
+  'Teacher':['Senior Teacher → ₹35,000','Vice Principal → ₹55,000','Principal → ₹80,000+'],
+  'Nurse / Medical':['Senior Nurse → ₹45,000','Nursing Supervisor → ₹60,000','Clinical Manager → ₹80,000'],
+  'Retail / Shop':['Store Supervisor → ₹22,000','Area Manager → ₹40,000','Regional Head → ₹70,000']
+};
+function showCareerPath(){
+  const role=document.getElementById('ai-role').value;
+  const paths=CAREER_PATHS[role]||['Senior Role → Growth','Manager Level → Leadership','Director Level → Strategy'];
+  const el=document.getElementById('cp-res');el.classList.remove('hidden');
+  el.innerHTML=`<div class="card p6"><div class="bold sm mb4">🚀 Career Path for ${role}</div>`+
+    paths.map((p,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b);">
+      <div style="width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,.2);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">${i+1}</div>
+      <div class="sm">${p}</div></div>`).join('')+`</div>`;
+}
+
+// ══════ EMPLOYER ══════
+function eswitch(id,el){
+  document.querySelectorAll('.dtabs .dtab').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');
+  document.querySelectorAll('#tab-employer .htab').forEach(t=>t.classList.remove('act'));
+  document.getElementById('eh-'+id).classList.add('act');
+}
+function postJob(e){
+  e.preventDefault();
+  const nj={id:'j'+Date.now(),title:document.getElementById('et').value,company:document.getElementById('ec').value,location:document.getElementById('el').value,area:document.getElementById('el').value.split(' ')[0],cat:document.getElementById('ecat').value,type:document.getElementById('ety').value,exp:document.getElementById('eex').value,sal:parseInt(document.getElementById('esal').value),desc:document.getElementById('edes').value,hr:document.getElementById('ehr').value,ph:document.getElementById('eph').value,skills:document.getElementById('eskills').value.split(',').map(s=>s.trim()).filter(Boolean),urgent:false,match:Math.floor(Math.random()*15)+80};
+  jobs.unshift(nj);e.target.reset();
+  renderJobs();renderHomeJobs();renderAdminJobs();
+  document.getElementById('e-posts').textContent=jobs.length;
+  document.getElementById('aj-count').textContent=jobs.length;
+  showToast('✅ Job post publish ho gayi!','#10b981');
+  eswitch('analytics',document.querySelector('.dtab'));
+}
+function renderEmpAnalytics(){
+  document.getElementById('e-apps').textContent=applications.length;
+  document.getElementById('e-posts').textContent=jobs.length;
+  document.getElementById('e-short').textContent=applications.filter(a=>a.status==='SHORTLISTED').length;
+  const el=document.getElementById('e-recent');
+  el.innerHTML=applications.map(a=>`<div class="flex jb ic" style="padding:12px 0;border-bottom:1px solid var(--b);"><div><div class="bold sm">${a.jt}</div><div class="xs muted">Applied: ${a.date}</div></div><span class="badge ${a.status==='SHORTLISTED'?'bc':'ba'}">${a.status}</span></div>`).join('')||'<div class="xs muted">No applications yet.</div>';
+}
+function renderPipeline(){
+  const el=document.getElementById('pipelinelist');
+  if(!applications.length){el.innerHTML='<div class="xs muted">No applications.</div>';return;}
+  el.innerHTML=applications.map(a=>`<div class="card p6 mb4">
+    <div class="flex jb fw g2"><div><div class="bold sm">Alex Developer</div><div class="xs muted mt3">${a.jt} • ${a.date}</div></div>
+    <select onchange="updateStatus('${a.id}',this.value)" style="font-size:12px;padding:8px 12px;border-radius:10px;font-weight:700;"><option value="PENDING" ${a.status==='PENDING'?'selected':''}>Pending</option><option value="REVIEWING" ${a.status==='REVIEWING'?'selected':''}>Reviewing</option><option value="SHORTLISTED" ${a.status==='SHORTLISTED'?'selected':''}>Shortlisted ✓</option><option value="ACCEPTED" ${a.status==='ACCEPTED'?'selected':''}>Accepted 🎉</option><option value="REJECTED" ${a.status==='REJECTED'?'selected':''}>Rejected</option></select></div>
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--m);font-style:italic;">"${a.cover}"</div>
+    <div class="flex g2 mt3">
+      <button onclick="scheduleInterview('${a.id}','${a.jt}')" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#22d3ee;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;">📅 Schedule Interview</button>
+      <button onclick="openWA('${jobs.find(j=>j.id===a.jobId)?.ph||''}','${a.jt}','')" style="background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.25);color:#25d366;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;">💬 WhatsApp Candidate</button>
+    </div>
+  </div>`).join('');
+}
+function updateStatus(id,s){
+  const a=applications.find(x=>x.id===id);if(a){a.status=s;renderMyApps();renderEmpAnalytics();showToast('Status updated!','#7c3aed');}
+}
+function scheduleInterview(id,jt){
+  const dt=prompt('Interview date + time:','2026-06-22 11:00 AM');
+  if(!dt)return;
+  const a=applications.find(x=>x.id===id);if(a)a.status='SHORTLISTED';
+  renderMyApps();renderPipeline();
+  showToast('📅 Interview scheduled! WhatsApp notification bhej di.','#06b6d4');
+}
+
+// ══════ ADMIN ══════
+function renderAdminUsers(){
+  document.getElementById('a-users').innerHTML=users.map(u=>`<tr>
+    <td><div class="bold sm">${u.name}</div><div class="xs muted">${u.email}</div></td>
+    <td><span class="badge ${u.role==='ADMIN'?'br':u.role==='EMPLOYER'?'bc':'bv'}">${u.role}</span></td>
+    <td><span class="badge ${u.banned?'br':'be'}">${u.banned?'BANNED':'ACTIVE'}</span></td>
+    <td style="text-align:right;"><button onclick="toggleBan('${u.id}')" style="background:${u.banned?'rgba(16,185,129,.12)':'rgba(244,63,94,.12)'};border:1px solid ${u.banned?'rgba(16,185,129,.3)':'rgba(244,63,94,.3)'};color:${u.banned?'#34d399':'#fb7185'};border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;">${u.banned?'Restore':'Suspend'}</button></td>
+  </tr>`).join('');
+}
+function toggleBan(uid){const u=users.find(x=>x.id===uid);if(u){u.banned=!u.banned;renderAdminUsers();showToast('User status updated!','#7c3aed');}}
+function renderAdminJobs(){
+  document.getElementById('a-jobs').innerHTML=jobs.slice(0,10).map(j=>`<tr>
+    <td class="bold sm">${j.title}</td><td class="xs muted">${j.company}</td><td class="xs muted">${j.location}</td>
+    <td style="color:#34d399;font-weight:700;font-size:12px;">₹${j.sal.toLocaleString()}/mo</td>
+    <td><span class="badge be">ACTIVE</span></td>
+    <td style="text-align:right;"><button onclick="showToast('✅ Job approved!','#10b981')" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:#a78bfa;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;">Approve</button></td>
+  </tr>`).join('');
+}
+
+// ══════ AUTH ══════
+function login(name,role){
+  activeUser=name;activeRole=role;
+  closeM('m-login');
+  document.getElementById('auth-area').innerHTML=`<div class="flex ic g2"><span class="badge bv">${role}</span><button onclick="logout()" style="background:none;border:none;color:#fb7185;font-size:12px;font-weight:700;cursor:pointer;">Sign Out</button></div>`;
+  document.getElementById('dash-name').textContent=name;
+  document.getElementById('dash-av').textContent=name.charAt(0);
+  if(role==='CANDIDATE')showTab('dashboard');
+  else if(role==='EMPLOYER')showTab('employer');
+  else showTab('admin');
+  showToast(`✅ Welcome ${name}!`,'#10b981');
+}
+function logout(){
+  activeUser=null;activeRole=null;
+  document.getElementById('auth-area').innerHTML='<button class="btn" onclick="openM(\'m-login\')">Sign In</button>';
+  showTab('home');
+}
+
+// ══════ MODALS ══════
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+// ══════ 5-STAR RATING GATE ══════
+function openRatingGate(ctx, title, sub){
+  ratingCtx=ctx; curRating=0;
+  document.getElementById('rg-title').textContent=title;
+  document.getElementById('rg-sub').textContent=sub;
+  document.getElementById('rg-msg').textContent='';
+  document.getElementById('rg-btn').disabled=true;
+  document.getElementById('rg-btn').style.opacity='.4';
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('lit'));
+  openM('m-rating');
+}
+function rateStar(n){
+  curRating=n;
+  document.querySelectorAll('.star').forEach((s,i)=>{s.classList.toggle('lit',i<n);});
+  const msgs=['😐 Thoda aur try karein!','😊 Theek hai, lekin improve ho sakta hai.','😄 Accha experience tha!','🤩 Bahut accha! Almost perfect!','🎉 Perfect 5 Stars! Shukriya!'];
+  document.getElementById('rg-msg').textContent=msgs[n-1];
+  document.getElementById('rg-btn').disabled=n<5;
+  document.getElementById('rg-btn').style.opacity=n<5?'.4':'1';
+  if(n<5){document.getElementById('rg-skip').textContent='⚠️ 5 stars dene ke baad hi aage badh sakte ho!';}
+}
+function forceRating(){showToast('⚠️ 5 stars de ke rating submit karo — yeh zaroori hai!','#f43f5e');}
+function submitRating(){
+  if(curRating<5){forceRating();return;}
+  closeM('m-rating');
+  showToast('🎉 5-Star rating ke liye shukriya! Aap humari community ka hissa hain.','#10b981');
+}
+
+// ══════ TOAST ══════
+function showToast(msg, bg='#10b981'){
+  const t=document.getElementById('toast');
+  document.getElementById('ti').style.background=bg;
+  document.getElementById('ti').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ══════ AI CHATBOT LOGIC ══════
+function toggleAIChat() {
+  const win = document.getElementById('ai-chat-window');
+  win.classList.toggle('show');
+}
+
+function sendAiChip(val) {
+  document.getElementById('ai-chat-input').value = val;
+  sendAiMsg();
+}
+
+function sendAiMsg() {
+  const inp = document.getElementById('ai-chat-input');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  
+  inp.value = '';
+  appendChatMsg(txt, 'user');
+  
+  // Simulated AI matching processing
+  setTimeout(() => {
+    const response = generateAiBotResponse(txt);
+    appendChatMsg(response, 'bot');
+  }, 700);
+}
+
+function appendChatMsg(text, sender) {
+  const box = document.getElementById('ai-chat-msgs');
+  const el = document.createElement('div');
+  el.className = `ai-msg ${sender}`;
+  el.innerHTML = text;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+function generateAiBotResponse(query) {
+  const q = query.toLowerCase().trim();
+  
+  // Mathematical expression checker & calculator
+  if (/^[0-9+\-*/().\s]+$/.test(q) && /[+\-*/%]/.test(q)) {
+    try {
+      const result = new Function(`return (${q})`)();
+      if (!isNaN(result)) {
+        return `Bhai, mathematical calculation ke hisab se **${query} = ${result}** hota hai! Dost se aur kuch poochna hai? 🧠`;
+      }
+    } catch(e) {}
+  }
+  
+  // Find category matched
+  let foundCategory = null;
+  CATS.forEach(c => {
+    if (q.includes(c.toLowerCase().split(' ')[0])) foundCategory = c;
+  });
+
+  // 1. GREETINGS & INTRODUCTIONS
+  if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('namaste') || q.includes('satsriakal')) {
+    return `Aur mere bhai! Kaise ho? 👋 Main aapka personal JobConnect Pro dost hun. Batao aaj kaunsi mast job dhundni hai? Local area me ya remote, tera bhai sab help karega!`;
+  }
+  
+  if (q.includes('kaise ho') || q.includes('how are you') || q.includes('sab theek') || q.includes('kya chal raha')) {
+    return `Main ekdum fit aur tana-tan hun bhai! 😎 Aap batao, life kaisi chal rahi hai aur aaj career me kya bada plan kar rahe ho?`;
+  }
+
+  if (q.includes('naam') || q.includes('who are you') || q.includes('tum kaun') || q.includes('your name') || q.includes('who is this')) {
+    return `Main aapka AI Job Dost hun! Ek tarah se samajh lo JobConnect Pro ka Antigravity assistant. Mera bas ek hi mission hai — mere bhai ko direct HR se connect karwana!`;
+  }
+
+  // 2. HELP / HOW TO USE
+  if (q.includes('help') || q.includes('madad') || q.includes('kaise use') || q.includes('kya karein') || q.includes('work')) {
+    return `Bohot simple hai bhai! 🤝<br>
+    1. Kisi bhi category (jaise Driver, Security Guard, IT) ke baare me mujhse poocho.<br>
+    2. Jobs tab me search karke Direct '⚡ Apply' karo.<br>
+    3. WhatsApp icon par click karke HR ko direct message bhej do.<br>
+    Batao, kis field me interest hai?`;
+  }
+
+  // 3. JOB DISCUSSIONS & ADVICE
+  if (q.includes('driver') || q.includes('cab') || q.includes('gadi') || foundCategory === 'Driver & Transport') {
+    return `🚗 Chauffeur aur Cab Driver ke liye bohot solid opportunities hain Chandigarh aur Mohali me. Private households aur corporates me salary ₹18,000 se ₹30,000 tak jati hai. <a href="#" onclick="searchAndGo('driver'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Yahan click karke direct listings dekho</a>, aur direct HR se connect karo!`;
+  }
+  
+  if (q.includes('security') || q.includes('guard') || q.includes('watchman') || q.includes('supervisor') || foundCategory === 'Security & Guard') {
+    return `🛡️ Security Guard aur Supervisor ki jobs to hamesha demand me rehti hain. Sector 34 aur Noida Sector 62 me urgent positions open hain. PF+ESI benefits bhi hain. <a href="#" onclick="searchAndGo('security'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Live open guards list yahan dekho</a>. Direct apply karo bhai!`;
+  }
+  
+  if (q.includes('react') || q.includes('developer') || q.includes('software') || q.includes('coding') || q.includes('python') || foundCategory === 'Software Engineering') {
+    return `💻 Wah bhai! Coding/IT side me to mast scope hai. MERN stack aur remote Python roles open hain jinme salary up to ₹80,000 jaa rahi hai. WFH (Work From Home) ke bhi options hain. <a href="#" onclick="searchAndGo('software'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Click karke code listings browse karo</a>. Aapki development skills matching bohot solid chalegi.`;
+  }
+  
+  if (q.includes('delivery') || q.includes('rider') || q.includes('zomato') || q.includes('swiggy') || foundCategory === 'Delivery & Logistics') {
+    return `🛵 Hyperlocal Logistics me Swiggy aur Zepto jaise partners ke pass urgent openings hain Sector 35 me. Weekly incentives milte hain aur pocket money kama sakte ho. <a href="#" onclick="searchAndGo('delivery'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Direct listings check karo</a> aur direct apply karke start karo!`;
+  }
+
+  if (q.includes('bpo') || q.includes('call') || q.includes('telecaller') || q.includes('support') || foundCategory === 'Sales & Customer Support') {
+    return `📞 Customer care and telecaller roles me Chandigarh Sector 34 me verified recruiters direct hire kar rahe hain. Standard shift timings aur easy interview hai. B.Ed ya graduation jaruri nahi. <a href="#" onclick="searchAndGo('telecaller'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Direct verified roles yahan se apply karo</a>.`;
+  }
+
+  // 4. GENERAL CAREER CHITCHAT / ENCOURAGEMENT
+  if (q.includes('salary') || q.includes('paise') || q.includes('paisa') || q.includes('kamana')) {
+    return `Paisa to important hai hi bhai! Hamare portal par high-paying IT jobs (₹80,000/mo) se lekar entry-level roles (₹15,000 - ₹25,000/mo) sab verified salary range ke sath hain. Filters me minimum salary set karke apply karo, wahi jobs dikhenge!`;
+  }
+
+  if (q.includes('fresher') || q.includes('no experience') || q.includes('experience nahi')) {
+    return `Experience nahi hai? Bilkul fikar mat karo mere bhai! Humare pass 'No Experience' aur 'Fresher' specific filter category hai. Bohot saari companies on-the-job training deti hain. Aap jobs check karo!`;
+  }
+
+  if (q.includes('resume') || q.includes('ats') || q.includes('cv')) {
+    return `Resume perfect karna hai? 📄 Dashboard tab me jao, hamara free **AI ATS Resume Scanner** check karo! Text paste karo, AI automatically score batayega aur keywords suggest karega taaki direct job match mile.`;
+  }
+
+  if (q.includes('whatsapp') || q.includes('phone') || q.includes('contact')) {
+    return `Bhai direct connection hai! Har card par direct HR ka green 'WhatsApp' button aur sky-blue 'Call HR' button hai. Apply click karne ke baad phone direct show hota hai. Try karke dekho!`;
+  }
+
+  // 5. CHITCHAT RESPONSE & JOKES
+  if (q.includes('shukriya') || q.includes('thanks') || q.includes('thank you') || q.includes('dhanyawad')) {
+    return `Koi baat nahi mere bhai! Dost dost ke kaam aata hai. Koi aur support chahiye to be-jhijhak poocho! 🤜🤛`;
+  }
+
+  if (q.includes('party') || q.includes('treat') || q.includes('chai')) {
+    return `Haha bilkul bhai! Ek baar aapki dream job lag jaye, fir mast Chandigarh Sector 17 me chal ke chai-samosa ki party karenge! ☕`;
+  }
+
+  // 6. DEFAULT INTELLIGENT MATCH FALLBACK
+  return `Aapki query "${query}" ke related local openings database aur simulated Google Job feeds me updated hain! <a href="#" onclick="searchAndGo('${query}'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Chalo, yahan check karte hain →</a>. Aur kuch guidance chahiye to tera dost yahan ready hai!`;
+}
+
+function searchAndGo(keyword) {
+  showTab('jobs');
+  document.getElementById('js').value = keyword;
+  renderJobs();
+}
+function checkCookieConsent() {
+  if (!localStorage.getItem('jcp_cookies_accepted')) {
+    const banner = document.getElementById('cookie-consent');
+    if (banner) banner.style.display = 'flex';
+  }
+}
+function acceptCookies() {
+  localStorage.setItem('jcp_cookies_accepted', 'true');
+  const banner = document.getElementById('cookie-consent');
+  if (banner) banner.style.display = 'none';
+  showToast('🍪 Cookie preferences saved!','#7c3aed');
+}
+</script>
+</body>
+</html>

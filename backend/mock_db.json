@@ -1,0 +1,131 @@
+{
+  "users": [
+    {
+      "id": "kmjnfkxzo",
+      "createdAt": "2026-06-14T17:28:37.726Z",
+      "updatedAt": "2026-06-14T17:28:37.726Z",
+      "isBanned": false,
+      "email": "candidate@jobconnect.com",
+      "password": "$2b$10$8q2K33gMpIBnf0Z3Og6/eeOTBi3c.wTB25Ag29M6MRtwkK205o7Sm",
+      "role": "CANDIDATE",
+      "firstName": "Alex",
+      "lastName": "Developer",
+      "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      "id": "sk5a60m47",
+      "createdAt": "2026-06-14T17:28:37.728Z",
+      "updatedAt": "2026-06-14T17:28:37.728Z",
+      "isBanned": false,
+      "email": "employer@jobconnect.com",
+      "password": "$2b$10$X7MmKQk26kc8ojs5jV.Leem34.RLQIR24tPO8qRosyDZyuroihqhe",
+      "role": "EMPLOYER",
+      "firstName": "Sarah",
+      "lastName": "Recruiter",
+      "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      "id": "784rm4a3j",
+      "createdAt": "2026-06-14T17:28:37.728Z",
+      "updatedAt": "2026-06-14T17:28:37.728Z",
+      "isBanned": false,
+      "email": "admin@jobconnect.com",
+      "password": "$2b$10$udN9Mnc0nsLOUyK7vWZCHOy9lrM30oamkQpwVk20AhC7K9IxDRb9.",
+      "role": "ADMIN",
+      "firstName": "Super",
+      "lastName": "Administrator",
+      "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80"
+    }
+  ],
+  "companies": [
+    {
+      "id": "0wsfrgtvm",
+      "createdAt": "2026-06-14T17:28:37.723Z",
+      "updatedAt": "2026-06-14T17:28:37.724Z",
+      "name": "TechCorp Solutions",
+      "website": "https://techcorp.example.com",
+      "location": "San Francisco, CA",
+      "description": "A global leader in SaaS and Enterprise solutions.",
+      "industry": "Software Engineering",
+      "size": "500-1000"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "vq17yovhk",
+      "createdAt": "2026-06-14T17:28:37.729Z",
+      "updatedAt": "2026-06-14T17:28:37.729Z",
+      "status": "ACTIVE",
+      "title": "Senior React Developer",
+      "description": "We are seeking a Senior React Developer to join our core SaaS application team. You will lead UI component architecture, state management, and visual optimization.",
+      "requirements": [
+        "5+ years UI experience",
+        "Strong state management skills",
+        "Responsive UI expertise"
+      ],
+      "skills": [
+        "React",
+        "JavaScript",
+        "Tailwind CSS",
+        "Redux"
+      ],
+      "category": "Software Engineering",
+      "location": "San Francisco, CA",
+      "type": "Full-time",
+      "salaryMin": 120000,
+      "salaryMax": 160000,
+      "experience": "Senior",
+      "companyId": "0wsfrgtvm"
+    },
+    {
+      "id": "u2i4j52gh",
+      "createdAt": "2026-06-14T17:28:37.729Z",
+      "updatedAt": "2026-06-14T17:28:37.729Z",
+      "status": "ACTIVE",
+      "title": "Full-Stack JavaScript Engineer",
+      "description": "Join our team as a Full-Stack Engineer working with Node.js and React. Responsible for back-end APIs, clean databases, and smooth animations.",
+      "requirements": [
+        "3+ years Experience",
+        "Node.js expertise",
+        "Postgres/MongoDB proficiency"
+      ],
+      "skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Express"
+      ],
+      "category": "Software Engineering",
+      "location": "Remote",
+      "type": "Remote",
+      "salaryMin": 90000,
+      "salaryMax": 130000,
+      "experience": "Mid",
+      "companyId": "0wsfrgtvm"
+    }
+  ],
+  "applications": [],
+  "messages": [],
+  "notifications": [],
+  "interviews": [],
+  "savedJobs": [],
+  "resumes": [
+    {
+      "id": "4xh7d938h",
+      "userId": "kmjnfkxzo",
+      "title": "Full Stack Engineer",
+      "bio": "Passionate MERN developer with 3 years of build experience.",
+      "skills": [
+        "React",
+        "Node.js",
+        "Express",
+        "JavaScript",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "experience": "3 Years",
+      "education": "B.S. in Computer Science"
+    }
+  ],
+  "reviews": []
+}

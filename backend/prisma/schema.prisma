@@ -1,0 +1,204 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CANDIDATE
+  EMPLOYER
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  ACCEPTED
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  password       String
+  role           Role            @default(CANDIDATE)
+  firstName      String?
+  lastName       String?
+  avatarUrl      String?
+  isBanned       Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  // Relations
+  candidateProfile CandidateProfile?
+  employerProfile   EmployerProfile?
+  sentMessages     Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
+  notifications    Notification[]
+  savedJobs        SavedJob[]
+  reviews          Review[]
+}
+
+model CandidateProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String?  // e.g. "Full Stack Developer"
+  bio         String?
+  skills      String[] // array of skills
+  resumeUrl   String?
+  experience  String?
+  education   String?
+  portfolio   String?
+  github      String?
+  linkedin    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  applications Application[]
+  interviews   Interview[]
+  resumes      Resume[]
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  logoUrl     String?
+  website     String?
+  location    String?
+  description String?
+  industry    String?
+  size        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  employers   EmployerProfile[]
+  jobs        Job[]
+}
+
+model EmployerProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  position  String?  // e.g. "HR Manager"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id           String    @id @default(uuid())
+  title        String
+  description  String
+  requirements String[]
+  skills       String[]
+  category     String
+  location     String
+  type         String    // e.g. "Full-time", "Part-time", "Remote"
+  salaryMin    Int?
+  salaryMax    Int?
+  experience   String    // e.g. "Entry", "Mid", "Senior"
+  status       String    @default("ACTIVE") // ACTIVE, INACTIVE, CLOSED
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  applications Application[]
+  savedBy      SavedJob[]
+}
+
+model Application {
+  id               String            @id @default(uuid())
+  jobId            String
+  job              Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidateId      String
+  candidateProfile CandidateProfile  @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  resumeUrl        String?
+  coverLetter      String?
+  status           ApplicationStatus @default(PENDING)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  interviews       Interview[]
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  fileUrl    String?
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Interview {
+  id            String          @id @default(uuid())
+  applicationId String
+  application   Application     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  candidateId   String
+  candidate     CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  scheduledTime DateTime
+  duration      Int             @default(60) // minutes
+  meetUrl       String?
+  notes         String?
+  status        InterviewStatus @default(SCHEDULED)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model SavedJob {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model Resume {
+  id               String           @id @default(uuid())
+  candidateId      String
+  candidateProfile CandidateProfile @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  resumeUrl        String
+  skillsMatched    String[]
+  aiScore          Int?
+  analysis         String?
+  createdAt        DateTime         @default(now())
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+}
