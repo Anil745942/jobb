@@ -1,0 +1,66 @@
+export const blogPosts = [
+  {
+    slug: 'optimize-resume-ats-2026',
+    title: 'How to Optimize Your Resume for ATS Parsers in 2026',
+    excerpt: 'Learn the exact keyword frequencies, layout structures, and action-verb optimizations that satisfy ATS filters and secure recruiter screens.',
+    date: 'June 10, 2026',
+    readTime: '8 min read',
+    cover: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80',
+    author: 'Sarah Chen',
+    category: 'Career Tips',
+  },
+  {
+    slug: 'nextjs-app-router-interview',
+    title: 'Mastering the Next.js App Router Technical Interview',
+    excerpt: 'A comprehensive deep-dive into Server Actions, Route Handlers, nested layouts, and performance optimization scenarios asked by top tech teams.',
+    date: 'May 28, 2026',
+    readTime: '12 min read',
+    cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80',
+    author: 'Raj Patel',
+    category: 'Interview Prep',
+  },
+  {
+    slug: 'salary-negotiation-senior-engineers',
+    title: 'Salary Negotiation: 5 Rules for Senior Software Engineers',
+    excerpt: 'Negotiating stock options, signing bonuses, and remote allowances can increase your base compensation by over 25%. Here is the exact script.',
+    date: 'April 14, 2026',
+    readTime: '10 min read',
+    cover: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
+    author: 'Michael Torres',
+    category: 'Compensation',
+  },
+  {
+    slug: 'remote-work-trends-2026',
+    title: 'Remote Work Trends Every Job Seeker Should Know in 2026',
+    excerpt: 'Hybrid policies, async-first cultures, and geo-neutral pay bands are reshaping how companies hire. Here is what to expect and how to position yourself.',
+    date: 'March 22, 2026',
+    readTime: '7 min read',
+    cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+    author: 'Emily Nakamura',
+    category: 'Industry Trends',
+  },
+  {
+    slug: 'linkedin-profile-optimization',
+    title: 'LinkedIn Profile Optimization: Get 3x More Recruiter Messages',
+    excerpt: 'Your headline, featured section, and skill endorsements directly impact recruiter outreach. Follow this step-by-step guide to stand out.',
+    date: 'February 8, 2026',
+    readTime: '6 min read',
+    cover: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=800&q=80',
+    author: 'Sarah Chen',
+    category: 'Personal Branding',
+  },
+  {
+    slug: 'cracking-system-design-interviews',
+    title: 'Cracking System Design Interviews: A Practical Framework',
+    excerpt: 'From URL shorteners to chat systems — learn the structured approach senior engineers use to ace system design rounds at FAANG companies.',
+    date: 'January 15, 2026',
+    readTime: '15 min read',
+    cover: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    author: 'Raj Patel',
+    category: 'Interview Prep',
+  },
+];
+
+export function getPostBySlug(slug: string) {
+  return blogPosts.find((p) => p.slug === slug);
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jobconnectpro.com/sitemap.xml
+
+# Disallow private dashboards from indexing
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /api/
