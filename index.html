@@ -797,12 +797,12 @@ l.parentNode.insertBefore(s, l);
 <div class="ptr-indicator" id="ptr-indicator"></div>
 
 <!-- FILTER DRAWER OVERLAY + DRAWER (Mobile) -->
-<div class="filter-overlay" id="filter-overlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-overlay" id="filter-overlay" data-action="closeFilterDrawer"></div>
 <div class="filter-drawer" id="filter-drawer">
   <div class="filter-drawer-handle"></div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
     <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;">🎯 Filter Jobs</div>
-    <button onclick="closeFilterDrawer()" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;">Done</button>
+    <button data-action="closeFilterDrawer" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;">Done</button>
   </div>
   <!-- Job Type -->
   <div style="margin-bottom:20px;"><label>Job Type</label>
@@ -839,8 +839,8 @@ l.parentNode.insertBefore(s, l);
     <div style="font-size:11px;font-weight:700;color:var(--t);">Install JobConnect Pro</div>
     <div style="font-size:10px;color:var(--m);">Add to Home Screen for app-like experience</div>
   </div>
-  <button id="install-btn" onclick="installApp()" style="background:linear-gradient(135deg,#7c3aed,#6366f1);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Install</button>
-  <button onclick="document.getElementById('install-banner').classList.remove('show')" style="background:none;border:none;color:var(--m);cursor:pointer;font-size:16px;padding:4px;">✕</button>
+  <button id="install-btn" data-action="installApp" style="background:linear-gradient(135deg,#7c3aed,#6366f1);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Install</button>
+  <button data-action="dismissInstallBanner" style="background:none;border:none;color:var(--m);cursor:pointer;font-size:16px;padding:4px;">✕</button>
 </div>
 
 <div class="parallax-bg">
@@ -850,20 +850,20 @@ l.parentNode.insertBefore(s, l);
 </div>
 <!-- NAVBAR -->
 <nav>
-  <div class="logo" onclick="showTab('home')">
+  <div class="logo" data-action="showTab" data-tab="home">
     <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
     <div class="logo-txt">JobConnect<span>Pro</span></div>
   </div>
-  <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle navigation"><span></span></button>
+  <button class="nav-toggle" data-action="toggleNav" aria-label="Toggle navigation"><span></span></button>
   <div class="navlinks">
-    <button class="navbtn act" id="nav-home" onclick="showTab('home')">Home</button>
-    <button class="navbtn" id="nav-jobs" onclick="showTab('jobs')">Find Jobs</button>
-    <button class="navbtn" id="nav-dashboard" onclick="showTab('dashboard')">Dashboard</button>
-    <button class="navbtn" id="nav-employer" onclick="showTab('employer')">Recruiter</button>
-    <button class="navbtn" id="nav-admin" onclick="showTab('admin')">Admin</button>
+    <button class="navbtn act" id="nav-home" data-action="showTab" data-tab="home">Home</button>
+    <button class="navbtn" id="nav-jobs" data-action="showTab" data-tab="jobs">Find Jobs</button>
+    <button class="navbtn" id="nav-dashboard" data-action="showTab" data-tab="dashboard">Dashboard</button>
+    <button class="navbtn" id="nav-employer" data-action="showTab" data-tab="employer">Recruiter</button>
+    <button class="navbtn" id="nav-admin" data-action="showTab" data-tab="admin">Admin</button>
   </div>
   <div class="flex ic g2">
-    <div id="auth-area"><button class="btn" onclick="openM('m-login')">Sign In</button></div>
+    <div id="auth-area"><button class="btn" data-action="openM" data-modal="m-login">Sign In</button></div>
   </div>
 </nav>
 
@@ -871,7 +871,7 @@ l.parentNode.insertBefore(s, l);
 <div id="toast"><div class="toast-inner" id="ti"></div></div>
 
 <!-- WHATSAPP FLOAT BUTTON -->
-<button class="wa-float" onclick="showToast('💚 WhatsApp HR Support: +91 98765 00001','#25d366')" title="Chat on WhatsApp">💬</button>
+<button class="wa-float" data-action="showToast" data-msg="💚 WhatsApp HR Support: +91 98765 00001" data-bg="#25d366" title="Chat on WhatsApp">💬</button>
 
 <!-- ══════ HOME TAB ══════ -->
 <div id="tab-home" class="tab act">
@@ -886,7 +886,7 @@ l.parentNode.insertBefore(s, l);
       <div class="sinp" style="flex:2;" id="hero-sinp-kw">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text" id="hs" placeholder="Job dhundo (Security, Driver, BPO, IT…)" oninput="showAutocomplete(this,'ac-hero-kw')" onfocus="showAutocomplete(this,'ac-hero-kw')" autocomplete="off">
-        <button class="voice-btn" id="voice-hero" onclick="startVoice('hs')" title="Voice Search 🎤">🎤</button>
+        <button class="voice-btn" id="voice-hero" data-action="startVoice" data-input="hs" title="Voice Search 🎤">🎤</button>
         <div class="ac-drop" id="ac-hero-kw"></div>
       </div>
       <div class="sinp" style="flex:1.5;" id="hero-sinp-loc">
@@ -894,24 +894,24 @@ l.parentNode.insertBefore(s, l);
         <input type="text" id="hl" placeholder="Chandigarh, Mohali…" oninput="showLocAutocomplete(this,'ac-hero-loc')" onfocus="showLocAutocomplete(this,'ac-hero-loc')" autocomplete="off">
         <div class="ac-drop" id="ac-hero-loc"></div>
       </div>
-      <button class="btn" style="padding:12px 28px;" onclick="heroSearch()">🔍 Search Jobs</button>
+      <button class="btn" style="padding:12px 28px;" data-action="heroSearch">🔍 Search Jobs</button>
     </div>
     <!-- TRENDING + RECENT SEARCHES -->
     <div class="search-chips" id="hero-chips"></div>
     <!-- Quick Category Pills -->
     <div class="qcats" id="qcats">
-      <div class="qcat act" onclick="qFilter('')"><span>🏠</span> All Jobs</div>
-      <div class="qcat" onclick="qFilter('Security & Guard')"><span>🛡️</span> Security Guard</div>
-      <div class="qcat" onclick="qFilter('Delivery & Logistics')"><span>🛵</span> Delivery Boy</div>
-      <div class="qcat" onclick="qFilter('Driver & Transport')"><span>🚗</span> Driver</div>
-      <div class="qcat" onclick="qFilter('Housekeeping & Cleaning')"><span>🧹</span> Housekeeping</div>
-      <div class="qcat" onclick="qFilter('Cook & Kitchen')"><span>👨‍🍳</span> Cook / Helper</div>
-      <div class="qcat" onclick="qFilter('Sales & Customer Support')"><span>📞</span> BPO / Telecaller</div>
-      <div class="qcat" onclick="qFilter('Software Engineering')"><span>💻</span> IT / Software</div>
-      <div class="qcat" onclick="qFilter('Healthcare & Nursing')"><span>🏥</span> Nurse / Medical</div>
-      <div class="qcat" onclick="qFilter('Construction & Labour')"><span>🏗️</span> Construction</div>
-      <div class="qcat" onclick="qFilter('Retail & Shop')"><span>🏪</span> Shop / Retail</div>
-      <div class="qcat" onclick="qFilter('Education & Training')"><span>📚</span> Teacher</div>
+      <div class="qcat act" data-action="qFilter" data-cat=""><span>🏠</span> All Jobs</div>
+      <div class="qcat" data-action="qFilter" data-cat="Security & Guard"><span>🛡️</span> Security Guard</div>
+      <div class="qcat" data-action="qFilter" data-cat="Delivery & Logistics"><span>🛵</span> Delivery Boy</div>
+      <div class="qcat" data-action="qFilter" data-cat="Driver & Transport"><span>🚗</span> Driver</div>
+      <div class="qcat" data-action="qFilter" data-cat="Housekeeping & Cleaning"><span>🧹</span> Housekeeping</div>
+      <div class="qcat" data-action="qFilter" data-cat="Cook & Kitchen"><span>👨‍🍳</span> Cook / Helper</div>
+      <div class="qcat" data-action="qFilter" data-cat="Sales & Customer Support"><span>📞</span> BPO / Telecaller</div>
+      <div class="qcat" data-action="qFilter" data-cat="Software Engineering"><span>💻</span> IT / Software</div>
+      <div class="qcat" data-action="qFilter" data-cat="Healthcare & Nursing"><span>🏥</span> Nurse / Medical</div>
+      <div class="qcat" data-action="qFilter" data-cat="Construction & Labour"><span>🏗️</span> Construction</div>
+      <div class="qcat" data-action="qFilter" data-cat="Retail & Shop"><span>🏪</span> Shop / Retail</div>
+      <div class="qcat" data-action="qFilter" data-cat="Education & Training"><span>📚</span> Teacher</div>
     </div>
     <div class="sgrid">
       <div class="scard card"><h3>24,800+</h3><p>Active Job Listings</p></div>
@@ -925,7 +925,7 @@ l.parentNode.insertBefore(s, l);
   <div class="page" style="padding-top:0;">
     <div class="flex jb ic mb4 fw g2">
       <div><div class="sec">Today's Top Jobs</div><div class="sub">Apne area ke fresh jobs — directly HR se</div></div>
-      <button class="btn" onclick="showTab('jobs')">View All Jobs →</button>
+      <button class="btn" data-action="showTab" data-tab="jobs">View All Jobs →</button>
     </div>
     <div id="home-jobs" style="display:flex;flex-direction:column;gap:14px;"></div>
 
@@ -965,7 +965,7 @@ l.parentNode.insertBefore(s, l);
     <div class="sinp card f1" style="border-radius:14px;padding:10px 16px;min-width:180px;" id="jobs-sinp-kw">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       <input type="text" id="js" placeholder="Job title, skill, company…" oninput="debounceRender();showAutocomplete(this,'ac-jobs-kw')" onfocus="showAutocomplete(this,'ac-jobs-kw')" autocomplete="off">
-      <button class="voice-btn" onclick="startVoice('js')" title="Voice Search">🎤</button>
+      <button class="voice-btn" data-action="startVoice" data-input="js" title="Voice Search">🎤</button>
       <div class="ac-drop" id="ac-jobs-kw"></div>
     </div>
     <div class="sinp card" style="border-radius:14px;padding:10px 16px;min-width:140px;" id="jobs-sinp-loc">
@@ -973,14 +973,14 @@ l.parentNode.insertBefore(s, l);
       <input type="text" id="jl" placeholder="City / Area…" oninput="debounceRender();showLocAutocomplete(this,'ac-jobs-loc')" onfocus="showLocAutocomplete(this,'ac-jobs-loc')" autocomplete="off">
       <div class="ac-drop" id="ac-jobs-loc"></div>
     </div>
-    <button class="btn" onclick="renderJobs()">🔍 Search</button>
-    <button onclick="clrFilters()" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:12px;padding:10px 16px;cursor:pointer;font-size:12px;font-weight:600;">✕ Clear</button>
+    <button class="btn" data-action="renderJobs">🔍 Search</button>
+    <button data-action="clrFilters" style="background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--m);border-radius:12px;padding:10px 16px;cursor:pointer;font-size:12px;font-weight:600;">✕ Clear</button>
   </div>
   <!-- SEARCH STATUS BAR ON JOBS PAGE -->
   <div class="search-chips mb3" id="jobs-chips" style="justify-content:flex-start;margin:0 0 12px 0;"></div>
 
   <!-- Mobile Filter Toggle Button -->
-  <button class="filter-toggle-btn" onclick="openFilterDrawer()">🎯 Filters &amp; Sort <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <button class="filter-toggle-btn" data-action="openFilterDrawer">🎯 Filters &amp; Sort <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
 
   <!-- Category Pills -->
   <div style="display:flex;gap:8px;margin-bottom:24px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;" id="cat-pills"></div>
@@ -1021,10 +1021,10 @@ l.parentNode.insertBefore(s, l);
         <div style="display:flex;align-items:center;gap:10px;">
           <div class="ss-speed" id="ss-speed"><span class="dot-g"></span> Ready</div>
           <div class="ss-sort">
-            <button class="act" onclick="sortJobs('relevance',this)">🎯 Relevance</button>
-            <button onclick="sortJobs('salary-high',this)">💰 Salary ↓</button>
-            <button onclick="sortJobs('salary-low',this)">💸 Salary ↑</button>
-            <button onclick="sortJobs('match',this)">🤖 AI Match</button>
+            <button class="act" data-action="sortJobs" data-sort="relevance">🎯 Relevance</button>
+            <button data-action="sortJobs" data-sort="salary-high">💰 Salary ↓</button>
+            <button data-action="sortJobs" data-sort="salary-low">💸 Salary ↑</button>
+            <button data-action="sortJobs" data-sort="match">🤖 AI Match</button>
           </div>
         </div>
       </div>
@@ -1042,10 +1042,10 @@ l.parentNode.insertBefore(s, l);
     <div><div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-name">Alex Developer</div><div class="xs muted">Candidate Account</div></div>
   </div>
   <div class="dtabs">
-    <button class="dtab act" onclick="dswitch('apps',this)">📋 Applications</button>
-    <button class="dtab" onclick="dswitch('saved',this)">🔖 Saved</button>
-    <button class="dtab" onclick="dswitch('ai',this)">🤖 AI Tools</button>
-    <button class="dtab" onclick="dswitch('profile',this)">👤 Profile</button>
+    <button class="dtab act" data-action="dswitch" data-panel="apps">📋 Applications</button>
+    <button class="dtab" data-action="dswitch" data-panel="saved">🔖 Saved</button>
+    <button class="dtab" data-action="dswitch" data-panel="ai">🤖 AI Tools</button>
+    <button class="dtab" data-action="dswitch" data-panel="profile">👤 Profile</button>
   </div>
   <div id="dh-apps" class="htab act"><div class="card p6"><div class="bold mb4">My Applications</div><div id="my-apps"></div></div></div>
   <div id="dh-saved" class="htab"><div class="card p6"><div class="bold mb4">Saved Jobs</div><div id="saved-jobs"></div></div></div>
@@ -1054,14 +1054,14 @@ l.parentNode.insertBefore(s, l);
       <div class="bold mb2" style="font-size:14px;">🤖 AI ATS Resume Scanner</div>
       <div class="xs muted mb4">Resume text paste karo — ATS score, missing keywords, aur improvement suggestions milenge.</div>
       <textarea id="ats-txt" rows="7" placeholder="Paste your resume text here...&#10;&#10;Example:&#10;OBJECTIVE: Looking for security guard job...&#10;EXPERIENCE: 2 years at XYZ Security...&#10;SKILLS: Physical fitness, Night shift, Kannada, Hindi..."></textarea>
-      <button class="btn mt3" onclick="runATS()">Analyze Resume →</button>
+      <button class="btn mt3" data-action="runATS">Analyze Resume →</button>
       <div id="ats-res" class="hidden mt4"></div>
     </div>
     <div class="card p6">
       <div class="bold mb2" style="font-size:14px;">🧠 AI Career Path Advisor</div>
       <div class="xs muted mb4">Apni current job type choose karo — AI next steps batayega</div>
       <select id="ai-role" style="margin-bottom:16px;"><option>Security Guard</option><option>Delivery Boy</option><option>Driver</option><option>Cook / Helper</option><option>Housekeeping</option><option>BPO / Telecaller</option><option>Software Developer</option><option>Teacher</option><option>Nurse / Medical</option><option>Retail / Shop</option></select>
-      <button class="btn" onclick="showCareerPath()">Show AI Career Path →</button>
+      <button class="btn" data-action="showCareerPath">Show AI Career Path →</button>
       <div id="cp-res" class="hidden mt4"></div>
     </div>
   </div>
@@ -1076,7 +1076,7 @@ l.parentNode.insertBefore(s, l);
         <div style="grid-column:span 2;"><label>Skills</label><input type="text" value="React, Node.js, JavaScript, PostgreSQL"></div>
         <div style="grid-column:span 2;"><label>Bio</label><textarea rows="3">Full Stack Developer with 3 years experience.</textarea></div>
       </div>
-      <button class="btn mt4" onclick="showToast('✅ Profile saved!','#7c3aed')">Save Profile</button>
+      <button class="btn mt4" data-action="showToast" data-msg="✅ Profile saved!" data-bg="#7c3aed">Save Profile</button>
     </div>
   </div>
 </div>
@@ -1086,9 +1086,9 @@ l.parentNode.insertBefore(s, l);
 <div id="tab-employer" class="tab">
 <div class="page">
   <div class="dtabs">
-    <button class="dtab act" onclick="eswitch('analytics',this)">📊 Analytics</button>
-    <button class="dtab" onclick="eswitch('post',this)">➕ Post Job</button>
-    <button class="dtab" onclick="eswitch('pipeline',this)">👥 Pipeline</button>
+    <button class="dtab act" data-action="eswitch" data-panel="analytics">📊 Analytics</button>
+    <button class="dtab" data-action="eswitch" data-panel="post">➕ Post Job</button>
+    <button class="dtab" data-action="eswitch" data-panel="pipeline">👥 Pipeline</button>
   </div>
   <div id="eh-analytics" class="htab act">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
@@ -1205,16 +1205,16 @@ l.parentNode.insertBefore(s, l);
 <footer>
   <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;flex-wrap:wrap;">
     <div><div class="logo-txt" style="margin-bottom:10px;">JobConnect<span>Pro</span></div><div class="xs muted" style="line-height:1.9;">Security guard se software engineer — Chandigarh, Mohali, Noida mein direct HR connect.</div></div>
-    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Job Seekers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" onclick="showTab('jobs')" style="font-size:12px;color:var(--m);text-decoration:none;">Browse All Jobs</a><a href="#" onclick="showTab('dashboard')" style="font-size:12px;color:var(--m);text-decoration:none;">My Dashboard</a></div></div>
-    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Employers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" onclick="showTab('employer')" style="font-size:12px;color:var(--m);text-decoration:none;">Post a Job</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Pricing</a></div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Job Seekers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" data-action="showTab" data-tab="jobs" style="font-size:12px;color:var(--m);text-decoration:none;">Browse All Jobs</a><a href="#" data-action="showTab" data-tab="dashboard" style="font-size:12px;color:var(--m);text-decoration:none;">My Dashboard</a></div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Employers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" data-action="showTab" data-tab="employer" style="font-size:12px;color:var(--m);text-decoration:none;">Post a Job</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Pricing</a></div></div>
     <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">Support</div><div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--m);"><span>📞 +91 98765 00001</span><span>📧 support@jobconnectpro.in</span><span>📍 Mohali, Punjab</span></div></div>
   </div>
   <div style="max-width:1200px;margin:20px auto 0;padding-top:20px;border-top:1px solid var(--b);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;" class="xs muted">
     <span>© 2026 JobConnect Pro. All rights reserved.</span>
     <span>
-      <a href="#" onclick="showTab('privacy')" style="color:var(--m);text-decoration:none;">Privacy Policy</a> • 
-      <a href="#" onclick="showTab('terms')" style="color:var(--m);text-decoration:none;">Terms</a> • 
-      <a href="#" onclick="showTab('cookies')" style="color:var(--m);text-decoration:none;">Cookie Policy</a>
+      <a href="#" data-action="showTab" data-tab="privacy" style="color:var(--m);text-decoration:none;">Privacy Policy</a> • 
+      <a href="#" data-action="showTab" data-tab="terms" style="color:var(--m);text-decoration:none;">Terms</a> • 
+      <a href="#" data-action="showTab" data-tab="cookies" style="color:var(--m);text-decoration:none;">Cookie Policy</a>
     </span>
   </div>
 </footer>
@@ -1222,21 +1222,21 @@ l.parentNode.insertBefore(s, l);
 <!-- Cookie Consent Banner (For AdSense / GDPR compliance) -->
 <div id="cookie-consent" style="position:fixed;bottom:20px;left:20px;right:20px;max-width:480px;background:rgba(18,18,28,.97);border:1px solid rgba(124,58,237,.3);backdrop-filter:blur(20px);border-radius:18px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.6);z-index:9999;display:none;align-items:center;justify-content:space-between;gap:14px;margin:0 auto;">
   <div style="font-size:11px;color:var(--t);line-height:1.6;font-family:'Inter',sans-serif;">
-    🍪 <strong>Cookie Consent</strong>: Hum Google AdSense ads show karne aur analytics track karne ke liye cookies use karte hain. Padhne ke liye <a href="#" onclick="showTab('privacy');return false;" style="color:#a78bfa;text-decoration:underline;">Privacy Policy</a> check karein.
+    🍪 <strong>Cookie Consent</strong>: Hum Google AdSense ads show karne aur analytics track karne ke liye cookies use karte hain. Padhne ke liye <a href="#" data-action="showTab" data-tab="privacy" style="color:#a78bfa;text-decoration:underline;">Privacy Policy</a> check karein.
   </div>
-  <button onclick="acceptCookies()" style="background:linear-gradient(135deg,#7c3aed,#22d3ee);border:none;color:#fff;border-radius:10px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Accept</button>
+  <button data-action="acceptCookies" style="background:linear-gradient(135deg,#7c3aed,#22d3ee);border:none;color:#fff;border-radius:10px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Accept</button>
 </div>
 
 <!-- ══ MODALS ══ -->
 <!-- Login -->
 <div class="mo" id="m-login">
   <div class="mbox" style="max-width:400px;">
-    <button onclick="closeM('m-login')" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
+    <button data-action="closeM" data-modal="m-login" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
     <div style="text-align:center;margin-bottom:24px;"><div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;">Welcome Back 👋</div><div class="xs muted mt3">Quick login — select your profile</div></div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="login('Alex Developer','CANDIDATE')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(124,58,237,.2);">👤 <div><div class="bold sm">Alex Developer</div><div class="xs muted">Candidate</div></div></button>
-      <button onclick="login('Sarah Recruiter','EMPLOYER')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(6,182,212,.2);">🏢 <div><div class="bold sm">Sarah Recruiter</div><div class="xs muted">Employer</div></div></button>
-      <button onclick="login('Admin','ADMIN')" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(244,63,94,.2);">🛡️ <div><div class="bold sm">Admin Manager</div><div class="xs muted">Administrator</div></div></button>
+      <button data-action="login" data-name="Alex Developer" data-role="CANDIDATE" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(124,58,237,.2);">👤 <div><div class="bold sm">Alex Developer</div><div class="xs muted">Candidate</div></div></button>
+      <button data-action="login" data-name="Sarah Recruiter" data-role="EMPLOYER" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(6,182,212,.2);">🏢 <div><div class="bold sm">Sarah Recruiter</div><div class="xs muted">Employer</div></div></button>
+      <button data-action="login" data-name="Admin" data-role="ADMIN" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(244,63,94,.2);">🛡️ <div><div class="bold sm">Admin Manager</div><div class="xs muted">Administrator</div></div></button>
     </div>
   </div>
 </div>
@@ -1244,7 +1244,7 @@ l.parentNode.insertBefore(s, l);
 <!-- Apply -->
 <div class="mo" id="m-apply">
   <div class="mbox">
-    <button onclick="closeM('m-apply')" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
+    <button data-action="closeM" data-modal="m-apply" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
     <div class="bold mb2" style="font-size:16px;" id="ap-title">Apply</div>
     <div class="xs muted mb6" id="ap-co">Company</div>
     <form onsubmit="submitApp(event)">
@@ -1258,7 +1258,7 @@ l.parentNode.insertBefore(s, l);
       </div>
       <div style="display:flex;gap:8px;">
         <button class="btn w100" type="submit">One-Tap Apply ⚡</button>
-        <button type="button" class="btn btn-wa" onclick="waApply()" style="white-space:nowrap;padding:10px 16px;">💬 WhatsApp</button>
+        <button type="button" class="btn btn-wa" data-action="waApply" style="white-space:nowrap;padding:10px 16px;">💬 WhatsApp</button>
       </div>
     </form>
   </div>
@@ -1271,20 +1271,20 @@ l.parentNode.insertBefore(s, l);
     <div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px;" id="rg-title">Rate Your Experience</div>
     <div class="xs muted mb2" id="rg-sub">Aapka feedback bohot zaruri hai!</div>
     <div class="stars" id="stars">
-      <span class="star" data-v="1" onclick="rateStar(1)">⭐</span>
-      <span class="star" data-v="2" onclick="rateStar(2)">⭐</span>
-      <span class="star" data-v="3" onclick="rateStar(3)">⭐</span>
-      <span class="star" data-v="4" onclick="rateStar(4)">⭐</span>
-      <span class="star" data-v="5" onclick="rateStar(5)">⭐</span>
+      <span class="star" data-v="1" data-action="rateStar" data-rating="1">⭐</span>
+      <span class="star" data-v="2" data-action="rateStar" data-rating="2">⭐</span>
+      <span class="star" data-v="3" data-action="rateStar" data-rating="3">⭐</span>
+      <span class="star" data-v="4" data-action="rateStar" data-rating="4">⭐</span>
+      <span class="star" data-v="5" data-action="rateStar" data-rating="5">⭐</span>
     </div>
     <div id="rg-msg" class="xs muted mb4" style="min-height:18px;"></div>
-    <button class="btn w100" id="rg-btn" onclick="submitRating()" disabled style="opacity:.4;">Submit Rating</button>
-    <div class="xs muted mt3" id="rg-skip" style="cursor:pointer;text-decoration:underline;" onclick="forceRating()">Skip nahi kar sakte — rating dena zaroori hai ⚠️</div>
+    <button class="btn w100" id="rg-btn" data-action="submitRating" disabled style="opacity:.4;">Submit Rating</button>
+    <div class="xs muted mt3" id="rg-skip" style="cursor:pointer;text-decoration:underline;" data-action="forceRating">Skip nahi kar sakte — rating dena zaroori hai ⚠️</div>
   </div>
 </div>
 
 <!-- AI CHATBOT CONTAINER -->
-<button class="ai-chat-btn" onclick="toggleAIChat()" title="AI Career Assistant">🤖</button>
+<button class="ai-chat-btn" data-action="toggleAIChat" title="AI Career Assistant">🤖</button>
 <div class="ai-chat-win" id="ai-chat-window">
   <div class="ai-chat-hdr">
     <div class="flex ic g2">
@@ -1294,19 +1294,19 @@ l.parentNode.insertBefore(s, l);
         <div class="xs" style="opacity: .8;">Online • Ready to Match</div>
       </div>
     </div>
-    <button onclick="toggleAIChat()" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">✕</button>
+    <button data-action="toggleAIChat" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">✕</button>
   </div>
   <div class="ai-chat-msgs" id="ai-chat-msgs">
     <div class="ai-msg bot">Hello! Main aapka JobConnect AI Assistant hun. Aapko kis location ya category me job chahiye? Mujhse puchhein!</div>
   </div>
   <div class="ai-chat-chips">
-    <span class="schip trend" onclick="sendAiChip('Chandigarh me driver job')">🚗 Driver Chandigarh</span>
-    <span class="schip trend" onclick="sendAiChip('Security Guard job')">🛡️ Security Guard</span>
-    <span class="schip trend" onclick="sendAiChip('React dev job remote')">💻 React remote</span>
+    <span class="schip trend" data-action="sendAiChip" data-chip="Chandigarh me driver job">🚗 Driver Chandigarh</span>
+    <span class="schip trend" data-action="sendAiChip" data-chip="Security Guard job">🛡️ Security Guard</span>
+    <span class="schip trend" data-action="sendAiChip" data-chip="React dev job remote">💻 React remote</span>
   </div>
   <div class="ai-chat-inp">
     <input type="text" id="ai-chat-input" placeholder="Type here..." onkeydown="if(event.key==='Enter') sendAiMsg()">
-    <button onclick="sendAiMsg()">Send</button>
+    <button data-action="sendAiMsg">Send</button>
   </div>
 </div>
 
@@ -2673,19 +2673,30 @@ function sendAiChip(val) {
   sendAiMsg();
 }
 
-function sendAiMsg() {
+async function sendAiMsg() {
   const inp = document.getElementById('ai-chat-input');
   const txt = inp.value.trim();
   if (!txt) return;
   
   inp.value = '';
   appendChatMsg(txt, 'user');
+  appendChatMsg('<span class="ai-typing">🤖 Soch raha hun...</span>', 'bot');
   
-  // Simulated AI matching processing
-  setTimeout(() => {
-    const response = generateAiBotResponse(txt);
+  try {
+    const response = await callGeminiAPI(txt);
+    // Remove typing indicator
+    const msgs = document.getElementById('ai-chat-msgs');
+    const lastMsg = msgs.lastElementChild;
+    if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
     appendChatMsg(response, 'bot');
-  }, 700);
+  } catch(err) {
+    const msgs = document.getElementById('ai-chat-msgs');
+    const lastMsg = msgs.lastElementChild;
+    if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
+    // Fallback to old rule-based if API fails
+    const fallback = generateAiBotResponse(txt);
+    appendChatMsg(fallback, 'bot');
+  }
 }
 
 function appendChatMsg(text, sender) {
@@ -2697,6 +2708,40 @@ function appendChatMsg(text, sender) {
   box.scrollTop = box.scrollHeight;
 }
 
+// Google Gemini API Integration
+const GEMINI_API_KEY = 'AIzaSyDJTSKRPMV3VYgje4-7z9bT2fYEPbQxXHg';
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+async function callGeminiAPI(userMessage) {
+  const systemPrompt = `Tum ek friendly aur helpful AI assistant ho jiska naam "JobConnect AI Dost" hai. Tum Hinglish (Hindi + English mix) mein baat karte ho.
+
+Tumhara kaam hai:
+1. Har tarah ke sawaalon ka jawab dena - jobs, career, general knowledge, science, math, weather, coding, entertainment, sab kuch.
+2. Job-related sawaalon mein extra helpful hona - salary info, interview tips, resume advice dena.
+3. Dost jaisa tone rakhna - "bhai", "yaar" use karna.
+4. Jawab concise aur informative rakhna.
+5. Agar koi job dhundh raha hai to usse relevant advice dena aur motivate karna.
+
+Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR cheez ka jawab de sakta hai!`;
+
+  const response = await fetch(GEMINI_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: [{ parts: [{ text: userMessage }] }],
+      generationConfig: { temperature: 0.8, maxOutputTokens: 500 }
+    })
+  });
+
+  if (!response.ok) throw new Error('Gemini API error');
+  const data = await response.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Bhai, abhi jawab nahi mil raha. Thodi der baad try karo!';
+  // Convert markdown bold to HTML
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+}
+
+// Fallback rule-based response (used when API fails)
 function generateAiBotResponse(query) {
   const q = query.toLowerCase().trim();
   
