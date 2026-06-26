@@ -16,7 +16,7 @@
 <meta name="google-adsense-account" content="ca-pub-5564677867865390">
 <meta name="google-site-verification" content="u8hWd4269WJgjrosGDm6tr2edRV8rt869j1JMWzEM8Q" />
 <meta name="5543508c4070fda170fee6c7d598eedc08ad74e5" content="5543508c4070fda170fee6c7d598eedc08ad74e5" />
-<meta name="monetag" content="fdbec34868b65e83fe601875eb787f7f">
+
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -754,26 +754,19 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 }
 </script>
 </head>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197909" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197906" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197905" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197904" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197903" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197902" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197900" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197892" data-cfasync="false" async></script>
 <script>
-(function(pllq){
+(function(lmbq){
 var d = document,
     s = d.createElement('script'),
     l = d.scripts[d.scripts.length - 1];
-s.settings = pllq || {};
-s.src = "\/\/untimely-hello.com\/bOXAVessd.GIlP0rYeWdcm\/OeXmu9WuUZYUQlHkqPvTHcLxuNhjAcO2RMWjukYtrNXziEq2\/NSzmYAzgMawT";
+s.settings = lmbq || {};
+s.src = "\/\/untimely-hello.com\/bNXnVZsId.Gclr0OYvWIcJ\/geMmD9ougZuUclLk\/PRT\/coxnNDj\/EDxIM-z_MdtsNOzZES2GMzTtE-ztNrwb";
 s.async = true;
 s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
 })({})
 </script>
+<!-- Intrusive ad scripts removed - only non-intrusive banner ads allowed -->
 <body>
 
 <!-- SPLASH SCREEN -->
@@ -918,6 +911,18 @@ l.parentNode.insertBefore(s, l);
       <div class="scard card"><h3>1,840+</h3><p>Verified HR Contacts</p></div>
       <div class="scard card"><h3>Direct</h3><p>WhatsApp HR Connect</p></div>
       <div class="scard card"><h3>99.2%</h3><p>HR Response Rate</p></div>
+    </div>
+  </div>
+
+  <!-- BANNER AD - Below Stats -->
+  <div style="max-width:820px;margin:24px auto 0;padding:0 20px;">
+    <div class="ad-banner-slot card" style="padding:12px;text-align:center;background:rgba(255,255,255,.02);border:1px dashed rgba(124,58,237,.15);border-radius:14px;min-height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+      <ins class="adsbygoogle"
+        style="display:block;width:100%;min-height:90px;"
+        data-ad-client="ca-pub-5564677867865390"
+        data-ad-slot="auto"
+        data-ad-format="horizontal"
+        data-full-width-responsive="true"></ins>
     </div>
   </div>
 
@@ -1198,6 +1203,18 @@ l.parentNode.insertBefore(s, l);
       <h3 class="sm bold">2. Managing Choices</h3>
       <p class="xs muted">You can instruct your browser to refuse all cookies or notify you when a cookie is sent. However, parts of the portal may function suboptimally without session tracking.</p>
     </div>
+  </div>
+</div>
+
+<!-- BANNER AD - Above Footer -->
+<div style="max-width:1200px;margin:0 auto 0;padding:0 20px 24px;">
+  <div class="ad-banner-slot card" style="padding:12px;text-align:center;background:rgba(255,255,255,.02);border:1px dashed rgba(124,58,237,.15);border-radius:14px;min-height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+    <ins class="adsbygoogle"
+      style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5564677867865390"
+      data-ad-slot="auto"
+      data-ad-format="horizontal"
+      data-full-width-responsive="true"></ins>
   </div>
 </div>
 
@@ -1841,7 +1858,32 @@ function renderActiveFilteredJobs(isAppend = false) {
     }
   }
   
-  el.innerHTML = slice.map(j => jobCardHTML(j, false, q)).join('');
+  // Render job cards with inline banner ads after every 3rd card
+  let html = '';
+  slice.forEach((j, i) => {
+    html += jobCardHTML(j, false, q);
+    // Insert a banner ad after every 3rd job card
+    if ((i + 1) % 3 === 0 && i < slice.length - 1) {
+      html += `<div class="ad-banner-slot card" style="padding:12px;text-align:center;margin-bottom:14px;background:rgba(255,255,255,.02);border:1px dashed rgba(124,58,237,.2);border-radius:14px;min-height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <ins class="adsbygoogle"
+          style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5564677867865390"
+          data-ad-slot="auto"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>`;
+    }
+  });
+  el.innerHTML = html;
+  
+  // Initialize AdSense ads in the newly rendered slots
+  try {
+    document.querySelectorAll('.ad-banner-slot ins.adsbygoogle').forEach(ad => {
+      if (!ad.dataset.adsbygoogleStatus) {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    });
+  } catch(e) { console.log('[Ads] AdSense not loaded yet or blocked:', e.message); }
 
   // GSAP animation for newly rendered cards
   gsap.fromTo("#jlist .jcard", 
@@ -2680,7 +2722,7 @@ async function sendAiMsg() {
   
   inp.value = '';
   appendChatMsg(txt, 'user');
-  appendChatMsg('<span class="ai-typing">🤖 Soch raha hun...</span>', 'bot');
+  appendChatMsg('<span class="ai-typing">🤖 Soch raha hun...<span style="display:inline-block;animation:pulse 1s infinite;">⏳</span></span>', 'bot');
   
   try {
     const response = await callGeminiAPI(txt);
@@ -2690,12 +2732,33 @@ async function sendAiMsg() {
     if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
     appendChatMsg(response, 'bot');
   } catch(err) {
+    console.error('[AI Chat] Error:', err.message);
     const msgs = document.getElementById('ai-chat-msgs');
     const lastMsg = msgs.lastElementChild;
     if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
-    // Fallback to old rule-based if API fails
+    
+    // Show specific error messages based on error type
+    let errorMsg = '';
+    if (err.message === 'API_KEY_INVALID') {
+      errorMsg = '🔑 Bhai, API key ka issue hai. Admin se contact karo ya thodi der baad try karo!';
+    } else if (err.message === 'API_RATE_LIMITED') {
+      errorMsg = '⏱️ Bohot zyada requests ho gayi bhai! 30 second wait karke dubara try karo.';
+    } else if (err.message === 'API_TIMEOUT') {
+      errorMsg = '⌛ Bhai, server slow chal raha hai. Internet check karo aur dubara try karo!';
+    } else if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
+      errorMsg = '📶 Network issue lag raha hai bhai! WiFi/Data check karo aur retry karo.';
+    } else {
+      errorMsg = '';
+    }
+    
+    // If we got a specific API error, show it + then fallback
+    if (errorMsg) {
+      appendChatMsg(errorMsg + `<br><br><button onclick="document.getElementById('ai-chat-input').value='${txt.replace(/'/g,"\\'")}';sendAiMsg();" style="background:#7c3aed;border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;">🔄 Retry</button>`, 'bot');
+    }
+    
+    // Always try fallback rule-based response
     const fallback = generateAiBotResponse(txt);
-    appendChatMsg(fallback, 'bot');
+    appendChatMsg('💡 ' + fallback, 'bot');
   }
 }
 
@@ -2724,21 +2787,59 @@ Tumhara kaam hai:
 
 Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR cheez ka jawab de sakta hai!`;
 
-  const response = await fetch(GEMINI_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{ parts: [{ text: userMessage }] }],
-      generationConfig: { temperature: 0.8, maxOutputTokens: 500 }
-    })
-  });
+  // Timeout controller - 15 seconds max wait
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  if (!response.ok) throw new Error('Gemini API error');
-  const data = await response.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Bhai, abhi jawab nahi mil raha. Thodi der baad try karo!';
-  // Convert markdown bold to HTML
-  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  try {
+    console.log('[AI Chat] Sending request to Gemini API...');
+    const response = await fetch(GEMINI_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ parts: [{ text: userMessage }] }],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 500 }
+      })
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      console.error(`[AI Chat] API Error: HTTP ${response.status} - ${errBody}`);
+      if (response.status === 400) throw new Error('API_BAD_REQUEST');
+      if (response.status === 403 || response.status === 401) throw new Error('API_KEY_INVALID');
+      if (response.status === 429) throw new Error('API_RATE_LIMITED');
+      throw new Error(`API_HTTP_${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('[AI Chat] Response received successfully');
+
+    // Check if response has candidates
+    if (!data.candidates || !data.candidates.length) {
+      console.warn('[AI Chat] No candidates in response:', data);
+      throw new Error('API_NO_CANDIDATES');
+    }
+
+    const text = data.candidates[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      console.warn('[AI Chat] Empty text in response');
+      throw new Error('API_EMPTY_RESPONSE');
+    }
+
+    // Convert markdown bold to HTML and handle line breaks
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      console.error('[AI Chat] Request timed out after 15s');
+      throw new Error('API_TIMEOUT');
+    }
+    throw err;
+  }
 }
 
 // Fallback rule-based response (used when API fails)
@@ -2852,24 +2953,15 @@ function acceptCookies() {
   showToast('🍪 Cookie preferences saved!','#7c3aed');
 }
 </script>
+<!-- Google AdSense - Banner Ads Only (no auto-ads) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5564677867865390"
      crossorigin="anonymous"></script>
-     <!-- Google tag (gtag.js) -->
+<!-- Google Analytics (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1FGJ4MW6L"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
-  gtag('config', 'G-S1FGJ4MW6L');
-</script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S1FGJ4MW6L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
   gtag('config', 'G-S1FGJ4MW6L');
 </script>
 </body>
