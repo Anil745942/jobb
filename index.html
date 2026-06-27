@@ -914,16 +914,40 @@ l.parentNode.insertBefore(s, l);
     </div>
   </div>
 
-  <!-- BANNER AD - Below Stats -->
+  <!-- BANNER AD - Below Stats (Blank Box replaced with premium 'Read Full Now' conversion ad) -->
   <div style="max-width:1200px;margin:32px auto 16px;padding:0 20px;">
-    <div class="ad-banner-slot card" style="padding:20px;text-align:center;background:rgba(255,255,255,.01);border:1px dashed rgba(124,58,237,.25);border-radius:18px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;position:relative;">
-      <div class="xs muted" style="position:absolute;top:6px;right:12px;font-size:9px;text-transform:uppercase;letter-spacing:.05em;opacity:0.6;">Sponsored Advertisement</div>
-      <ins class="adsbygoogle"
-        style="display:block;width:100%;min-height:90px;"
-        data-ad-client="ca-pub-5564677867865390"
-        data-ad-slot="auto"
-        data-ad-format="horizontal"
-        data-full-width-responsive="true"></ins>
+    <div class="ad-banner-slot card" style="padding:0;text-align:center;background:rgba(18,18,28,0.4);border:1px solid rgba(124,58,237,.25);border-radius:18px;min-height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 8px 32px rgba(124,58,237,0.15);">
+      
+      <!-- Premium Interactive 'Read Full Now' Native Ad Unit -->
+      <a href="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" target="_blank" rel="noopener" style="display:flex;width:100%;height:100%;min-height:130px;text-decoration:none;color:inherit;position:relative;align-items:center;justify-content:space-between;padding:16px 36px;background:linear-gradient(135deg, rgba(20,20,35,0.85) 0%, rgba(124,58,237,0.06) 50%, rgba(6,182,212,0.08) 100%);">
+        
+        <!-- Glow accents -->
+        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#7c3aed,#06b6d4);"></div>
+        <div style="position:absolute;top:6px;right:16px;font-size:9px;text-transform:uppercase;letter-spacing:.05em;opacity:0.6;font-weight:700;color:#a78bfa;">Sponsored Ad</div>
+        
+        <!-- Left Side: Engaging content -->
+        <div style="text-align:left;max-width:65%;">
+          <div style="display:inline-flex;align-items:center;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;color:#22d3ee;margin-bottom:8px;">🔥 URGENT UPDATE</div>
+          <h4 style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;margin:0 0 4px;color:#fff;line-height:1.3;">15,000+ Direct HR Mobile Numbers Database Leaked?</h4>
+          <p class="xs muted" style="margin:0;line-height:1.4;">Chandigarh & Noida IT/Recruiter contacts list now open for everyone. Verify your Pincode to get direct access.</p>
+        </div>
+
+        <!-- Right Side: High Converting Animated CTA Button -->
+        <div style="flex-shrink:0;margin-left:20px;">
+          <div style="position:relative;display:inline-block;padding:14px 28px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border-radius:12px;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 6px 20px rgba(124,58,237,0.4);transition:all 0.3s;animation:pulseAdBtn 2s infinite;cursor:pointer;">
+            Read Full Now 📄
+          </div>
+        </div>
+      </a>
+
+      <!-- Subtle pulse animation injected directly in styling -->
+      <style>
+        @keyframes pulseAdBtn {
+          0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(124,58,237,0.4); }
+          50% { transform: scale(1.04); box-shadow: 0 6px 30px rgba(6,182,212,0.6); }
+        }
+      </style>
+      
     </div>
   </div>
 
