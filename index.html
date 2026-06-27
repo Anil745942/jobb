@@ -2375,11 +2375,67 @@ function acSelect(val,inputId,dropId){
 }
 function escAttr(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 
-// Close dropdowns on outside click
-document.addEventListener('click',e=>{
-  document.querySelectorAll('.ac-drop.show').forEach(d=>{
-    if(!d.parentElement.contains(e.target)) d.classList.remove('show');
+// ══════ GLOBAL EVENT DELEGATION (data-action handler) ══════
+document.addEventListener('click', e => {
+  // Close autocomplete dropdowns on outside click
+  document.querySelectorAll('.ac-drop.show').forEach(d => {
+    if (!d.parentElement.contains(e.target)) d.classList.remove('show');
   });
+
+  // Find the closest element with a data-action attribute
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  e.preventDefault();
+
+  const action = el.dataset.action;
+
+  // ── Navigation & Tabs ──
+  if (action === 'showTab') { showTab(el.dataset.tab); return; }
+  if (action === 'toggleNav') { toggleNav(); return; }
+
+  // ── Search & Filters ──
+  if (action === 'heroSearch') { heroSearch(); return; }
+  if (action === 'renderJobs') { renderJobs(); return; }
+  if (action === 'clrFilters') { clrFilters(); return; }
+  if (action === 'openFilterDrawer') { openFilterDrawer(); return; }
+  if (action === 'closeFilterDrawer') { closeFilterDrawer(); return; }
+  if (action === 'sortJobs') { sortJobs(el.dataset.sort, el); return; }
+  if (action === 'qFilter') { qFilter(el.dataset.cat); return; }
+
+  // ── AI Chatbot ──
+  if (action === 'toggleAIChat') { toggleAIChat(); return; }
+  if (action === 'sendAiMsg') { sendAiMsg(); return; }
+  if (action === 'sendAiChip') { sendAiChip(el.dataset.chip); return; }
+
+  // ── Dashboard Sub-tabs ──
+  if (action === 'dswitch') { dswitch(el.dataset.panel, el); return; }
+  if (action === 'eswitch') { eswitch(el.dataset.panel, el); return; }
+
+  // ── AI Tools ──
+  if (action === 'runATS') { runATS(); return; }
+  if (action === 'showCareerPath') { showCareerPath(); return; }
+
+  // ── Voice Search ──
+  if (action === 'startVoice') { startVoice(el.dataset.input); return; }
+
+  // ── Auth ──
+  if (action === 'openM') { openM(el.dataset.modal); return; }
+
+  // ── Rating ──
+  if (action === 'rateStar') { rateStar(parseInt(el.dataset.rating)); return; }
+  if (action === 'submitRating') { submitRating(); return; }
+  if (action === 'forceRating') { submitRating(); return; }
+
+  // ── PWA Install ──
+  if (action === 'installApp') { installApp(); return; }
+  if (action === 'dismissInstallBanner') {
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.classList.remove('show');
+    return;
+  }
+
+  // ── Toast ──
+  if (action === 'showToast') { showToast(el.dataset.msg, el.dataset.bg || '#10b981'); return; }
 });
 
 // ══════ VOICE SEARCH ══════
