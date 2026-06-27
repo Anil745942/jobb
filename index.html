@@ -1927,10 +1927,10 @@ function renderJobs(){
     const t0=performance.now();
     let arr=filterJobs();
     
-    // Google search fallback: If user searched something and database has fewer than 4 results,
+    // Google search fallback: If user searched something and database has fewer than 5 results,
     // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
     let isGoogleFallback = false;
-    if (q && arr.length < 5) {
+    if (q) {
       isGoogleFallback = true;
       const googleJobs = fetchSimulatedGoogleJobs(q, l);
       // Combine them: Database matches + Google Search Results
