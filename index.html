@@ -841,7 +841,7 @@ l.parentNode.insertBefore(s, l);
 <!-- NAVBAR -->
 <nav>
   <div class="logo" data-action="showTab" data-tab="home">
-    <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+    <img src="logo.png" alt="JobConnect Pro" style="width:38px;height:38px;border-radius:10px;object-fit:cover;box-shadow:0 4px 16px rgba(124,58,237,0.3);">
     <div class="logo-txt">JobConnect<span>Pro</span></div>
   </div>
   <button class="nav-toggle" data-action="toggleNav" aria-label="Toggle navigation"><span></span></button>
@@ -2531,6 +2531,12 @@ document.addEventListener('click', e => {
 
   // ── Toast ──
   if (action === 'showToast') { showToast(el.dataset.msg, el.dataset.bg || '#10b981'); return; }
+
+  // ── WhatsApp Apply ──
+  if (action === 'waApply') { waApply(); return; }
+
+  // ── Cookie Consent ──
+  if (action === 'acceptCookies') { acceptCookies(); return; }
 });
 
 // ══════ VOICE SEARCH ══════
