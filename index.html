@@ -2794,33 +2794,14 @@ async function sendAiMsg() {
     if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
     appendChatMsg(response, 'bot');
   } catch(err) {
-    console.error('[AI Chat] Error:', err.message);
+    console.log('[AI Chat] API unavailable, using smart fallback:', err.message);
     const msgs = document.getElementById('ai-chat-msgs');
     const lastMsg = msgs.lastElementChild;
     if (lastMsg && lastMsg.querySelector('.ai-typing')) lastMsg.remove();
     
-    // Show specific error messages based on error type
-    let errorMsg = '';
-    if (err.message === 'API_KEY_INVALID') {
-      errorMsg = '🔑 Bhai, API key ka issue hai. Admin se contact karo ya thodi der baad try karo!';
-    } else if (err.message === 'API_RATE_LIMITED') {
-      errorMsg = '⏱️ Bohot zyada requests ho gayi bhai! 30 second wait karke dubara try karo.';
-    } else if (err.message === 'API_TIMEOUT') {
-      errorMsg = '⌛ Bhai, server slow chal raha hai. Internet check karo aur dubara try karo!';
-    } else if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
-      errorMsg = '📶 Network issue lag raha hai bhai! WiFi/Data check karo aur retry karo.';
-    } else {
-      errorMsg = '';
-    }
-    
-    // If we got a specific API error, show it + then fallback
-    if (errorMsg) {
-      appendChatMsg(errorMsg + `<br><br><button onclick="document.getElementById('ai-chat-input').value='${txt.replace(/'/g,"\\'")}';sendAiMsg();" style="background:#7c3aed;border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;">🔄 Retry</button>`, 'bot');
-    }
-    
-    // Always try fallback rule-based response
+    // Silently use smart fallback — user should not see error
     const fallback = generateAiBotResponse(txt);
-    appendChatMsg('💡 ' + fallback, 'bot');
+    appendChatMsg(fallback, 'bot');
   }
 }
 
@@ -2904,7 +2885,7 @@ Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR chee
   }
 }
 
-// Fallback rule-based response (used when API fails)
+// Smart AI Fallback response (used when Gemini API is unavailable)
 function generateAiBotResponse(query) {
   const q = query.toLowerCase().trim();
   
@@ -2913,7 +2894,7 @@ function generateAiBotResponse(query) {
     try {
       const result = new Function(`return (${q})`)();
       if (!isNaN(result)) {
-        return `Bhai, mathematical calculation ke hisab se **${query} = ${result}** hota hai! Dost se aur kuch poochna hai? 🧠`;
+        return `🧠 Bhai, **${query} = ${result}** hota hai! Calculator bhi main hi hun — aur kuch calculate karna hai? 😎`;
       }
     } catch(e) {}
   }
@@ -2924,77 +2905,173 @@ function generateAiBotResponse(query) {
     if (q.includes(c.toLowerCase().split(' ')[0])) foundCategory = c;
   });
 
-  // 1. GREETINGS & INTRODUCTIONS
-  if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('namaste') || q.includes('satsriakal')) {
-    return `Aur mere bhai! Kaise ho? 👋 Main aapka personal JobConnect Pro dost hun. Batao aaj kaunsi mast job dhundni hai? Local area me ya remote, tera bhai sab help karega!`;
+  // ═══ 1. GREETINGS & INTRODUCTIONS ═══
+  if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('namaste') || q.includes('satsriakal') || q.includes('hlo') || q.includes('hii') || q === 'yo') {
+    const greetings = [
+      `Aur mere bhai! Kaise ho? 👋 Main JobConnect AI Dost hun — tera personal career assistant! Kuch bhi poocho, jobs se lekar life advice tak, main ready hun!`,
+      `Hey bhai! Swagat hai! 🎉 Batao kya help chahiye? Job search, career tips, ya bas timepass baat karna — sab chalega!`,
+      `Namaste bhai! 🙏 Main tera AI dost hun. Aaj kya plan hai? Job dhundni hai ya kuch interesting baatein karni hain?`
+    ];
+    return greetings[Math.floor(Math.random() * greetings.length)];
   }
   
-  if (q.includes('kaise ho') || q.includes('how are you') || q.includes('sab theek') || q.includes('kya chal raha')) {
-    return `Main ekdum fit aur tana-tan hun bhai! 😎 Aap batao, life kaisi chal rahi hai aur aaj career me kya bada plan kar rahe ho?`;
+  if (q.includes('kaise ho') || q.includes('how are you') || q.includes('sab theek') || q.includes('kya chal raha') || q.includes('kaisa hai') || q.includes('how r u')) {
+    return `Main ekdum first class hun bhai! 😎 24/7 online rehta hun tera wait karte hue. Tu bata, tera din kaisa ja raha hai? Kuch career guidance chahiye ya casual baat karna hai?`;
   }
 
-  if (q.includes('naam') || q.includes('who are you') || q.includes('tum kaun') || q.includes('your name') || q.includes('who is this')) {
-    return `Main aapka AI Job Dost hun! Ek tarah se samajh lo JobConnect Pro ka Antigravity assistant. Mera bas ek hi mission hai — mere bhai ko direct HR se connect karwana!`;
+  // ═══ 2. PERSONAL / IDENTITY QUESTIONS ═══
+  if (q.includes('my name') || q.includes('mera naam') || q.includes('know me') || q.includes('recognize me') || q.includes('who am i') || q.includes('mujhe jaante')) {
+    return `Bhai, main AI hun — mujhe tera naam to tab pata chalega jab tu batayega! 😄 Lekin ek baat pakki hai, tu ek fighter hai jo apni dream job dhundh raha hai, aur main tera dost hun jo help karega. Tu apna naam bata, fir yaad rakhunga! 💪`;
   }
 
-  // 2. HELP / HOW TO USE
-  if (q.includes('help') || q.includes('madad') || q.includes('kaise use') || q.includes('kya karein') || q.includes('work')) {
-    return `Bohot simple hai bhai! 🤝<br>
-    1. Kisi bhi category (jaise Driver, Security Guard, IT) ke baare me mujhse poocho.<br>
-    2. Jobs tab me search karke Direct '⚡ Apply' karo.<br>
-    3. WhatsApp icon par click karke HR ko direct message bhej do.<br>
-    Batao, kis field me interest hai?`;
+  if (q.includes('naam') || q.includes('who are you') || q.includes('tum kaun') || q.includes('your name') || q.includes('who is this') || q.includes('what are you') || q.includes('kya hai tu') || q.includes('introduce')) {
+    return `Main hun **JobConnect AI Dost** 🤖! Tera personal career assistant. Main Hinglish me baat karta hun, jobs dhundhne me help karta hun, interview tips deta hun, aur tera motivator bhi hun. Bol bhai, kya service chahiye? 😎`;
   }
 
-  // 3. JOB DISCUSSIONS & ADVICE
+  if (q.includes('age') || q.includes('umar') || q.includes('kitna purana') || q.includes('how old')) {
+    return `Main ageless hun bhai! 😂 AI ki umar kya hogi — jab se banaya gaya tab se 24x7 tere liye kaam kar raha hun! Tera kaam bol, baaki sab bakwas hai! 😄`;
+  }
+
+  if (q.includes('love') || q.includes('pyaar') || q.includes('girlfriend') || q.includes('boyfriend') || q.includes('crush') || q.includes('date')) {
+    return `Haha bhai pyaar-vyaar ka to mujhe nahi pata! 😂❤️ Lekin ek baat bolu? Pehle career set karo, baaki sab apne aap aa jayega. Confidence aur paisa aata hai to log khud attract hote hain! Ab bol, job search karein? 💼`;
+  }
+
+  // ═══ 3. GENERAL KNOWLEDGE / SMART ANSWERS ═══
+  if (q.includes('time') || q.includes('samay') || q.includes('kitne baje') || q.includes('what time')) {
+    const now = new Date();
+    return `Bhai abhi time hai **${now.toLocaleTimeString('hi-IN', {hour:'2-digit', minute:'2-digit'})}** ⏰! Kaam ka time hai — chalo job dhundhte hain! 💪`;
+  }
+
+  if (q.includes('date') || q.includes('aaj kya') || q.includes('tarikh') || q.includes('today')) {
+    const now = new Date();
+    return `Aaj ki date hai **${now.toLocaleDateString('hi-IN', {day:'numeric', month:'long', year:'numeric'})}** 📅! Naya din, nayi opportunities. Kuch search karein?`;
+  }
+
+  if (q.includes('weather') || q.includes('mausam') || q.includes('barish') || q.includes('garmi') || q.includes('thand')) {
+    return `Bhai mausam to bahar dekh le! 😄🌤️ Main indoor AI hun, weather forecast mere bas ki baat nahi. Lekin haan, job market ka mausam batata hun — bahut garma-garam openings hain! Kya search karun?`;
+  }
+
+  if (q.includes('joke') || q.includes('funny') || q.includes('mazak') || q.includes('hasao') || q.includes('hasa') || q.includes('comedy')) {
+    const jokes = [
+      `😂 Ek banda interview me gaya. HR boli: "Aapki biggest weakness kya hai?" Banda bola: "Honesty." HR boli: "Yeh to weakness nahi hai!" Banda bola: "Mujhe aapki opinion ki koi parwah nahi." 🤣`,
+      `😂 Teacher: "Beta, bade hokar kya banoge?" Baccha: "Software Engineer." Teacher: "Kyun?" Baccha: "Taaki ghar baithe kaam kar sakun aur mummy ko lagey ki main kuch nahi karta!" 🤣`,
+      `😂 Interview me pucha: "5 saal baad khud ko kahan dekhte ho?" Maine kaha: "Bhai, pehle ye batao ye job milegi ya nahi!" 🤣`,
+      `😂 Boss ne pucha: "Tum late kyun aaye?" Maine kaha: "Sir, aapne kaha tha ghar pe kaam karo. To pehle ghar ka kaam kiya, fir office aaya!" 🤣`
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+  }
+
+  if (q.includes('motivat') || q.includes('inspire') || q.includes('demotivat') || q.includes('haar') || q.includes('nahi ho raha') || q.includes('udaas') || q.includes('sad') || q.includes('depression')) {
+    const motivations = [
+      `Bhai sun, har successful insaan ne pehle 100 baar rejection face kiya hai! 💪 Steve Jobs ko uski khud ki company se nikala tha, aaj wo legend hai. Tera time aayega, bas try karna mat chhod! 🔥`,
+      `Arre yaar, udaas mat ho! 🌟 Har "No" tujhe ek "Yes" ke kareeb le jaata hai. Tera talent hai, bas sahi opportunity ka wait kar. Aur main hun na teri help ke liye! Let's find something awesome! 🚀`,
+      `Bhai, diamond bhi pressure me banta hai! 💎 Mushkil waqt temporary hai, tera success permanent hoga. Chal, ek strong job search karte hain aur dikhate hain duniya ko! 💪🔥`
+    ];
+    return motivations[Math.floor(Math.random() * motivations.length)];
+  }
+
+  if (q.includes('music') || q.includes('song') || q.includes('gaana') || q.includes('gana')) {
+    return `🎵 Bhai main gaana to nahi ga sakta, lekin sun — "Apna Time Aayega" ye tera anthem hona chahiye! Hustle karte reh, success milega. Ab bata, kaunsi job field me dhundna hai? 🎶💼`;
+  }
+
+  if (q.includes('food') || q.includes('khana') || q.includes('biryani') || q.includes('pizza') || q.includes('momos')) {
+    return `Bhai mujhe khana to nahi khana padta 😂 lekin sun — pehle job lagwa, fir biryani aur momos ki party karunga tere saath! 🍕🥟 Ab bol, kya search karein?`;
+  }
+
+  if (q.includes('cricket') || q.includes('football') || q.includes('sport') || q.includes('ipl') || q.includes('match') || q.includes('khel')) {
+    return `🏏 Bhai cricket aur sports ki baat karein to mast hai! Lekin tera asli match to career ka hai. Jaise Dhoni last ball pe chhakka maarta hai, waise tu bhi apni dream job grab kar! Ab bol, kaunsi field? 💪`;
+  }
+
+  if (q.includes('movie') || q.includes('film') || q.includes('web series') || q.includes('netflix') || q.includes('show')) {
+    return `🎬 Bhai entertainment ke liye Netflix dekh, lekin career ke liye JobConnect Pro use kar! 😄 Pehle hustle, fir chill. Ab bata, kaunsi industry me kaam dhundna hai?`;
+  }
+
+  if (q.includes('kya kar sakta') || q.includes('features') || q.includes('capabilities') || q.includes('kya kya')) {
+    return `Main bohot kuch kar sakta hun bhai! 🤖<br>✅ Jobs dhundhne me help<br>✅ Career advice aur interview tips<br>✅ Resume/ATS guidance<br>✅ Salary information<br>✅ General knowledge baatein<br>✅ Jokes sunana 😂<br>✅ Motivation dena 💪<br>✅ Math calculations<br>Bol bhai, kya service chahiye?`;
+  }
+
+  // ═══ 4. INTERVIEW & CAREER TIPS ═══
+  if (q.includes('interview') || q.includes('tips') || q.includes('prepare')) {
+    return `💡 Interview Tips bhai:<br>1. Company ke baare me research karo (website, products)<br>2. "Tell me about yourself" ka 60-second answer ready rakho<br>3. STAR method use karo (Situation, Task, Action, Result)<br>4. Body language confident rakho — eye contact, firm handshake<br>5. Questions poocho — "What does a typical day look like?"<br>Tu ye follow kar, selection pakka! 🏆`;
+  }
+
+  // ═══ 5. HELP / HOW TO USE ═══
+  if (q.includes('help') || q.includes('madad') || q.includes('kaise use') || q.includes('kya karein')) {
+    return `Bohot simple hai bhai! 🤝<br>1. Kisi bhi category (jaise Driver, Security Guard, IT) ke baare me mujhse poocho.<br>2. Jobs tab me search karke Direct '⚡ Apply' karo.<br>3. WhatsApp icon par click karke HR ko direct message bhej do.<br>Batao, kis field me interest hai?`;
+  }
+
+  // ═══ 6. JOB DISCUSSIONS & ADVICE ═══
   if (q.includes('driver') || q.includes('cab') || q.includes('gadi') || foundCategory === 'Driver & Transport') {
-    return `🚗 Chauffeur aur Cab Driver ke liye bohot solid opportunities hain Chandigarh aur Mohali me. Private households aur corporates me salary ₹18,000 se ₹30,000 tak jati hai. <a href="#" onclick="searchAndGo('driver'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Yahan click karke direct listings dekho</a>, aur direct HR se connect karo!`;
+    return `🚗 Chauffeur aur Cab Driver ke liye bohot solid opportunities hain Chandigarh aur Mohali me. Salary ₹18,000 se ₹30,000 tak. <a href="#" onclick="searchAndGo('driver'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Yahan click karke direct listings dekho</a>!`;
   }
   
   if (q.includes('security') || q.includes('guard') || q.includes('watchman') || q.includes('supervisor') || foundCategory === 'Security & Guard') {
-    return `🛡️ Security Guard aur Supervisor ki jobs to hamesha demand me rehti hain. Sector 34 aur Noida Sector 62 me urgent positions open hain. PF+ESI benefits bhi hain. <a href="#" onclick="searchAndGo('security'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Live open guards list yahan dekho</a>. Direct apply karo bhai!`;
+    return `🛡️ Security Guard jobs hamesha demand me hain! Sector 34 aur Noida me urgent openings. PF+ESI benefits bhi. <a href="#" onclick="searchAndGo('security'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Live listings dekho</a>!`;
   }
   
   if (q.includes('react') || q.includes('developer') || q.includes('software') || q.includes('coding') || q.includes('python') || foundCategory === 'Software Engineering') {
-    return `💻 Wah bhai! Coding/IT side me to mast scope hai. MERN stack aur remote Python roles open hain jinme salary up to ₹80,000 jaa rahi hai. WFH (Work From Home) ke bhi options hain. <a href="#" onclick="searchAndGo('software'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Click karke code listings browse karo</a>. Aapki development skills matching bohot solid chalegi.`;
+    return `💻 IT/Coding me mast scope hai bhai! MERN stack, Python roles — salary ₹80,000 tak. WFH bhi available. <a href="#" onclick="searchAndGo('software'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Code listings browse karo</a>!`;
   }
   
   if (q.includes('delivery') || q.includes('rider') || q.includes('zomato') || q.includes('swiggy') || foundCategory === 'Delivery & Logistics') {
-    return `🛵 Hyperlocal Logistics me Swiggy aur Zepto jaise partners ke pass urgent openings hain Sector 35 me. Weekly incentives milte hain aur pocket money kama sakte ho. <a href="#" onclick="searchAndGo('delivery'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Direct listings check karo</a> aur direct apply karke start karo!`;
+    return `🛵 Delivery me Swiggy, Zepto ke urgent openings hain. Weekly incentives milte hain! <a href="#" onclick="searchAndGo('delivery'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight:700;">Listings check karo</a>!`;
   }
 
-  if (q.includes('bpo') || q.includes('call') || q.includes('telecaller') || q.includes('support') || foundCategory === 'Sales & Customer Support') {
-    return `📞 Customer care and telecaller roles me Chandigarh Sector 34 me verified recruiters direct hire kar rahe hain. Standard shift timings aur easy interview hai. B.Ed ya graduation jaruri nahi. <a href="#" onclick="searchAndGo('telecaller'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Direct verified roles yahan se apply karo</a>.`;
+  if (q.includes('bpo') || q.includes('telecaller') || foundCategory === 'Sales & Customer Support') {
+    return `📞 Telecaller roles me verified recruiters direct hire kar rahe hain! <a href="#" onclick="searchAndGo('telecaller'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Apply karo yahan se</a>!`;
   }
 
-  // 4. GENERAL CAREER CHITCHAT / ENCOURAGEMENT
+  // ═══ 7. CAREER TOPICS ═══
   if (q.includes('salary') || q.includes('paise') || q.includes('paisa') || q.includes('kamana')) {
-    return `Paisa to important hai hi bhai! Hamare portal par high-paying IT jobs (₹80,000/mo) se lekar entry-level roles (₹15,000 - ₹25,000/mo) sab verified salary range ke sath hain. Filters me minimum salary set karke apply karo, wahi jobs dikhenge!`;
+    return `💰 Paisa important hai bhai! Portal par IT jobs ₹80,000/mo tak aur entry-level roles ₹15,000-25,000/mo hain. Salary filter lagao aur best wali dhundho!`;
   }
 
   if (q.includes('fresher') || q.includes('no experience') || q.includes('experience nahi')) {
-    return `Experience nahi hai? Bilkul fikar mat karo mere bhai! Humare pass 'No Experience' aur 'Fresher' specific filter category hai. Bohot saari companies on-the-job training deti hain. Aap jobs check karo!`;
+    return `🆕 Fresher ho? Fikar mat karo! 'No Experience' filter use karo. Bohot companies on-the-job training deti hain. Start karo, experience apne aap ban jayega! 💪`;
   }
 
   if (q.includes('resume') || q.includes('ats') || q.includes('cv')) {
-    return `Resume perfect karna hai? 📄 Dashboard tab me jao, hamara free **AI ATS Resume Scanner** check karo! Text paste karo, AI automatically score batayega aur keywords suggest karega taaki direct job match mile.`;
+    return `📄 Resume ke liye Dashboard tab me jao — free **AI ATS Resume Scanner** hai! Paste karo, score aur keywords mil jayenge!`;
   }
 
   if (q.includes('whatsapp') || q.includes('phone') || q.includes('contact')) {
-    return `Bhai direct connection hai! Har card par direct HR ka green 'WhatsApp' button aur sky-blue 'Call HR' button hai. Apply click karne ke baad phone direct show hota hai. Try karke dekho!`;
+    return `📱 Har job card par direct HR ka WhatsApp aur Call button hai. Apply karo, phone number mil jayega. Seedha baat karo! 🤝`;
   }
 
-  // 5. CHITCHAT RESPONSE & JOKES
+  // ═══ 8. CHITCHAT ═══
   if (q.includes('shukriya') || q.includes('thanks') || q.includes('thank you') || q.includes('dhanyawad')) {
-    return `Koi baat nahi mere bhai! Dost dost ke kaam aata hai. Koi aur support chahiye to be-jhijhak poocho! 🤜🤛`;
+    return `Koi baat nahi mere bhai! Dost dost ke kaam aata hai. Koi bhi sawaal ho, poocho! 🤜🤛`;
   }
 
   if (q.includes('party') || q.includes('treat') || q.includes('chai')) {
-    return `Haha bilkul bhai! Ek baar aapki dream job lag jaye, fir mast Chandigarh Sector 17 me chal ke chai-samosa ki party karenge! ☕`;
+    return `Haha bilkul bhai! Job lag jaye fir Chandigarh Sector 17 me chai-samosa ki party! ☕🎉`;
   }
 
-  // 6. DEFAULT INTELLIGENT MATCH FALLBACK
-  return `Aapki query "${query}" ke related local openings database aur simulated Google Job feeds me updated hain! <a href="#" onclick="searchAndGo('${query}'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Chalo, yahan check karte hain →</a>. Aur kuch guidance chahiye to tera dost yahan ready hai!`;
+  if (q.includes('bye') || q.includes('alvida') || q.includes('goodbye') || q.includes('tata') || q.includes('chal') || q.includes('chalta')) {
+    return `Alvida bhai! 👋 Jab bhi zaroorat ho, main yahan hun. All the best tera career ke liye! 🚀💪 Jaldi milte hain!`;
+  }
+
+  if (q.includes('bore') || q.includes('boring') || q.includes('timepass')) {
+    return `Bore ho raha hai? 😄 Chal kuch productive karte hain! Jobs search kar, resume scan karwa, ya mujhse kuch interesting sawaal pooch. Main entertainment + career guidance dono provide karta hun! 🎯`;
+  }
+
+  if (q.includes('pagal') || q.includes('stupid') || q.includes('bewakoof') || q.includes('bakwas') || q.includes('idiot')) {
+    return `Arre bhai bhai bhai! 😅 Itna gussa mat ho yaar. Main try kar raha hun best help dene ki. Bata kya chahiye — seriously poocho to seriously jawab dunga! 🤝`;
+  }
+
+  if (q.includes('accha') || q.includes('sahi') || q.includes('nice') || q.includes('great') || q.includes('awesome') || q.includes('amazing') || q.includes('good')) {
+    return `Shukriya bhai! 😊🎉 Tera appreciation sunke mast laga! Aur kuch help chahiye to bol, main ready hun!`;
+  }
+
+  // ═══ 9. SMART CONVERSATIONAL DEFAULT ═══
+  // Instead of showing job search for everything, have a natural conversation
+  const smartReplies = [
+    `Interesting sawaal hai bhai! 🤔 "${query}" — main ek AI assistant hun to har cheez ka perfect jawab nahi de paata, lekin try zaroor karta hun. Kya specifically jaanna hai? Thoda detail me bata! 😊`,
+    `Hmm "${query}" — accha sawaal hai! 🧠 Main primarily job search me expert hun, lekin general baatein bhi kar leta hun. Thoda aur context de bhai, better help karunga! 💪`,
+    `Bhai "${query}" ke baare me — interesting topic hai! 😄 Main AI hun, sab kuch nahi jaanta, lekin try karta hun. Agar job se related hai to 100% help kar sakta hun. Aur bata, kya chahiye? 🎯`,
+    `"${query}" — wah bhai! 🤖 Pura samajh nahi aaya, lekin koi baat nahi. Thoda simple me poocho ya specific bano — main definitely help karunga! Jobs, career, interview tips, ya kuch aur? 😊`
+  ];
+  return smartReplies[Math.floor(Math.random() * smartReplies.length)];
 }
 
 function searchAndGo(keyword) {
