@@ -158,52 +158,91 @@ mark{background:rgba(124,58,237,.3);color:#e0d4ff;border-radius:2px;padding:0 1p
 .scard h3{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800}
 .scard p{font-size:11px;color:var(--m);margin-top:4px}
 /* QUICK CATS */
-.qcats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:36px auto;max-width:900px}
-.qcat{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:40px;border:1px solid var(--b);background:var(--s);cursor:pointer;font-size:12px;font-weight:700;color:var(--m);transition:all .2s;white-space:nowrap}
-.qcat:hover,.qcat.act{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.4);color:#a78bfa}
-.qcat span{font-size:16px}
-/* JOB CARD */
-.jcard{padding:20px;display:flex;gap:14px;align-items:flex-start;position:relative;overflow:hidden}
-.jcard::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:99px}
-.jcard.blue::before{background:linear-gradient(180deg,#7c3aed,#6366f1)}
-.jcard.cyan::before{background:linear-gradient(180deg,#06b6d4,#0ea5e9)}
-.jcard.green::before{background:linear-gradient(180deg,#10b981,#059669)}
-.jcard.rose::before{background:linear-gradient(180deg,#f43f5e,#e11d48)}
-.jcard.amber::before{background:linear-gradient(180deg,#f59e0b,#d97706)}
-.jlogo{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(124,58,237,.12)}
-.jbody{flex:1;min-width:0}
-.jtitle{font-size:14px;font-weight:700;margin-bottom:3px}
-.jmeta{font-size:11px;color:var(--m);margin-bottom:8px}
-.jtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.jhr{background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:10px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
-.jsal{font-size:13px;font-weight:800;color:#34d399}
-.jact{display:flex;gap:6px;flex-wrap:wrap}
-.urgbadge{animation:pulse 1.4s infinite;font-size:10px;font-weight:700;color:#fb7185}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-/* MATCHING SCORE */
-.match-score{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#7c3aed,#22d3ee);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;color:#fff}
-/* NOTIFICATION DOT */
-.dot{width:8px;height:8px;background:#f43f5e;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite}
-/* TOAST */
-#toast{position:fixed;bottom:24px;right:16px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:calc(100vw - 32px);}
-#toast.show{transform:translateY(0);opacity:1}
-.toast-inner{color:#fff;font-size:12px;font-weight:700;padding:12px 18px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;word-break:break-word;}
-/* MODAL */
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
-.mo.open{display:flex}
-.mbox{background:#111118;border:1px solid var(--b);border-radius:24px;padding:32px;max-width:480px;width:100%;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.8);max-height:90vh;overflow-y:auto}
-/* RATING GATE */
-.rgate{background:#111118;border:1px solid var(--b);border-radius:24px;padding:36px;max-width:380px;width:100%;text-align:center}
-.stars{display:flex;justify-content:center;gap:10px;margin:20px 0;font-size:36px;cursor:pointer}
-.star{transition:transform .15s;opacity:.3}
-.star.lit{opacity:1;transform:scale(1.2)}
-/* PIPELINE */
-.pill{padding:5px 14px;border-radius:40px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
-/* AI MATCH */
-.match-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
-.match-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#22d3ee)}
-/* WHATSAPP FLOAT */
-.wa-float{position:fixed;bottom:24px;left:24px;z-index:200;background:#25d366;color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,.5);transition:transform .2s}
+</script>
+<script>
+(function(){
+  var adUrl = 'https://untimely-hello.com/bNXnVZsId.Gclr0OYvWIcJ/geMmD9ougZuUclLk/PRT/coxnNDj/EDxIM-z_MdtsNOzZES2GMzTtE-ztNrwb';
+  function ensureSlot(){
+    if(!document.getElementById('banner-ad-slot')){
+      var style = document.createElement('style');
+      style.id = 'banner-ad-slot-style';
+      style.textContent = '#banner-ad-slot{position:fixed;left:16px;right:16px;bottom:24px;z-index:9999;display:flex;justify-content:center;align-items:flex-end;pointer-events:none}';
+      document.head.appendChild(style);
+      var slot = document.createElement('div');
+      slot.id = 'banner-ad-slot';
+      slot.setAttribute('aria-hidden','true');
+      var wrapper = document.createElement('div');
+      wrapper.id = 'banner-ad-wrapper';
+      wrapper.className = 'ad-wrapper';
+      wrapper.setAttribute('role','region');
+      wrapper.setAttribute('aria-label','Banner advertisement slot');
+      var close = document.createElement('button');
+      close.id = 'banner-ad-close';
+      close.className = 'ad-close';
+      close.title = 'Close ad';
+      close.innerText = '✕';
+      close.addEventListener('click', function(){
+        slot.classList.remove('visible');
+        slot.setAttribute('aria-hidden','true');
+        setTimeout(function(){ wrapper.innerHTML = ''; }, 450);
+      });
+      slot.appendChild(wrapper);
+      slot.appendChild(close);
+      document.body.appendChild(slot);
+    }
+  }
+  function createConsentBanner(){
+    if(document.getElementById('banner-ad-consent')) return;
+    ensureSlot();
+    var banner = document.createElement('div');
+    banner.id = 'banner-ad-consent';
+    banner.style = 'position:fixed;left:8px;right:8px;bottom:12px;z-index:10000;background:#111118;border:1px solid rgba(255,255,255,.06);padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:#ddd;backdrop-filter:blur(6px)';
+    banner.innerHTML = '<div style="flex:1;min-width:0">This page may load third-party banner ads. Load content from external source only if you trust it.</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button id="load-ad-btn" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 12px;cursor:pointer">Show Ad</button>' +
+      '<button id="load-iframe-btn" style="background:#222;border:1px solid rgba(255,255,255,.06);color:#ddd;border-radius:8px;padding:8px 12px;cursor:pointer">Show Sandboxed Ad</button>' +
+      '<button id="dismiss-ad-btn" style="background:transparent;border:none;color:#999;padding:6px 8px;cursor:pointer">Close</button>' +
+      '</div>';
+    document.body.appendChild(banner);
+    document.getElementById('load-ad-btn').addEventListener('click', loadExternalScript);
+    document.getElementById('load-iframe-btn').addEventListener('click', loadSandboxedIframe);
+    document.getElementById('dismiss-ad-btn').addEventListener('click', function(){ banner.remove(); });
+  }
+  function loadExternalScript(){
+    ensureSlot();
+    var wrapper = document.getElementById('banner-ad-wrapper');
+    var slot = document.getElementById('banner-ad-slot');
+    if(!wrapper || document.getElementById('external-ad-script')) return;
+    var s = document.createElement('script');
+    s.id = 'external-ad-script';
+    s.src = adUrl;
+    s.async = true;
+    s.referrerPolicy = 'no-referrer-when-downgrade';
+    s.crossOrigin = 'anonymous';
+    wrapper.appendChild(s);
+    slot.classList.add('visible');
+    slot.setAttribute('aria-hidden','false');
+  }
+  function loadSandboxedIframe(){
+    ensureSlot();
+    var wrapper = document.getElementById('banner-ad-wrapper');
+    var slot = document.getElementById('banner-ad-slot');
+    if(!wrapper || document.getElementById('sandboxed-ad-iframe')) return;
+    var iframe = document.createElement('iframe');
+    iframe.id = 'sandboxed-ad-iframe';
+    iframe.src = adUrl;
+    iframe.style.cssText = 'width:100%;max-width:728px;height:90px;border:0;border-radius:8px;display:block;margin:0 auto';
+    iframe.sandbox = 'allow-scripts allow-same-origin';
+    iframe.loading = 'lazy';
+    wrapper.appendChild(iframe);
+    slot.classList.add('visible');
+    slot.setAttribute('aria-hidden','false');
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', createConsentBanner);
+  } else { createConsentBanner(); }
+})();
+</script>
 .wa-float:hover{transform:scale(1.1)}
 /* DASH TABS */
 .dtabs{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,.04);border-radius:14px;margin-bottom:24px;flex-wrap:wrap}
@@ -754,19 +793,58 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 }
 </script>
 </head>
+<!-- Banner ad loader: replaced unsafe inline injection with consent-based loader.
+     Warning: external domains may be untrusted. The ad will load only after user consent.
+     Consider replacing `adUrl` below with a trusted provider and adding SRI (`integrity`) when available. -->
 <script>
-(function(lmbq){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = lmbq || {};
-s.src = "\/\/untimely-hello.com\/bNXnVZsId.Gclr0OYvWIcJ\/geMmD9ougZuUclLk\/PRT\/coxnNDj\/EDxIM-z_MdtsNOzZES2GMzTtE-ztNrwb";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})
+(function(){
+  var adUrl = 'https://untimely-hello.com/bNXnVZsId.Gclr0OYvWIcJ/geMmD9ougZuUclLk/PRT/coxnNDj/EDxIM-z_MdtsNOzZES2GMzTtE-ztNrwb';
+  function createConsentBanner(){
+    if(document.getElementById('banner-ad-consent')) return;
+    var banner = document.createElement('div');
+    banner.id = 'banner-ad-consent';
+    banner.style = 'position:fixed;left:8px;right:8px;bottom:12px;z-index:10000;background:#111118;border:1px solid rgba(255,255,255,.06);padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:#ddd;backdrop-filter:blur(6px)';
+    banner.innerHTML = '<div style="flex:1;min-width:0">This page may load third-party banner ads. Load content from external source only if you trust it.</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button id="load-ad-btn" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 12px;cursor:pointer">Show Ad</button>' +
+      '<button id="load-iframe-btn" style="background:#222;border:1px solid rgba(255,255,255,.06);color:#ddd;border-radius:8px;padding:8px 12px;cursor:pointer">Show Sandboxed Ad</button>' +
+      '<button id="dismiss-ad-btn" style="background:transparent;border:none;color:#999;padding:6px 8px;cursor:pointer">Close</button>' +
+      '</div>';
+    document.body.appendChild(banner);
+    document.getElementById('load-ad-btn').addEventListener('click', loadExternalScript);
+    document.getElementById('load-iframe-btn').addEventListener('click', loadSandboxedIframe);
+    document.getElementById('dismiss-ad-btn').addEventListener('click', function(){ banner.remove(); });
+  }
+  function loadExternalScript(){
+    if(document.getElementById('external-ad-script')) return;
+    var s = document.createElement('script');
+    s.id = 'external-ad-script';
+    s.src = adUrl;
+    s.async = true;
+    s.referrerPolicy = 'no-referrer-when-downgrade';
+    s.crossOrigin = 'anonymous';
+    // If you have an SRI hash from the provider, add it here: s.integrity = 'sha384-...';
+    document.body.appendChild(s);
+  }
+  function loadSandboxedIframe(){
+    if(document.getElementById('sandboxed-ad-iframe')) return;
+    var iframe = document.createElement('iframe');
+    iframe.id = 'sandboxed-ad-iframe';
+    iframe.src = adUrl;
+    iframe.style = 'width:100%;max-width:728px;height:90px;border:0;border-radius:8px;display:block;margin:8px auto';
+    iframe.sandbox = 'allow-scripts allow-same-origin';
+    iframe.loading = 'lazy';
+    var container = document.createElement('div');
+    container.style = 'text-align:center;padding:6px;';
+    container.appendChild(iframe);
+    document.body.appendChild(container);
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', createConsentBanner);
+  } else { createConsentBanner(); }
+})();
 </script>
-<!-- Intrusive ad scripts removed - only non-intrusive banner ads allowed -->
+<!-- Banner ads require user consent; only load if trusted -->
 <body>
 
 <!-- SPLASH SCREEN -->
@@ -787,6 +865,21 @@ l.parentNode.insertBefore(s, l);
 </style>
 
 <!-- PTR Loading Indicator -->
+<!-- Banner ad slot (dedicated container for banner ad injection) -->
+<style id="banner-ad-slot-style">
+#banner-ad-slot{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;justify-content:center;align-items:flex-end;pointer-events:none;transition:opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1);transform:translateY(100%);opacity:0}
+#banner-ad-slot.visible{transform:translateY(0);opacity:1;pointer-events:auto}
+#banner-ad-slot .ad-wrapper{pointer-events:auto;max-width:728px;width:100%;height:90px;border-radius:12px 12px 0 0;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 -8px 28px rgba(0,0,0,.45);background:transparent;margin:0 12px}
+#banner-ad-slot .ad-close{position:relative;margin-left:8px;background:rgba(0,0,0,.45);border-radius:10px;border:none;color:#fff;padding:6px 8px;cursor:pointer;pointer-events:auto;font-size:16px}
+@media (max-width:900px){#banner-ad-slot .ad-wrapper{max-width:468px;height:60px}}
+@media (max-width:480px){#banner-ad-slot{bottom:72px}#banner-ad-slot .ad-wrapper{max-width:320px;height:50px;border-radius:10px}#banner-ad-slot .ad-close{padding:4px 6px}}
+@media (max-width:360px){#banner-ad-slot{display:none!important}}
+</style>
+<div id="banner-ad-slot" aria-hidden="true">
+  <div class="ad-wrapper" id="banner-ad-wrapper" role="region" aria-label="Banner advertisement slot"></div>
+  <button class="ad-close" id="banner-ad-close" aria-label="Close banner ad" title="Close ad">✕</button>
+  <!-- Ad will be injected into #banner-ad-wrapper after user consent -->
+</div>
 <div class="ptr-indicator" id="ptr-indicator"></div>
 
 <!-- FILTER DRAWER OVERLAY + DRAWER (Mobile) -->
