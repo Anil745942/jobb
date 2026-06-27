@@ -1548,6 +1548,12 @@ window.onload=()=>{
   renderAdminJobs();
   checkCookieConsent();
   
+  // Initialize static AdSense units
+  try {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  } catch(e) { console.log('[Ads] Initial AdSense push failed:', e.message); }
+  
   // 2. Parallax background blobs movement with mouse (Throttled via requestAnimationFrame)
   let mouseMoveTimeout;
   document.addEventListener('mousemove', (e) => {
