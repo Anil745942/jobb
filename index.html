@@ -1245,16 +1245,59 @@ l.parentNode.insertBefore(s, l);
 </div>
 
 <!-- ══ MODALS ══ -->
-<!-- Login -->
+<!-- Login & Signup Modal -->
 <div class="mo" id="m-login">
-  <div class="mbox" style="max-width:400px;">
+  <div class="mbox" style="max-width:400px; padding:24px;">
     <button data-action="closeM" data-modal="m-login" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
-    <div style="text-align:center;margin-bottom:24px;"><div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;">Welcome Back 👋</div><div class="xs muted mt3">Quick login — select your profile</div></div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button data-action="login" data-name="Alex Developer" data-role="CANDIDATE" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(124,58,237,.2);">👤 <div><div class="bold sm">Alex Developer</div><div class="xs muted">Candidate</div></div></button>
-      <button data-action="login" data-name="Sarah Recruiter" data-role="EMPLOYER" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(6,182,212,.2);">🏢 <div><div class="bold sm">Sarah Recruiter</div><div class="xs muted">Employer</div></div></button>
-      <button data-action="login" data-name="Admin" data-role="ADMIN" class="card" style="padding:14px 18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;border:1px solid rgba(244,63,94,.2);">🛡️ <div><div class="bold sm">Admin Manager</div><div class="xs muted">Administrator</div></div></button>
+    
+    <!-- Modal Toggle Tabs -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:20px;margin-top:10px;">
+      <button id="auth-tab-login" onclick="toggleAuthMode('login')" style="background:var(--b);border:none;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;">Login</button>
+      <button id="auth-tab-signup" onclick="toggleAuthMode('signup')" style="background:none;border:none;color:var(--m);border-radius:8px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;">Sign Up</button>
     </div>
+
+    <!-- Login Form -->
+    <form id="auth-form-login" onsubmit="handleLoginSubmit(event)">
+      <div style="margin-bottom:14px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Email Address</label>
+        <input type="email" id="login-email" required placeholder="name@example.com" style="width:100%;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Password</label>
+        <input type="password" id="login-pass" required placeholder="••••••••" style="width:100%;">
+      </div>
+      <button class="btn w100" type="submit" style="padding:12px;">Sign In →</button>
+      <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--m);">
+        Accout nahi hai? <a href="#" onclick="toggleAuthMode('signup');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Sign Up karein</a>
+      </div>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="auth-form-signup" onsubmit="handleSignupSubmit(event)" style="display:none;">
+      <div style="margin-bottom:12px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Full Name</label>
+        <input type="text" id="signup-name" required placeholder="Enter full name" style="width:100%;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Email Address</label>
+        <input type="email" id="signup-email" required placeholder="name@example.com" style="width:100%;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Password</label>
+        <input type="password" id="signup-pass" required placeholder="Choose password" style="width:100%;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">I want to: </label>
+        <select id="signup-role" style="width:100%;">
+          <option value="CANDIDATE">🔍 Find Jobs (Candidate)</option>
+          <option value="EMPLOYER">🏢 Post Jobs (Employer)</option>
+        </select>
+      </div>
+      <button class="btn w100" type="submit" style="padding:12px;">Create Account ✨</button>
+      <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--m);">
+        Pehle se account hai? <a href="#" onclick="toggleAuthMode('login');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Login karein</a>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -2420,6 +2463,7 @@ document.addEventListener('click', e => {
 
   // ── Auth ──
   if (action === 'openM') { openM(el.dataset.modal); return; }
+  if (action === 'closeM') { closeM(el.dataset.modal); return; }
 
   // ── Rating ──
   if (action === 'rateStar') { rateStar(parseInt(el.dataset.rating)); return; }
@@ -2708,13 +2752,120 @@ function renderAdminJobs(){
   </tr>`).join('');
 }
 
-// ══════ AUTH ══════
+// ══════ AUTH (Database driven via localStorage) ══════
+// Seed initial users if they don't exist
+if (!localStorage.getItem('jcp_users')) {
+  localStorage.setItem('jcp_users', JSON.stringify([
+    { name: 'Alex Developer', email: 'alex@ex.com', pass: 'alex123', role: 'CANDIDATE', id: 'u1', banned: false },
+    { name: 'Sarah Recruiter', email: 'sarah@ex.com', pass: 'sarah123', role: 'EMPLOYER', id: 'u2', banned: false },
+    { name: 'Admin', email: 'admin@ex.com', pass: 'admin123', role: 'ADMIN', id: 'u3', banned: false }
+  ]));
+}
+
+// Global user array syncs from localStorage
+function getUsersDB() {
+  return JSON.parse(localStorage.getItem('jcp_users'));
+}
+
+function saveUsersDB(db) {
+  localStorage.setItem('jcp_users', JSON.stringify(db));
+  users = db; // sync to app state
+}
+
+function toggleAuthMode(mode) {
+  const loginForm = document.getElementById('auth-form-login');
+  const signupForm = document.getElementById('auth-form-signup');
+  const loginTab = document.getElementById('auth-tab-login');
+  const signupTab = document.getElementById('auth-tab-signup');
+
+  if (mode === 'login') {
+    loginForm.style.display = 'block';
+    signupForm.style.display = 'none';
+    loginTab.style.background = 'var(--b)';
+    loginTab.style.color = '#fff';
+    signupTab.style.background = 'none';
+    signupTab.style.color = 'var(--m)';
+  } else {
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
+    signupTab.style.background = 'var(--b)';
+    signupTab.style.color = '#fff';
+    loginTab.style.background = 'none';
+    loginTab.style.color = 'var(--m)';
+  }
+}
+
+function handleLoginSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+
+  const db = getUsersDB();
+  const user = db.find(u => u.email.toLowerCase() === email && u.pass === pass);
+
+  if (!user) {
+    showToast('❌ Invalid email ya password bhai!', '#f43f5e');
+    return;
+  }
+
+  if (user.banned) {
+    showToast('🚫 Aapka account ban kar diya gaya hai!', '#f43f5e');
+    return;
+  }
+
+  login(user.name, user.role);
+  // Clear fields
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+function handleSignupSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim().toLowerCase();
+  const pass = document.getElementById('signup-pass').value;
+  const role = document.getElementById('signup-role').value;
+
+  const db = getUsersDB();
+  if (db.some(u => u.email.toLowerCase() === email)) {
+    showToast('⚠️ Email pehle se registered hai bhai!', '#f59e0b');
+    return;
+  }
+
+  const newUser = {
+    id: 'u' + Date.now(),
+    name: name,
+    email: email,
+    pass: pass,
+    role: role,
+    banned: false
+  };
+
+  db.push(newUser);
+  saveUsersDB(db);
+
+  showToast('🎉 Signup successful! Ab direct login ho raha hai...', '#10b981');
+  
+  // Auto login
+  login(name, role);
+
+  // Clear fields
+  document.getElementById('signup-name').value = '';
+  document.getElementById('signup-email').value = '';
+  document.getElementById('signup-pass').value = '';
+}
+
 function login(name,role){
   activeUser=name;activeRole=role;
   closeM('m-login');
   document.getElementById('auth-area').innerHTML=`<div class="flex ic g2"><span class="badge bv">${role}</span><button onclick="logout()" style="background:none;border:none;color:#fb7185;font-size:12px;font-weight:700;cursor:pointer;">Sign Out</button></div>`;
-  document.getElementById('dash-name').textContent=name;
-  document.getElementById('dash-av').textContent=name.charAt(0);
+  
+  // Update dashboard elements safely if they exist
+  const dashName = document.getElementById('dash-name');
+  const dashAv = document.getElementById('dash-av');
+  if (dashName) dashName.textContent=name;
+  if (dashAv) dashAv.textContent=name.charAt(0);
+
   if(role==='CANDIDATE')showTab('dashboard');
   else if(role==='EMPLOYER')showTab('employer');
   else showTab('admin');
@@ -2724,6 +2875,7 @@ function logout(){
   activeUser=null;activeRole=null;
   document.getElementById('auth-area').innerHTML='<button class="btn" onclick="openM(\'m-login\')">Sign In</button>';
   showTab('home');
+  showToast('👋 logged out successfully!','#7c3aed');
 }
 
 // ══════ MODALS ══════
