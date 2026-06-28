@@ -821,6 +821,15 @@ l.parentNode.insertBefore(s, l);
       <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-mob" value="3+ years" onchange="syncFilterRadios('je-mob','je-desk');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 3+ Years</label>
     </div>
   </div>
+  <!-- Distance Radius Filter -->
+  <div style="margin-bottom:20px;"><label>Distance Radius</label>
+    <div style="display:flex;gap:6px;margin-top:8px;">
+      <button class="schip act" data-action="setDistFilter" data-dist="" style="flex:1;justify-content:center;">All India</button>
+      <button class="schip" data-action="setDistFilter" data-dist="2km" style="flex:1;justify-content:center;">⚡ 2 km</button>
+      <button class="schip" data-action="setDistFilter" data-dist="5km" style="flex:1;justify-content:center;">📍 5 km</button>
+      <button class="schip" data-action="setDistFilter" data-dist="10km" style="flex:1;justify-content:center;">🛵 10 km</button>
+    </div>
+  </div>
   <!-- Salary Slider -->
   <div>
     <label>Min Salary (₹/month)</label>
@@ -1058,6 +1067,15 @@ l.parentNode.insertBefore(s, l);
             <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;cursor:pointer;color:var(--t);"><input type="radio" name="je-desk" value="3+ years" onchange="syncFilterRadios('je-desk','je-mob');renderJobs()" style="width:auto;padding:0;border:none;background:none;accent-color:#7c3aed;"> 3+ Years</label>
           </div>
         </div>
+        <!-- Desktop Distance Filter -->
+        <div style="margin-bottom:20px;"><label>Distance Radius</label>
+          <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+            <button class="schip act" data-action="setDistFilter" data-dist="" style="font-size:9px;padding:4px 8px;">All India</button>
+            <button class="schip" data-action="setDistFilter" data-dist="2km" style="font-size:9px;padding:4px 8px;">2 km</button>
+            <button class="schip" data-action="setDistFilter" data-dist="5km" style="font-size:9px;padding:4px 8px;">5 km</button>
+            <button class="schip" data-action="setDistFilter" data-dist="10km" style="font-size:9px;padding:4px 8px;">10 km</button>
+          </div>
+        </div>
         <div>
           <label>Min Salary (₹/month)</label>
           <input type="range" min="0" max="200000" step="2000" value="0" id="sal-sl-desk" oninput="document.getElementById('sal-v').textContent='₹'+Number(this.value).toLocaleString();document.getElementById('sal-sl').value=this.value;renderJobs();" style="width:100%;border:none;padding:0;background:none;accent-color:#7c3aed;margin-top:8px;">
@@ -1090,7 +1108,15 @@ l.parentNode.insertBefore(s, l);
 <div class="page">
   <div class="flex g3 ic mb6 fw">
     <div style="width:50px;height:50px;border-radius:14px;background:rgba(124,58,237,.15);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-av">A</div>
-    <div><div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-name">Alex Developer</div><div class="xs muted">Candidate Account</div></div>
+    <div style="flex:1;min-width:160px;">
+      <div style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;" id="dash-name">Alex Developer</div>
+      <div class="xs muted">Candidate Account</div>
+    </div>
+    <!-- Profile Strength Score Meter -->
+    <div class="card p3" style="padding:10px 16px;min-width:180px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);">
+      <div class="flex jb ic mb1"><span class="xs bold" style="color:#34d399;">Profile Strength</span><span class="xs bold" style="color:#34d399;">85%</span></div>
+      <div class="match-bar" style="height:5px;"><div class="match-fill" style="width:85%;background:#34d399;"></div></div>
+    </div>
   </div>
   <div class="dtabs">
     <button class="dtab act" data-action="dswitch" data-panel="apps">📋 Applications</button>
@@ -1369,6 +1395,20 @@ l.parentNode.insertBefore(s, l);
         Pehle se account hai? <a href="#" onclick="toggleAuthMode('login');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Login karein</a>
       </div>
     </form>
+  </div>
+<!-- Verified HR Modal -->
+<div class="mo" id="m-hr-verify">
+  <div class="mbox" style="max-width:420px;">
+    <button data-action="closeM" data-modal="m-hr-verify" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
+    <div style="font-size:36px;margin-bottom:10px;">🛡️</div>
+    <div class="bold mb2" style="font-size:18px;color:#34d399;">100% Verified Recruiter</div>
+    <div class="xs muted mb4" style="line-height:1.7;">
+      Yeh HR recruiter JobConnect Pro compliance team dwara verified hai.<br>
+      • <strong>GST & CIN Registered Company</strong><br>
+      • <strong>Zero Scam Guarantee (No registration fees)</strong><br>
+      • <strong>Direct Call & WhatsApp Connect Active</strong>
+    </div>
+    <button class="btn w100" data-action="closeM" data-modal="m-hr-verify" style="padding:12px;">Got It, Thanks! 👍</button>
   </div>
 </div>
 
@@ -2355,7 +2395,10 @@ function jobCardHTML(j, compact, searchQ=''){
       </div>
       <div class="jhr">
         <span class="jsal">₹${j.sal.toLocaleString()} / month</span>
-        <span class="xs" style="color:#25d366;">💬 HR: ${j.hr} — <a href="tel:${j.ph}" style="color:#25d366;font-weight:700;">${j.ph}</a></span>
+        <span class="xs" style="color:#25d366;display:flex;align-items:center;gap:4px;">
+          💬 HR: ${j.hr}
+          <button data-action="openM" data-modal="m-hr-verify" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34d399;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:800;cursor:pointer;">[✓ Verified HR]</button>
+        </span>
       </div>
       <div class="xs muted" style="line-height:1.75;margin-bottom:10px;">${j.desc}</div>
       <div class="xs muted mb2">🤖 AI Match Score: <span style="color:#a78bfa;font-weight:700;">${j.match}%</span></div>
@@ -2572,6 +2615,9 @@ document.addEventListener('click', e => {
   // ── WhatsApp Apply ──
   if (action === 'waApply') { waApply(); return; }
 
+  // ── Distance Radius ──
+  if (action === 'setDistFilter') { setDistFilter(el.dataset.dist, el); return; }
+
   // ── Cookie Consent ──
   if (action === 'acceptCookies') { acceptCookies(); return; }
 
@@ -2708,9 +2754,13 @@ function submitApp(e){
   renderMyApps();renderEmpAnalytics();renderPipeline();
   document.getElementById('aj-count').textContent=jobs.length;
   document.getElementById('aa-count').textContent=applications.length;
-  showToast('✅ Apply ho gaya! HR ka number: '+curApplyJob.ph,'#10b981');
+  showToast('✅ Application Sent! HR ka number: '+curApplyJob.ph,'#10b981');
+  // Simulated WhatsApp Status Alert
+  setTimeout(()=>{
+    showToast('💬 WhatsApp Alert: HR '+curApplyJob.hr+' received your profile! Status: ACTIVE 🔥','#25d366');
+  },1800);
   // Trigger rating gate after apply
-  setTimeout(()=>openRatingGate('apply','Rate This Job Listing','Is job listing ko rate karo!'),1200);
+  setTimeout(()=>openRatingGate('apply','Rate This Job Listing','Is job listing ko rate karo!'),3200);
 }
 function openWA(ph,title,co){
   const clean=ph.replace(/\s+/g,'').replace('+','');
