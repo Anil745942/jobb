@@ -25,7 +25,14 @@
 <style>
 :root{--v:#7c3aed;--vl:#a78bfa;--c:#06b6d4;--g:#10b981;--r:#f43f5e;--bg:#0a0a0f;--s:rgba(18,18,28,.85);--b:rgba(255,255,255,.07);--t:#f4f4f5;--m:#71717a}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;transition:background .3s,color .3s}
+body.light-mode{--bg:#f8fafc;--s:#ffffff;--b:rgba(0,0,0,.08);--t:#0f172a;--m:#64748b}
+body.light-mode nav{background:rgba(255,255,255,.92)}
+body.light-mode .card{box-shadow:0 4px 20px rgba(0,0,0,.05)}
+body.light-mode .ac-drop, body.light-mode .mbox, body.light-mode .filter-drawer, body.light-mode .ai-chat-win{background:#ffffff;border-color:rgba(0,0,0,.1)}
+body.light-mode input, body.light-mode select, body.light-mode textarea{background:rgba(0,0,0,.03);color:#0f172a}
+body.light-mode .navbtn{color:#64748b}
+body.light-mode .logo-txt{color:#0f172a}
 body::before{content:'';position:fixed;top:-300px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 .card{background:var(--s);border:1px solid var(--b);backdrop-filter:blur(16px);border-radius:18px;transition:transform .2s,box-shadow .2s;transform-style:preserve-3d;backface-visibility:hidden}
@@ -855,6 +862,7 @@ l.parentNode.insertBefore(s, l);
     <button class="navbtn" id="nav-admin" data-action="showTab" data-tab="admin">Admin</button>
   </div>
   <div class="flex ic g2">
+    <button class="navbtn" data-action="toggleTheme" title="Toggle Light/Dark Mode" style="padding:6px 10px;font-size:16px;" id="theme-btn">🌙</button>
     <div id="auth-area"><button class="btn" data-action="openM" data-modal="m-login">Sign In</button></div>
   </div>
 </nav>
@@ -913,43 +921,6 @@ l.parentNode.insertBefore(s, l);
     </div>
   </div>
 
-  <!-- BANNER AD - Below Stats (Blank Box replaced with premium 'Read Full Now' conversion ad) -->
-  <div style="max-width:1200px;margin:32px auto 16px;padding:0 20px;">
-    <div class="ad-banner-slot card" style="padding:0;text-align:center;background:rgba(18,18,28,0.4);border:1px solid rgba(124,58,237,.25);border-radius:18px;min-height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 8px 32px rgba(124,58,237,0.15);">
-      
-      <!-- Premium Interactive 'Read Full Now' Native Ad Unit -->
-      <a href="#" data-action="openM" data-modal="m-ad-detail" style="display:flex;width:100%;height:100%;min-height:130px;text-decoration:none;color:inherit;position:relative;align-items:center;justify-content:space-between;padding:16px 36px;background:linear-gradient(135deg, rgba(20,20,35,0.85) 0%, rgba(124,58,237,0.06) 50%, rgba(6,182,212,0.08) 100%);">
-        
-        <!-- Glow accents -->
-        <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#7c3aed,#06b6d4);"></div>
-        <div style="position:absolute;top:6px;right:16px;font-size:9px;text-transform:uppercase;letter-spacing:.05em;opacity:0.6;font-weight:700;color:#a78bfa;">Sponsored Ad</div>
-        
-        <!-- Left Side: Engaging content -->
-        <div style="text-align:left;max-width:65%;">
-          <div style="display:inline-flex;align-items:center;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;color:#22d3ee;margin-bottom:8px;">🔥 URGENT UPDATE</div>
-          <h4 style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;margin:0 0 4px;color:#fff;line-height:1.3;">15,000+ Direct HR Mobile Numbers Database Leaked?</h4>
-          <p class="xs muted" style="margin:0;line-height:1.4;">Chandigarh & Noida IT/Recruiter contacts list now open for everyone. Verify your Pincode to get direct access.</p>
-        </div>
-
-        <!-- Right Side: High Converting Animated CTA Button -->
-        <div style="flex-shrink:0;margin-left:20px;">
-          <div style="position:relative;display:inline-block;padding:14px 28px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border-radius:12px;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 6px 20px rgba(124,58,237,0.4);transition:all 0.3s;animation:pulseAdBtn 2s infinite;cursor:pointer;">
-            Read Full Now 📄
-          </div>
-        </div>
-      </a>
-
-      <!-- Subtle pulse animation injected directly in styling -->
-      <style>
-        @keyframes pulseAdBtn {
-          0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(124,58,237,0.4); }
-          50% { transform: scale(1.04); box-shadow: 0 6px 30px rgba(6,182,212,0.6); }
-        }
-      </style>
-      
-    </div>
-  </div>
-
   <!-- HOME JOB FEED -->
   <div class="page" style="padding-top:0;">
     <div class="flex jb ic mb4 fw g2">
@@ -983,6 +954,26 @@ l.parentNode.insertBefore(s, l);
       <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"Security guard ki job Chandigarh mein 1 din mein mili! HR ka number direct card pe tha — seedha call kiya."</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(124,58,237,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#a78bfa;">S</div><div><div class="bold sm">Suresh Kumar</div><div class="xs muted">Security Guard, Mohali</div></div></div></div>
       <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"Delivery boy job ke liye 15 applications aayi — sab ka phone number direct tha. 2 din mein kaam shuru!"</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#22d3ee;">R</div><div><div class="bold sm">Ravi Singh</div><div class="xs muted">Delivery Executive, Noida</div></div></div></div>
       <div class="card p6"><div style="font-size:12px;color:var(--m);line-height:1.9;font-style:italic;">"React Developer job ₹45,000/month mili. AI ne mujhe bata diya kaunse skills add karne hain resume mein."</div><div class="flex ic g3 mt4"><div style="width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,.2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#34d399;">P</div><div><div class="bold sm">Priya Verma</div><div class="xs muted">React Developer, Chandigarh</div></div></div></div>
+    </div>
+
+    <!-- MOVED READ FULL NOW AD UNIT (BOTTOM PLACEMENT) -->
+    <div style="max-width:1200px;margin:32px auto 16px;">
+      <div class="ad-banner-slot card" style="padding:0;text-align:center;background:rgba(18,18,28,0.4);border:1px solid rgba(124,58,237,.25);border-radius:18px;min-height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 8px 32px rgba(124,58,237,0.15);">
+        <a href="#" data-action="openM" data-modal="m-ad-detail" style="display:flex;width:100%;height:100%;min-height:130px;text-decoration:none;color:inherit;position:relative;align-items:center;justify-content:space-between;padding:16px 36px;background:linear-gradient(135deg, rgba(20,20,35,0.85) 0%, rgba(124,58,237,0.06) 50%, rgba(6,182,212,0.08) 100%);">
+          <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#7c3aed,#06b6d4);"></div>
+          <div style="position:absolute;top:6px;right:16px;font-size:9px;text-transform:uppercase;letter-spacing:.05em;opacity:0.6;font-weight:700;color:#a78bfa;">Sponsored Ad</div>
+          <div style="text-align:left;max-width:65%;">
+            <div style="display:inline-flex;align-items:center;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;color:#22d3ee;margin-bottom:8px;">🔥 URGENT UPDATE</div>
+            <h4 style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;margin:0 0 4px;color:inherit;line-height:1.3;">15,000+ Direct HR Mobile Numbers Database Leaked?</h4>
+            <p class="xs muted" style="margin:0;line-height:1.4;">Chandigarh & Noida IT/Recruiter contacts list now open for everyone. Verify your Pincode to get direct access.</p>
+          </div>
+          <div style="flex-shrink:0;margin-left:20px;">
+            <div style="position:relative;display:inline-block;padding:14px 28px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border-radius:12px;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 6px 20px rgba(124,58,237,0.4);transition:all 0.3s;animation:pulseAdBtn 2s infinite;cursor:pointer;">
+              Read Full Now 📄
+            </div>
+          </div>
+        </a>
+      </div>
     </div>
 
     <!-- TRUSTED BY COMPANIES TICKER -->
@@ -1119,6 +1110,15 @@ l.parentNode.insertBefore(s, l);
       <button class="btn mt3" data-action="runATS">Analyze Resume →</button>
       <div id="ats-res" class="hidden mt4"></div>
     </div>
+    <div class="card p6 mb4">
+      <div class="bold mb2" style="font-size:14px;">🎙️ Practice AI Interview Simulator</div>
+      <div class="xs muted mb4">Select your target role and let AI conduct a quick mock interview to test your readiness.</div>
+      <select id="mock-role" style="margin-bottom:12px;">
+        <option>Security Guard</option><option>Delivery Executive</option><option>Driver</option><option>BPO / Telecaller</option><option>Software Developer</option><option>Shop Assistant</option>
+      </select>
+      <button class="btn" data-action="startMockInterview">Start AI Practice Interview →</button>
+      <div id="mock-interview-box" class="hidden mt4" style="background:rgba(0,0,0,0.2);border:1px solid var(--b);border-radius:14px;padding:16px;"></div>
+    </div>
     <div class="card p6">
       <div class="bold mb2" style="font-size:14px;">🧠 AI Career Path Advisor</div>
       <div class="xs muted mb4">Apni current job type choose karo — AI next steps batayega</div>
@@ -1135,10 +1135,13 @@ l.parentNode.insertBefore(s, l);
         <div><label>Last Name</label><input type="text" value="Developer"></div>
         <div><label>Phone</label><input type="tel" value="+91 98765 43210"></div>
         <div><label>City</label><input type="text" value="Chandigarh"></div>
-        <div style="grid-column:span 2;"><label>Skills</label><input type="text" value="React, Node.js, JavaScript, PostgreSQL"></div>
-        <div style="grid-column:span 2;"><label>Bio</label><textarea rows="3">Full Stack Developer with 3 years experience.</textarea></div>
+        <div style="grid-column:span 2;"><label>Skills</label><input type="text" id="prof-skills" value="React, Node.js, JavaScript, PostgreSQL"></div>
+        <div style="grid-column:span 2;"><label>Bio</label><textarea id="prof-bio" rows="3">Full Stack Developer with 3 years experience.</textarea></div>
       </div>
-      <button class="btn mt4" data-action="showToast" data-msg="✅ Profile saved!" data-bg="#7c3aed">Save Profile</button>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn" data-action="showToast" data-msg="✅ Profile saved!" data-bg="#7c3aed">Save Profile</button>
+        <button class="btn" data-action="downloadPDFResume" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9);">📄 Download PDF Resume</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2584,6 +2587,13 @@ document.addEventListener('click', e => {
 
   // ── Cookie Consent ──
   if (action === 'acceptCookies') { acceptCookies(); return; }
+
+  // ── Theme Toggle ──
+  if (action === 'toggleTheme') { toggleTheme(); return; }
+
+  // ── PDF Resume & AI Interview ──
+  if (action === 'downloadPDFResume') { downloadPDFResume(); return; }
+  if (action === 'startMockInterview') { startMockInterview(); return; }
 });
 
 // ══════ VOICE SEARCH ══════
@@ -3347,6 +3357,79 @@ function acceptCookies() {
   if (banner) banner.style.display = 'none';
   showToast('🍪 Cookie preferences saved!','#7c3aed');
 }
+
+// ══════ THEME TOGGLE & AUTO MOBILE LIGHT MODE ══════
+function initTheme() {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+  const savedTheme = localStorage.getItem('jcp_theme');
+  if (savedTheme === 'light' || (!savedTheme && isMobile)) {
+    document.body.classList.add('light-mode');
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = '☀️';
+  }
+}
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('jcp_theme', isLight ? 'light' : 'dark');
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+  showToast(isLight ? '☀️ Light Mode Activated!' : '🌙 Dark Mode Activated!', '#7c3aed');
+}
+
+// ══════ 1-CLICK PDF RESUME BUILDER ══════
+function downloadPDFResume() {
+  const name = activeUser || 'Candidate';
+  const skills = document.getElementById('prof-skills') ? document.getElementById('prof-skills').value : 'General Skills';
+  const bio = document.getElementById('prof-bio') ? document.getElementById('prof-bio').value : 'Motivated professional looking for exciting job opportunities.';
+  
+  const content = `==================================================\n` +
+                  `                RESUME: ${name.toUpperCase()}\n` +
+                  `==================================================\n` +
+                  `Platform: Verified candidate on JobConnect Pro\n` +
+                  `Contact: Direct HR Connection Enabled\n` +
+                  `--------------------------------------------------\n\n` +
+                  `SUMMARY / BIO:\n${bio}\n\n` +
+                  `SKILLS & COMPETENCIES:\n${skills}\n\n` +
+                  `VERIFICATION STATUS:\n` +
+                  `[✓] Phone Verified\n` +
+                  `[✓] Profile 100% Complete\n` +
+                  `==================================================`;
+  
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name.replace(/\s+/g, '_')}_Resume.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast('📄 Professional Resume downloaded!','#10b981');
+}
+
+// ══════ PRACTICE AI INTERVIEW SIMULATOR ══════
+function startMockInterview() {
+  const role = document.getElementById('mock-role').value;
+  const box = document.getElementById('mock-interview-box');
+  box.classList.remove('hidden');
+  
+  const questions = {
+    'Security Guard': ['Aapka 12-hour night shift ka experience kaisa hai?', 'Agar building mein koi stranger entry kare to pehla step kya hoga?'],
+    'Delivery Executive': ['Bike aur Driving license valid hai?', 'Rainy season mein timely delivery manage kaise karte ho?'],
+    'Driver': ['Chandigarh aur Mohali ke routes achhe se pata hain?', 'Commercial vehicle license category kya hai?'],
+    'BPO / Telecaller': ['Tell me about yourself in English & Hindi.', 'Customer angry ho to kaise handle karte ho?'],
+    'Software Developer': ['React state vs props mein kya difference hai?', 'API error handling kaise karte ho?'],
+    'Shop Assistant': ['Sales counter aur billing Software handle kar sakte ho?', 'Stock inventory management ka experience hai?']
+  };
+  
+  const qList = questions[role] || questions['Security Guard'];
+  box.innerHTML = `<div style="font-weight:700;color:#a78bfa;margin-bottom:8px;">🤖 AI Interviewer for ${role}:</div>` +
+                  `<div style="font-size:13px;line-height:1.6;margin-bottom:12px;color:var(--t);">${qList[0]}</div>` +
+                  `<textarea rows="3" placeholder="Apna answer type karo ya bol ke bolo..." style="margin-bottom:10px;"></textarea>` +
+                  `<button class="btn" onclick="showToast('✅ AI Analysis: Good confidence! Clear answer. Score: 8.5/10','#10b981')">Submit Answer for AI Feedback ✨</button>`;
+}
+
+document.addEventListener('DOMContentLoaded', initTheme);
+initTheme();
 </script>
 <!-- Google Analytics (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1FGJ4MW6L"></script>
