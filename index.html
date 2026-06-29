@@ -28,12 +28,84 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;transition:background .3s,color .3s}
 body.light-mode{--bg:#f8fafc;--s:#ffffff;--b:rgba(0,0,0,.08);--t:#0f172a;--m:#64748b}
-body.light-mode nav{background:rgba(255,255,255,.92)}
-body.light-mode .card{box-shadow:0 4px 20px rgba(0,0,0,.05)}
-body.light-mode .ac-drop, body.light-mode .mbox, body.light-mode .filter-drawer, body.light-mode .ai-chat-win{background:#ffffff;border-color:rgba(0,0,0,.1)}
-body.light-mode input, body.light-mode select, body.light-mode textarea{background:rgba(0,0,0,.03);color:#0f172a}
-body.light-mode .navbtn{color:#64748b}
+/* ═══ COMPREHENSIVE LIGHT MODE OVERRIDES ═══ */
+/* Nav */
+body.light-mode nav{background:rgba(255,255,255,.95);border-bottom-color:rgba(0,0,0,.06)}
+body.light-mode .navbtn{color:#475569}
+body.light-mode .navbtn:hover,body.light-mode .navbtn.act{background:rgba(124,58,237,.1);color:#7c3aed}
 body.light-mode .logo-txt{color:#0f172a}
+body.light-mode .nav-toggle span,body.light-mode .nav-toggle span::before,body.light-mode .nav-toggle span::after{background:#334155}
+/* Mobile nav dropdown */
+body.light-mode .navlinks{background:rgba(255,255,255,.98)!important;border:1px solid rgba(0,0,0,.06);box-shadow:0 8px 32px rgba(0,0,0,.1)}
+/* Cards */
+body.light-mode .card{background:#ffffff;border-color:rgba(0,0,0,.06);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+body.light-mode .card:not(.jcard):not(.scard):hover{box-shadow:0 8px 28px rgba(0,0,0,.1)}
+/* Inputs */
+body.light-mode input,body.light-mode select,body.light-mode textarea{background:rgba(0,0,0,.03);color:#0f172a;border-color:rgba(0,0,0,.1)}
+body.light-mode input:focus,body.light-mode select:focus,body.light-mode textarea:focus{border-color:#7c3aed}
+body.light-mode input::placeholder{color:#94a3b8}
+/* Search box */
+body.light-mode .sbox{background:rgba(255,255,255,.95);border-color:rgba(0,0,0,.08);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+body.light-mode .sinp{background:rgba(0,0,0,.03)}
+/* Autocomplete & Dropdowns */
+body.light-mode .ac-drop{background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.1);box-shadow:0 12px 40px rgba(0,0,0,.12)}
+body.light-mode .ac-item:hover{background:rgba(124,58,237,.06)}
+/* Modals */
+body.light-mode .mbox,body.light-mode .rgate{background:#ffffff;border-color:rgba(0,0,0,.08);box-shadow:0 20px 60px rgba(0,0,0,.15)}
+body.light-mode .mo{background:rgba(0,0,0,.4)}
+/* Filter drawer */
+body.light-mode .filter-drawer{background:#ffffff;border-color:rgba(0,0,0,.08)}
+body.light-mode .filter-drawer-handle{background:rgba(0,0,0,.12)}
+/* Footer */
+body.light-mode footer{background:rgba(0,0,0,.03);border-top-color:rgba(0,0,0,.06)}
+/* AI Chat */
+body.light-mode .ai-chat-win{background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.1)}
+body.light-mode .ai-msg.bot{background:rgba(0,0,0,.04);color:#0f172a}
+body.light-mode .ai-chat-inp{background:rgba(248,250,252,.98);border-top-color:rgba(0,0,0,.06)}
+body.light-mode .ai-chat-chips{background:rgba(248,250,252,.5);border-top-color:rgba(0,0,0,.06)}
+/* Install banner & Cookie */
+body.light-mode .install-banner{background:rgba(255,255,255,.97);border-color:rgba(0,0,0,.08);box-shadow:0 8px 32px rgba(0,0,0,.1)}
+body.light-mode #cookie-consent{background:rgba(255,255,255,.98)!important;border-color:rgba(0,0,0,.08)!important;box-shadow:0 -4px 24px rgba(0,0,0,.08)!important}
+/* Quick category pills */
+body.light-mode .qcat{background:rgba(0,0,0,.04);color:#475569;border-color:rgba(0,0,0,.06)}
+body.light-mode .qcat:hover,body.light-mode .qcat.act{background:rgba(124,58,237,.1);color:#7c3aed;border-color:rgba(124,58,237,.2)}
+body.light-mode #cat-pills .qcat{background:rgba(0,0,0,.04);color:#475569;border-color:rgba(0,0,0,.06)}
+/* Dashboard tabs */
+body.light-mode .dtabs{background:rgba(0,0,0,.03)}
+body.light-mode .dtab{color:#64748b}
+/* Stat cards */
+body.light-mode .scard{border-color:rgba(0,0,0,.06)}
+/* Match bar */
+body.light-mode .match-bar{background:rgba(0,0,0,.06)}
+/* Skeleton loaders */
+body.light-mode .skel{background:linear-gradient(90deg,rgba(0,0,0,.04) 25%,rgba(0,0,0,.08) 50%,rgba(0,0,0,.04) 75%);background-size:200% 100%;animation:skelAnim 1.4s infinite}
+body.light-mode .skel-card{background:#fff;border-color:rgba(0,0,0,.06)}
+/* Scrollbar */
+body.light-mode ::-webkit-scrollbar-thumb{background:rgba(124,58,237,.25)}
+/* Radial backgrounds - hide in light mode */
+body.light-mode::before,body.light-mode::after{opacity:0.3}
+/* Search chips */
+body.light-mode .schip{background:rgba(124,58,237,.08);color:#7c3aed;border-color:rgba(124,58,237,.15)}
+/* Table */
+body.light-mode th{color:#64748b;border-bottom-color:rgba(0,0,0,.06)}
+body.light-mode td{border-bottom-color:rgba(0,0,0,.04)}
+/* Hero */
+body.light-mode .hero{background:linear-gradient(180deg,rgba(248,250,252,0) 0%,rgba(248,250,252,1) 100%)}
+body.light-mode .gt{background:linear-gradient(135deg,#7c3aed,#0891b2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* Pill badges on job cards */
+body.light-mode .badge.bv{background:rgba(124,58,237,.08);color:#7c3aed}
+body.light-mode .badge.bc{background:rgba(6,182,212,.08);color:#0891b2}
+body.light-mode .badge.be{background:rgba(16,185,129,.08);color:#059669}
+body.light-mode .badge.br{background:rgba(244,63,94,.08);color:#e11d48}
+body.light-mode .badge.ba{background:rgba(245,158,11,.08);color:#d97706}
+/* Theme toggle button */
+body.light-mode #theme-toggle-btn{background:rgba(0,0,0,.06);color:#475569}
+/* Trusted ticker */
+body.light-mode .ticker-track span{color:#64748b!important}
+/* Premium CTA section inline styles override */
+body.light-mode [style*="background:linear-gradient(135deg,rgba(124,58,237"]{background:linear-gradient(135deg,rgba(124,58,237,.05),rgba(6,182,212,.05))!important}
+/* OG meta tag */
+body.light-mode .og-card{background:#fff;border-color:rgba(0,0,0,.06)}
 body::before{content:'';position:fixed;top:-300px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 .card{background:var(--s);border:1px solid var(--b);backdrop-filter:blur(16px);border-radius:18px;transition:transform .2s,box-shadow .2s;transform-style:preserve-3d;backface-visibility:hidden}
