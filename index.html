@@ -933,6 +933,7 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
     <button class="navbtn" id="nav-admin" data-action="showTab" data-tab="admin">Admin</button>
   </div>
   <div class="flex ic g2">
+    <button class="navbtn" data-action="shareApp" title="Share App via WhatsApp" style="padding:6px 10px;font-size:16px;">🔗 Share</button>
     <button class="navbtn" data-action="toggleTheme" title="Toggle Light/Dark Mode" style="padding:6px 10px;font-size:16px;" id="theme-btn">🌙</button>
     <div id="auth-area"><button class="btn" data-action="openM" data-modal="m-login">Sign In</button></div>
   </div>
@@ -2710,6 +2711,9 @@ document.addEventListener('click', e => {
   // ── Theme Toggle ──
   if (action === 'toggleTheme') { toggleTheme(); return; }
 
+  // ── Share App ──
+  if (action === 'shareApp') { shareApp(); return; }
+
   // ── PDF Resume & AI Interview ──
   if (action === 'downloadPDFResume') { downloadPDFResume(); return; }
   if (action === 'startMockInterview') { startMockInterview(); return; }
@@ -3575,6 +3579,14 @@ window.addEventListener('offline', () => toggleOfflineScreen(true));
 // Initial check
 if (!navigator.onLine) {
   toggleOfflineScreen(true);
+}
+
+// ══════ SHARE APP FUNCTION ══════
+function shareApp() {
+  const shareText = "Bhai! Chandigarh, Mohali, Noida aur pure India ki jobs seedha HR se baat karke pao. Naukri Dhundho website se direct App (APK) download karo aur apply karo: " + window.location.href;
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+  window.open(whatsappUrl, '_blank');
+  showToast('🔗 Opening WhatsApp to share Naukri Dhundho!','#25d366');
 }
 </script>
 <!-- Moved External Ad Network Script to Bottom -->
