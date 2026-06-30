@@ -944,6 +944,29 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
 <!-- WHATSAPP FLOAT BUTTON -->
 <button class="wa-float" data-action="showToast" data-msg="💚 WhatsApp HR Support: +91 98765 00001" data-bg="#25d366" title="Chat on WhatsApp">💬</button>
 
+<!-- CUSTOM OFFLINE SCREEN -->
+<div id="offline-screen" style="position:fixed;inset:0;background:var(--bg);z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:'Inter',sans-serif;">
+  <div style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:28px;box-shadow:0 0 40px rgba(244,63,94,0.15);animation:offlinePulse 2s infinite;">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.5M5 12.5a10.94 10.94 0 0 1 5.83-2.84M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+    </svg>
+  </div>
+  <h2 style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:900;color:var(--t);margin-bottom:12px;">Connection Lost!</h2>
+  <p style="color:var(--m);font-size:13px;max-width:320px;line-height:1.6;margin:0 0 32px;">Bhai, aapka internet connection chala gaya hai. Jobs search karne ke liye connection check karein.</p>
+  <button class="btn" onclick="checkOnlineStatus()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;font-size:12px;font-weight:700;">
+    🔄 Retry Connection
+  </button>
+  <div class="xs muted" style="margin-top:24px;opacity:0.8;">Naukri Dhundho offline detection mode</div>
+</div>
+
+<style>
+@keyframes offlinePulse {
+  0% { transform: scale(1); box-shadow: 0 0 40px rgba(244,63,94,0.15); }
+  50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(244,63,94,0.3); }
+  100% { transform: scale(1); box-shadow: 0 0 40px rgba(244,63,94,0.15); }
+}
+</style>
+
 <!-- ══════ HOME TAB ══════ -->
 <div id="tab-home" class="tab act">
   <div class="hero">
@@ -3530,6 +3553,29 @@ function startMockInterview() {
 
 document.addEventListener('DOMContentLoaded', initTheme);
 initTheme();
+
+// ══════ OFFLINE SCREEN HANDLERS ══════
+function toggleOfflineScreen(isOffline) {
+  const offlineScreen = document.getElementById('offline-screen');
+  if (offlineScreen) {
+    offlineScreen.style.display = isOffline ? 'flex' : 'none';
+  }
+}
+function checkOnlineStatus() {
+  if (navigator.onLine) {
+    toggleOfflineScreen(false);
+    showToast('📶 Back online! Connecting to servers...','#10b981');
+  } else {
+    toggleOfflineScreen(true);
+    showToast('❌ Still offline. Check connection again.','#f43f5e');
+  }
+}
+window.addEventListener('online', () => toggleOfflineScreen(false));
+window.addEventListener('offline', () => toggleOfflineScreen(true));
+// Initial check
+if (!navigator.onLine) {
+  toggleOfflineScreen(true);
+}
 </script>
 <!-- Moved External Ad Network Script to Bottom -->
 <script>
