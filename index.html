@@ -2302,6 +2302,7 @@ function renderJobs(){
       // Combine them: Database matches + Google Search Results
       const combined = [...arr];
       googleJobs.forEach(gj => {
+        gj.searchScore = computeSearchScore(gj, q);
         if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
           combined.push(gj);
         }
@@ -2313,6 +2314,14 @@ function renderJobs(){
     if(currentSort==='salary-high') arr.sort((a,b)=>b.sal-a.sal);
     else if(currentSort==='salary-low') arr.sort((a,b)=>a.sal-b.sal);
     else if(currentSort==='match') arr.sort((a,b)=>b.match-a.match);
+    else {
+      // Relevance sorting
+      if (q) {
+        arr.sort((a,b)=>(b.searchScore||0)-(a.searchScore||0));
+      } else {
+        arr.sort((a,b)=>b.match-a.match); // Default to AI Match score
+      }
+    }
     
     currentFilteredJobs = arr; // Save to global state
     
@@ -2507,7 +2516,74 @@ function getSmartSuggestions(q){
   return [...new Set(suggestions)].slice(0,6);
 }
 
-// ── FILTER JOBS (with fuzzy + synonym support) ──
+// ── HEURISTIC SEARCH SCORING ENGINE ──
+function computeSearchScore(j, query) {
+  if (!query) return 0;
+  const q = query.toLowerCase().trim();
+  const tokens = q.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return 0;
+
+  let score = 0;
+
+  const titleL = j.title.toLowerCase();
+  const descL = j.desc.toLowerCase();
+  const companyL = j.company.toLowerCase();
+  const catL = j.cat.toLowerCase();
+  const areaL = j.area.toLowerCase();
+  const locL = j.location.toLowerCase();
+  const skillsL = (j.skills || []).map(s => s.toLowerCase());
+
+  // 1. Huge bonus for exact phrase matching in title or description
+  if (titleL.includes(q)) score += 200;
+  else if (descL.includes(q)) score += 60;
+
+  tokens.forEach(t => {
+    // Title matches (Weighted highest)
+    if (titleL.includes(t)) {
+      score += 65;
+    } else if (fuzzyMatch(t, j.title)) {
+      score += 35;
+    } else if (SYNONYMS[t]) {
+      const syns = SYNONYMS[t].split(' ');
+      if (syns.some(syn => titleL.includes(syn))) {
+        score += 25;
+      }
+    }
+
+    // Skills matches (Weighted high)
+    if (skillsL.some(sk => sk.includes(t))) {
+      score += 45;
+    } else if (skillsL.some(sk => fuzzyMatch(t, sk))) {
+      score += 25;
+    }
+
+    // Category matches
+    if (catL.includes(t)) {
+      score += 30;
+    }
+
+    // Company matches
+    if (companyL.includes(t)) {
+      score += 30;
+    } else if (fuzzyMatch(t, j.company)) {
+      score += 15;
+    }
+
+    // Location/Area matches
+    if (areaL.includes(t) || locL.includes(t)) {
+      score += 20;
+    }
+
+    // Description matches
+    if (descL.includes(t)) {
+      score += 10;
+    }
+  });
+
+  return score;
+}
+
+// ── FILTER JOBS (with fuzzy + synonym + scoring support) ──
 function filterJobs(){
   const s=(document.getElementById('js')?.value||'').trim().toLowerCase();
   const l=(document.getElementById('jl')?.value||'').trim().toLowerCase();
@@ -2521,9 +2597,6 @@ function filterJobs(){
     parseInt(slDesk?.value||'0')
   );
   
-  // Expand query with synonyms
-  const expandedWords = s ? expandQuery(s) : [];
-  
   return jobs.filter(j=>{
     if(filterCat && j.cat!==filterCat) return false;
     if(type){
@@ -2536,21 +2609,13 @@ function filterJobs(){
     }
     if(j.sal<minSal) return false;
     
-    // Smart keyword search with fuzzy + synonyms
+    // Smart keyword search with fuzzy + synonyms + heuristic scores
     if(s){
-      const haystack = [
-        j.title, j.desc, j.company, j.cat, j.hr, j.area, j.location,
-        ...(j.skills||[])
-      ].join(' ').toLowerCase();
-      
-      // Original words must match (fuzzy allowed)
-      const origWords = s.split(/\s+/).filter(Boolean);
-      const origMatch = origWords.every(w => haystack.includes(w) || fuzzyMatch(w,haystack));
-      
-      // OR expanded synonym words match
-      const synMatch = expandedWords.some(w => haystack.includes(w));
-      
-      if(!origMatch && !synMatch) return false;
+      const score = computeSearchScore(j, s);
+      if(score === 0) return false;
+      j.searchScore = score;
+    } else {
+      j.searchScore = 0;
     }
     
     // Location search with fuzzy
@@ -2562,6 +2627,7 @@ function filterJobs(){
     return true;
   });
 }
+
 
 // ── HIGHLIGHT matching text in job cards ──
 function highlightText(text,query){
@@ -2613,7 +2679,7 @@ function jobCardHTML(j, compact, searchQ=''){
   </div>`;
 }
 
-// ══════ AUTOCOMPLETE DROPDOWN ══════
+// ══════ AUTOCOMPLETE DROPDOWN (Heuristic Match & Rank) ══════
 function showAutocomplete(input, dropId){
   const drop=document.getElementById(dropId);
   const q=input.value.trim().toLowerCase();
@@ -2637,47 +2703,119 @@ function showAutocomplete(input, dropId){
     drop.classList.add('show');
     return;
   }
-  // Build suggestions: categories + job titles + skills
+
+  // Tokenize query for heuristic multi-word matching
+  const qTokens = q.split(/\s+/).filter(Boolean);
   let items=[];
-  // Category matches
+
+  // 1. Category matches
   CATS.forEach(c=>{
-    if(c.toLowerCase().includes(q)||fuzzyMatch(q,c)){
-      items.push({type:'cat',emoji:CAT_EMOJIS[c],title:c,sub:jobs.filter(j=>j.cat===c).length+' jobs'});
+    let score = 0;
+    if(c.toLowerCase().includes(q)) score += 100;
+    else {
+      qTokens.forEach(t => {
+        if(c.toLowerCase().includes(t)) score += 40;
+        else if(fuzzyMatch(t, c)) score += 20;
+      });
+    }
+    if(score > 0) {
+      items.push({
+        type: 'cat',
+        emoji: CAT_EMOJIS[c],
+        title: c,
+        sub: jobs.filter(j=>j.cat===c).length+' jobs available',
+        score: score + 15
+      });
     }
   });
-  // Job title matches (unique titles)
+
+  // 2. Job title matches (scored & deduplicated)
   const seenTitles=new Set();
   jobs.forEach(j=>{
     const t=j.title;
-    if(!seenTitles.has(t)&&(t.toLowerCase().includes(q)||fuzzyMatch(q,t))){
-      seenTitles.add(t);
-      items.push({type:'job',emoji:'💼',title:t,sub:j.company+' • '+j.area+' • ₹'+j.sal.toLocaleString()});
+    if(!seenTitles.has(t)){
+      let score = 0;
+      if(t.toLowerCase().includes(q)) score += 100;
+      else {
+        qTokens.forEach(token => {
+          if(t.toLowerCase().includes(token)) score += 40;
+          else if(fuzzyMatch(token, t)) score += 20;
+          else if(SYNONYMS[token] && SYNONYMS[token].split(' ').some(syn => t.toLowerCase().includes(syn))) score += 15;
+        });
+      }
+      if(score > 0) {
+        seenTitles.add(t);
+        items.push({
+          type: 'job',
+          emoji: '💼',
+          title: t,
+          sub: j.company+' • '+j.area+' • ₹'+j.sal.toLocaleString(),
+          score: score
+        });
+      }
     }
   });
-  // Skill matches
+
+  // 3. Skill matches
   const seenSkills=new Set();
   jobs.forEach(j=>{
     j.skills.forEach(sk=>{
-      if(!seenSkills.has(sk)&&(sk.toLowerCase().includes(q)||fuzzyMatch(q,sk))){
-        seenSkills.add(sk);
-        items.push({type:'skill',emoji:'🏷️',title:sk,sub:'Skill tag'});
+      if(!seenSkills.has(sk)){
+        let score = 0;
+        if(sk.toLowerCase().includes(q)) score += 100;
+        else {
+          qTokens.forEach(token => {
+            if(sk.toLowerCase().includes(token)) score += 40;
+            else if(fuzzyMatch(token, sk)) score += 20;
+          });
+        }
+        if(score > 0) {
+          seenSkills.add(sk);
+          items.push({
+            type: 'skill',
+            emoji: '🏷️',
+            title: sk,
+            sub: 'Skill Tag',
+            score: score - 5
+          });
+        }
       }
     });
   });
-  // Company matches
+
+  // 4. Company matches
   const seenCo=new Set();
   jobs.forEach(j=>{
-    if(!seenCo.has(j.company)&&(j.company.toLowerCase().includes(q)||fuzzyMatch(q,j.company))){
-      seenCo.add(j.company);
-      items.push({type:'company',emoji:'🏢',title:j.company,sub:j.location});
+    if(!seenCo.has(j.company)){
+      let score = 0;
+      if(j.company.toLowerCase().includes(q)) score += 100;
+      else {
+        qTokens.forEach(token => {
+          if(j.company.toLowerCase().includes(token)) score += 40;
+          else if(fuzzyMatch(token, j.company)) score += 20;
+        });
+      }
+      if(score > 0) {
+        seenCo.add(j.company);
+        items.push({
+          type: 'company',
+          emoji: '🏢',
+          title: j.company,
+          sub: j.location,
+          score: score - 10
+        });
+      }
     }
   });
-  
+
+  // Sort by highest heuristic match score
+  items.sort((a,b) => b.score - a.score);
+
   if(!items.length){
-    // Synonym suggestions
+    // Synonym suggestions fallback
     const expanded=expandQuery(q);
     expanded.filter(w=>w!==q).slice(0,4).forEach(w=>{
-      items.push({type:'synonym',emoji:'💡',title:w.charAt(0).toUpperCase()+w.slice(1),sub:'Did you mean?'});
+      items.push({type:'synonym',emoji:'💡',title:w.charAt(0).toUpperCase()+w.slice(1),sub:'Did you mean?', score: 1});
     });
   }
   
