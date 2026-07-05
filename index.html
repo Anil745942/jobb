@@ -2600,69 +2600,77 @@ function renderJobs(){
   }
 
   searchTimeoutId = setTimeout(() => {
-    const t0=performance.now();
-    let arr=filterJobs();
-    
-    // Google search fallback: If user searched something and database has fewer than 5 results,
-    // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
-    let isGoogleFallback = false;
-    if (q) {
-      isGoogleFallback = true;
-      const googleJobs = fetchSimulatedGoogleJobs(q, l);
-      // Combine them: Database matches + Google Search Results
-      const combined = [...arr];
-      googleJobs.forEach(gj => {
-        gj.searchScore = computeSearchScore(gj, q);
-        if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
-          combined.push(gj);
-        }
-      });
-      arr = combined;
-    }
-
-    // Sort
-    if(currentSort==='salary-high') arr.sort((a,b)=>b.sal-a.sal);
-    else if(currentSort==='salary-low') arr.sort((a,b)=>a.sal-b.sal);
-    else if(currentSort==='match') arr.sort((a,b)=>b.match-a.match);
-    else {
-      // Relevance sorting
+    try {
+      const t0=performance.now();
+      let arr=filterJobs();
+      
+      // Google search fallback: If user searched something and database has fewer than 5 results,
+      // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
+      let isGoogleFallback = false;
       if (q) {
-        arr.sort((a,b)=>(b.searchScore||0)-(a.searchScore||0));
-      } else {
-        arr.sort((a,b)=>b.match-a.match); // Default to AI Match score
+        isGoogleFallback = true;
+        const googleJobs = fetchSimulatedGoogleJobs(q, l);
+        // Combine them: Database matches + Google Search Results
+        const combined = [...arr];
+        googleJobs.forEach(gj => {
+          gj.searchScore = computeSearchScore(gj, q);
+          if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
+            combined.push(gj);
+          }
+        });
+        arr = combined;
       }
+
+      // Sort
+      if(currentSort==='salary-high') arr.sort((a,b)=>b.sal-a.sal);
+      else if(currentSort==='salary-low') arr.sort((a,b)=>a.sal-b.sal);
+      else if(currentSort==='match') arr.sort((a,b)=>b.match-a.match);
+      else {
+        // Relevance sorting
+        if (q) {
+          arr.sort((a,b)=>(b.searchScore||0)-(a.searchScore||0));
+        } else {
+          arr.sort((a,b)=>b.match-a.match); // Default to AI Match score
+        }
+      }
+      
+      currentFilteredJobs = arr; // Save to global state
+      
+      const t1=performance.now();
+      const ms=(t1-t0 + (isGoogleFallback ? 140 : 0)).toFixed(1);
+      
+      if(speed) speed.innerHTML=`<span class="dot-g"></span> ${ms}ms • ${isGoogleFallback ? 'Google Index' : 'Local Index'}`;
+      
+      if(!arr.length){
+        // SMART NO-RESULTS with suggestions
+        const suggestions = getSmartSuggestions(q);
+        el.innerHTML=`<div class="card p6" style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:14px;">🔍</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px;">Koi job nahi mili</div>
+          <div class="xs muted mb4" style="line-height:1.8;">Filters clear karein, spelling check karein, ya neeche ke suggestions try karein.</div>
+          ${suggestions.length?`<div style="margin-bottom:14px;">
+            <div class="xs muted mb2">🤖 AI Suggestions — yeh try karein:</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+              ${suggestions.map(s=>`<button onclick="document.getElementById('js').value='${s}';renderJobs();" class="schip trend" style="padding:7px 14px;font-size:11px;">${s}</button>`).join('')}
+            </div>
+          </div>`:''}
+          <button class="btn" onclick="clrFilters()" style="font-size:12px;">✕ Clear All Filters</button>
+        </div>`;
+        return;
+      }
+      
+      renderActiveFilteredJobs();
+      
+      // Save to recent
+      if(q.length>=2) saveRecent(q);
+      renderSearchChips();
+    } catch (err) {
+      console.error("Search Error: ", err);
+      // Fail gracefully: render local unfiltered jobs
+      currentFilteredJobs = jobs;
+      renderActiveFilteredJobs();
+      if(speed) speed.innerHTML=`<span class="dot-r"></span> Error loaded fallback index`;
     }
-    
-    currentFilteredJobs = arr; // Save to global state
-    
-    const t1=performance.now();
-    const ms=(t1-t0 + (isGoogleFallback ? 140 : 0)).toFixed(1);
-    
-    if(speed) speed.innerHTML=`<span class="dot-g"></span> ${ms}ms • ${isGoogleFallback ? 'Google Index' : 'Local Index'}`;
-    
-    if(!arr.length){
-      // SMART NO-RESULTS with suggestions
-      const suggestions = getSmartSuggestions(q);
-      el.innerHTML=`<div class="card p6" style="text-align:center;">
-        <div style="font-size:48px;margin-bottom:14px;">🔍</div>
-        <div style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px;">Koi job nahi mili</div>
-        <div class="xs muted mb4" style="line-height:1.8;">Filters clear karein, spelling check karein, ya neeche ke suggestions try karein.</div>
-        ${suggestions.length?`<div style="margin-bottom:14px;">
-          <div class="xs muted mb2">🤖 AI Suggestions — yeh try karein:</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
-            ${suggestions.map(s=>`<button onclick="document.getElementById('js').value='${s}';renderJobs();" class="schip trend" style="padding:7px 14px;font-size:11px;">${s}</button>`).join('')}
-          </div>
-        </div>`:''}
-        <button class="btn" onclick="clrFilters()" style="font-size:12px;">✕ Clear All Filters</button>
-      </div>`;
-      return;
-    }
-    
-    renderActiveFilteredJobs();
-    
-    // Save to recent
-    if(q.length>=2) saveRecent(q);
-    renderSearchChips();
   }, q ? 350 : 0); // Simulated API latency
 }
 
