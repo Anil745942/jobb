@@ -2196,21 +2196,33 @@ window.onload=()=>{
     setTimeout(() => ptr.classList.remove('show'), 1400);
   }
 
-  // 1. Initialize Lenis Smooth Scroll
-  lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true
-  });
-  
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
+  // 1. Initialize Lenis Smooth Scroll (Safely wrapped)
+  try {
+    if (typeof Lenis !== 'undefined') {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+      });
+      
+      function raf(time) {
+        if (lenis) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+      }
+      requestAnimationFrame(raf);
+      
+      lenis.on('scroll', ScrollTrigger.update);
+    }
+  } catch (e) {
+    console.error('Lenis initialization failed:', e);
   }
-  requestAnimationFrame(raf);
-  
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.lagSmoothing(0);
+  try {
+    if (typeof ScrollTrigger !== 'undefined') {
+      gsap.ticker.lagSmoothing(0);
+    }
+  } catch (e) {}
 
   // Show skeleton loaders on initial jobs tab load
   showSkeletonLoader(5);
