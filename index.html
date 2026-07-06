@@ -2225,19 +2225,19 @@ window.onload=()=>{
   } catch (e) {}
 
   // Show skeleton loaders on initial jobs tab load
-  showSkeletonLoader(5);
+  try { showSkeletonLoader(5); } catch(e) {}
   
   // Render initial components
-  renderHomeJobs();
-  renderJobs();
-  buildCatPills();
-  renderSearchChips();
-  renderMyApps();
-  renderEmpAnalytics();
-  renderPipeline();
-  renderAdminUsers();
-  renderAdminJobs();
-  checkCookieConsent();
+  try { renderHomeJobs(); } catch(e) { console.error(e); }
+  try { renderJobs(); } catch(e) { console.error(e); }
+  try { buildCatPills(); } catch(e) { console.error(e); }
+  try { renderSearchChips(); } catch(e) { console.error(e); }
+  try { renderMyApps(); } catch(e) { console.error(e); }
+  try { renderEmpAnalytics(); } catch(e) { console.error(e); }
+  try { renderPipeline(); } catch(e) { console.error(e); }
+  try { renderAdminUsers(); } catch(e) { console.error(e); }
+  try { renderAdminJobs(); } catch(e) { console.error(e); }
+  try { checkCookieConsent(); } catch(e) { console.error(e); }
   
   // Initialize static AdSense units
   try {
