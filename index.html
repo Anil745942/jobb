@@ -3,12 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Monetag Notification/Ad Scripts -->
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197902" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197904" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197903" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197900" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197892" data-cfasync="false" async></script>
+<!-- Monetag ads moved to footer for faster page load -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Naukri Dhundho — India's #1 Local Job App</title>
 <meta name="description" content="Naukri Dhundho - Local job search portal. Security guard se lekar software engineer tak ke liye Chandigarh, Mohali, Noida aur pure India ki jobs. Direct HR WhatsApp contact.">
@@ -4732,10 +4727,26 @@ function shareApp() {
   showToast('🔗 Opening WhatsApp to share Naukri Dhundho!','#25d366');
 }
 </script>
-<!-- Monetag Ads -->
-<script src="https://5gvci.com/act/files/tag.min.js?z=11197909" data-cfasync="false" async></script>
-<script src="https://5gvci.com/act/files/tag.min.js?z=11244120" data-cfasync="false" async></script>
-<script>(function(s){s.dataset.zone='11244126',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<!-- Monetag Ads - All loaded AFTER page is ready -->
+<script>
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var zones = ['11197902','11197904','11197903','11197900','11197892','11197909','11244120'];
+    zones.forEach(function(z) {
+      var s = document.createElement('script');
+      s.src = 'https://5gvci.com/act/files/tag.min.js?z=' + z;
+      s.async = true;
+      document.body.appendChild(s);
+    });
+    // nap5k zone
+    var n = document.createElement('script');
+    n.dataset.zone = '11244126';
+    n.src = 'https://nap5k.com/tag.min.js';
+    n.async = true;
+    document.body.appendChild(n);
+  }, 3000);
+});
+</script>
 <!-- Google Analytics (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1FGJ4MW6L"></script>
 <script>
