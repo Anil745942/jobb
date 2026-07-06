@@ -109,9 +109,9 @@ body.light-mode [style*="background:linear-gradient(135deg,rgba(124,58,237"]{bac
 body.light-mode .og-card{background:#fff;border-color:rgba(0,0,0,.06)}
 body::before{content:'';position:fixed;top:-300px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
-.card{background:var(--s);border:1px solid var(--b);backdrop-filter:blur(16px);border-radius:18px;transition:transform .2s,box-shadow .2s;transform-style:preserve-3d;backface-visibility:hidden}
-.card:not(.jcard):not(.scard):hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.45)}
-.jcard, .scard { will-change: transform; }
+.card{background:var(--s);border:1px solid var(--b);backdrop-filter:blur(16px);border-radius:18px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;will-change:transform,box-shadow;}
+.card:not(.jcard):not(.scard):hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,.45)}
+.jcard, .scard { will-change: transform, box-shadow; }
 .btn{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;font-weight:700;font-size:12px;padding:10px 20px;border-radius:12px;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px rgba(124,58,237,.35);-webkit-tap-highlight-color:transparent}
 .btn:hover{transform:scale(1.03);box-shadow:0 6px 22px rgba(124,58,237,.55)}
 .btn-wa{background:linear-gradient(135deg,#25d366,#128c7e);box-shadow:0 4px 14px rgba(37,211,102,.3)}
@@ -788,6 +788,82 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
   }
   .dtabs::-webkit-scrollbar { display: none; }
   .dtab { flex-shrink: 0; }
+  
+  /* Hiding desktop nav utilities for a pure native look */
+  nav .flex.ic.g2 {
+    display: none !important;
+  }
+  .nav-toggle {
+    display: none !important;
+  }
+  .navlinks {
+    display: none !important;
+  }
+  
+  /* Safe area padding for native bottom nav */
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Premium Bottom Nav Bar */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(66px + env(safe-area-inset-bottom, 0px));
+    background: rgba(10, 10, 15, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 999;
+    padding: 6px 10px calc(env(safe-area-inset-bottom, 0px)) 10px;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.5);
+  }
+  body.light-mode .mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.95);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .m-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--m);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 700;
+    gap: 4px;
+    background: none;
+    border: none;
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-nav-item svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--m);
+    fill: none;
+    stroke-width: 2.2;
+    transition: stroke 0.2s ease, transform 0.15s ease;
+  }
+  .m-nav-item.act {
+    color: #7c3aed;
+  }
+  body.light-mode .m-nav-item.act {
+    color: #7c3aed;
+  }
+  .m-nav-item.act svg {
+    stroke: #7c3aed;
+    transform: translateY(-2px);
+  }
 
   /* Search status bar - wraps clean */
   .search-status {
@@ -971,6 +1047,40 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
     <div id="auth-area"><button class="btn" data-action="openM" data-modal="m-login">Sign In</button></div>
   </div>
 </nav>
+
+<!-- MOBILE BOTTOM NAV BAR (Native App Style) -->
+<div class="mobile-bottom-nav" id="mobile-bottom-nav" style="display:none;">
+  <button class="m-nav-item act" id="mn-home" onclick="showTab('home');updateMobileNav('mn-home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="m-nav-item" id="mn-jobs" onclick="showTab('jobs');updateMobileNav('mn-jobs')">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    <span>Jobs</span>
+  </button>
+  <button class="m-nav-item" id="mn-dashboard" onclick="showTab('dashboard');updateMobileNav('mn-dashboard')">
+    <svg viewBox="0 0 24 24"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>
+    <span>Dashboard</span>
+  </button>
+  <button class="m-nav-item" id="mn-employer" onclick="showTab('employer');updateMobileNav('mn-employer')">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span>Recruiter</span>
+  </button>
+  <button class="m-nav-item" id="mn-more" onclick="toggleMobileMore()">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+    <span>More</span>
+  </button>
+</div>
+
+<!-- Mobile More Menu Popup -->
+<div id="mobile-more-menu" style="display:none;position:fixed;bottom:calc(70px + env(safe-area-inset-bottom,0px));right:8px;background:rgba(18,18,28,.97);border:1px solid rgba(124,58,237,.25);border-radius:16px;padding:8px;z-index:1000;box-shadow:0 12px 40px rgba(0,0,0,.6);min-width:180px;backdrop-filter:blur(20px);">
+  <button onclick="showTab('resume-analyzer');updateMobileNav('');closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">📄 Resume Analyzer</button>
+  <button onclick="showTab('career-quiz');updateMobileNav('');closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">🧭 Career Finder</button>
+  <button onclick="showTab('admin');updateMobileNav('');closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">🛡️ Admin Panel</button>
+  <button onclick="toggleTheme();closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">🌙 Theme Toggle</button>
+  <button onclick="shareApp();closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:var(--t);font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">🔗 Share App</button>
+  <button onclick="openM('m-login');closeMobileMore()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:none;border:none;color:#a78bfa;font-size:12px;font-weight:700;cursor:pointer;border-radius:10px;text-align:left;" onmouseover="this.style.background='rgba(124,58,237,.1)'" onmouseout="this.style.background='none'">👤 Sign In</button>
+</div>
 
 <!-- TOAST -->
 <div id="toast"><div class="toast-inner" id="ti"></div></div>
@@ -2157,7 +2267,7 @@ function init3DTilt(selector) {
 
     card.addEventListener('mouseenter', () => {
       gsap.to(card, {
-        scale: 1.03,
+        y: -6,
         boxShadow: "0 20px 40px rgba(0,0,0,0.55)",
         borderColor: "rgba(124,58,237,0.35)",
         duration: 0.3,
@@ -2167,7 +2277,7 @@ function init3DTilt(selector) {
     
     card.addEventListener('mouseleave', () => {
       gsap.to(card, {
-        scale: 1,
+        y: 0,
         boxShadow: "0 12px 36px rgba(0,0,0,.45)",
         borderColor: "rgba(255,255,255,.07)",
         duration: 0.4,
@@ -4728,6 +4838,33 @@ function addUpcomingInterview(jobTitle, companyName) {
   
   showToast(`📅 Interview scheduled: ${dateStr}! Details added to dashboard tracker.`, '#10b981');
 }
+
+// ══════ SHARE APP FUNCTION ══════
+// ══════ MOBILE BOTTOM NAV FUNCTIONS ══════
+function updateMobileNav(activeId) {
+  document.querySelectorAll('.m-nav-item').forEach(b => b.classList.remove('act'));
+  if (activeId) {
+    const el = document.getElementById(activeId);
+    if (el) el.classList.add('act');
+  }
+  closeMobileMore();
+}
+function toggleMobileMore() {
+  const menu = document.getElementById('mobile-more-menu');
+  if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+function closeMobileMore() {
+  const menu = document.getElementById('mobile-more-menu');
+  if (menu) menu.style.display = 'none';
+}
+// Close more menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobile-more-menu');
+  const moreBtn = document.getElementById('mn-more');
+  if (menu && menu.style.display === 'block' && !menu.contains(e.target) && !moreBtn.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
 
 // ══════ SHARE APP FUNCTION ══════
 function shareApp() {
