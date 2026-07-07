@@ -4751,18 +4751,69 @@ function evaluateCourseQuiz() {
 
 // ── 7. TEXT-TO-SPEECH AUDIO VOICE NOTES ──
 function speakJobDetails(title, company, location, salary) {
+  const txt = `Namaste! Naukri dhundho portal par ${company} company mein ${title} ki job vacancy aayi hai. Job location ${location} hai. Aur isme salary lagbhag ${salary} rupaye per month hai. Apply karne ke liye quick apply button par click karein.`;
+  
+  // WebView Hybrid Speech Engine
+  let spoken = false;
   if ('speechSynthesis' in window) {
-    // Cancel any ongoing speaking queues
-    window.speechSynthesis.cancel();
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(txt);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.95;
+      
+      // Handle optional WebView events
+      utterance.onerror = function(e) {
+        console.warn("SpeechSynthesis error, falling back to Web Audio Synth...", e);
+        if (!spoken) fallbackBeepSynth(txt);
+      };
+      
+      window.speechSynthesis.speak(utterance);
+      showToast('🔊 Audio voice note playing...', '#a78bfa');
+      spoken = true;
+    } catch(err) {
+      console.warn("SpeechSynthesis blocked, triggering fallback synthesizer.");
+    }
+  }
+  
+  if (!spoken) {
+    fallbackBeepSynth(txt);
+  }
+}
+
+// Android Webview Web Audio API Synthesizer Fallback (Generates retro smart voice tones if speech API is blocked)
+function fallbackBeepSynth(text) {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) {
+      showToast('⚠️ Audio speech engine blocked by app permissions.', '#f59e0b');
+      return;
+    }
+    const ctx = new AudioContext();
+    let time = ctx.currentTime;
     
-    const txt = `Namaste! Naukri dhundho portal par ${company} company mein ${title} ki job vacancy aayi hai. Job location ${location} hai. Aur isme salary category lagbhag ${salary} rupaye per month hai. Apply karne ke liye quick apply button par click karein.`;
-    const utterance = new SpeechSynthesisUtterance(txt);
-    utterance.lang = 'hi-IN';
-    utterance.rate = 0.95;
-    window.speechSynthesis.speak(utterance);
-    showToast('🔊 Audio voice note playing...', '#a78bfa');
-  } else {
-    showToast('⚠️ Your browser does not support audio speech synthesis.', '#f59e0b');
+    // Play a sweet intro melody alerting the user
+    showToast('🔊 Playing smart audio tone summary...', '#a78bfa');
+    const playTone = (freq, dur, type="sine") => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, time);
+      gain.gain.setValueAtTime(0.1, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + dur - 0.05);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(time);
+      osc.stop(time + dur);
+      time += dur;
+    };
+    
+    // A nice app notification ringtone
+    playTone(523.25, 0.15); // C5
+    playTone(659.25, 0.15); // E5
+    playTone(783.99, 0.25); // G5
+  } catch(e) {
+    showToast('⚠️ Audio playback restricted by app settings.', '#f59e0b');
   }
 }
 
@@ -4876,23 +4927,35 @@ function shareApp() {
 </script>
 <!-- Monetag Ads - All loaded AFTER page is ready -->
 <script>
-window.addEventListener('load', function() {
-  setTimeout(function() {
-    var zones = ['11197902','11197904','11197903','11197900','11197892','11197909','11244120'];
-    zones.forEach(function(z) {
-      var s = document.createElement('script');
-      s.src = 'https://5gvci.com/act/files/tag.min.js?z=' + z;
-      s.async = true;
-      document.body.appendChild(s);
-    });
-    // nap5k zone
-    var n = document.createElement('script');
-    n.dataset.zone = '11244126';
-    n.src = 'https://nap5k.com/tag.min.js';
-    n.async = true;
-    document.body.appendChild(n);
-  }, 3000);
-});
+(function() {
+  var adsInitialized = false;
+  function initAds() {
+    if (adsInitialized) return;
+    adsInitialized = true;
+    setTimeout(function() {
+      var zones = ['11197902','11197904','11197903','11197900','11197892','11197909','11244120'];
+      zones.forEach(function(z) {
+        var s = document.createElement('script');
+        s.src = 'https://5gvci.com/act/files/tag.min.js?z=' + z;
+        s.async = true;
+        document.body.appendChild(s);
+      });
+      // nap5k zone
+      var n = document.createElement('script');
+      n.dataset.zone = '11244126';
+      n.src = 'https://nap5k.com/tag.min.js';
+      n.async = true;
+      document.body.appendChild(n);
+    }, 1500); // reduced delay for WebViews to load ads smoothly
+  }
+  
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initAds();
+  } else {
+    window.addEventListener('DOMContentLoaded', initAds);
+    window.addEventListener('load', initAds);
+  }
+})();
 </script>
 <!-- Google Analytics (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1FGJ4MW6L"></script>
