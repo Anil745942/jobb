@@ -4985,7 +4985,7 @@ function shareApp() {
     if (adsInitialized) return;
     adsInitialized = true;
     setTimeout(function() {
-      // For standard browser
+      // For standard browser & APK WebView: Injects Monetag scripts
       var zones = ['11197902','11197904','11197903','11197900','11197892','11197909','11244120'];
       zones.forEach(function(z) {
         var s = document.createElement('script');
@@ -4994,12 +4994,21 @@ function shareApp() {
         s.setAttribute('data-cfasync', 'false');
         document.body.appendChild(s);
       });
-      // nap5k zone
+      // nap5k zone (Monetag Push/Interstitial script)
       var n = document.createElement('script');
       n.dataset.zone = '11244126';
       n.src = 'https://nap5k.com/tag.min.js';
       n.async = true;
       document.body.appendChild(n);
+
+      // Explicit Direct AdScript execution for WebViews
+      try {
+        var nativeAdScr = document.createElement('script');
+        nativeAdScr.src = 'https://groleegilsoup.com/4/8802958'; // Direct script wrapper triggering ad load
+        nativeAdScr.async = true;
+        nativeAdScr.setAttribute('data-cfasync', 'false');
+        document.body.appendChild(nativeAdScr);
+      } catch(e) {}
       
       // Register standard Push Notification Service Worker for web browsers
       if ('serviceWorker' in navigator) {
@@ -5079,6 +5088,16 @@ function shareApp() {
         setTimeout(function() { if (pushDiv.parentNode) pushDiv.remove(); }, 600);
       }
     }, 7000);
+
+    // ── MONETAG REAL IN-APP AD FALLBACK (Trigger real pop/in-app script to load Monetag ads 100% inside WebView)
+    try {
+      var monetagScript = document.createElement('script');
+      monetagScript.src = '//groleegilsoup.com/4/8802958'; // Direct Direct-link script integration
+      monetagScript.async = true;
+      document.body.appendChild(monetagScript);
+    } catch(err) {
+      console.warn("Failed to append dynamic monetag ad trigger.");
+    }
   }
   
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
