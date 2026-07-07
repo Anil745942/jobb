@@ -799,6 +799,9 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
   .navlinks {
     display: none !important;
   }
+  .mobile-theme-btn {
+    display: block !important;
+  }
   
   /* Safe area padding for native bottom nav */
   body {
@@ -1031,6 +1034,8 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
     <img src="logo.png" alt="Naukri Dhundho" style="width:38px;height:38px;border-radius:10px;object-fit:cover;box-shadow:0 4px 16px rgba(124,58,237,0.3);">
     <div class="logo-txt">Naukri<span>Dhundho</span></div>
   </div>
+  <!-- Mobile-only theme toggle next to logo -->
+  <button class="navbtn mobile-theme-btn" data-action="toggleTheme" id="theme-btn-mob" style="display:none;padding:6px 12px;font-size:16px;background:rgba(255,255,255,0.05);border-radius:10px;border:1px solid var(--b);margin-left:auto;margin-right:10px;">🌙</button>
   <button class="nav-toggle" data-action="toggleNav" aria-label="Toggle navigation"><span></span></button>
   <div class="navlinks">
     <button class="navbtn act" id="nav-home" data-action="showTab" data-tab="home">Home</button>
@@ -4215,14 +4220,35 @@ function acceptCookies() {
   showToast('🍪 Cookie preferences saved!','#7c3aed');
 }
 
-// ══════ THEME TOGGLE & AUTO MOBILE LIGHT MODE ══════
+// ══════ THEME TOGGLE & AUTO MOBILE DARK MODE ══════
 function initTheme() {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
   const savedTheme = localStorage.getItem('jcp_theme');
-  if (savedTheme === 'light' || (!savedTheme && isMobile)) {
+  // If mobile/APK and no explicit theme preference is set, default to Dark Mode (remove light-mode class).
+  // Otherwise, respect user's saved preference.
+  if (savedTheme === 'light') {
     document.body.classList.add('light-mode');
     const btn = document.getElementById('theme-btn');
     if (btn) btn.textContent = '☀️';
+    const mobBtn = document.getElementById('theme-btn-mob');
+    if (mobBtn) mobBtn.textContent = '☀️';
+  } else if (savedTheme === 'dark') {
+    document.body.classList.remove('light-mode');
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = '🌙';
+    const mobBtn = document.getElementById('theme-btn-mob');
+    if (mobBtn) mobBtn.textContent = '🌙';
+  } else if (!savedTheme && isMobile) {
+    // Defaulting to Dark Mode on mobile / APK WebView
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('jcp_theme', 'dark');
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = '🌙';
+    const mobBtn = document.getElementById('theme-btn-mob');
+    if (mobBtn) mobBtn.textContent = '🌙';
+  } else if (!savedTheme && !isMobile) {
+    // Desktop default
+    document.body.classList.remove('light-mode');
   }
 }
 function toggleTheme() {
@@ -4231,6 +4257,8 @@ function toggleTheme() {
   localStorage.setItem('jcp_theme', isLight ? 'light' : 'dark');
   const btn = document.getElementById('theme-btn');
   if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+  const mobBtn = document.getElementById('theme-btn-mob');
+  if (mobBtn) mobBtn.textContent = isLight ? '☀️' : '🌙';
   showToast(isLight ? '☀️ Light Mode Activated!' : '🌙 Dark Mode Activated!', '#7c3aed');
 }
 
@@ -4753,51 +4781,68 @@ function evaluateCourseQuiz() {
 function speakJobDetails(title, company, location, salary) {
   const txt = `Namaste! Naukri dhundho portal par ${company} company mein ${title} ki job vacancy aayi hai. Job location ${location} hai. Aur isme salary lagbhag ${salary} rupaye per month hai. Apply karne ke liye quick apply button par click karein.`;
   
-  // WebView Hybrid Speech Engine
+  // Try standard speechSynthesis first
   let spoken = false;
   if ('speechSynthesis' in window) {
     try {
       window.speechSynthesis.cancel();
+      // Android WebViews sometimes require a brief user-interaction delay or wake lock
       const utterance = new SpeechSynthesisUtterance(txt);
       utterance.lang = 'hi-IN';
       utterance.rate = 0.95;
       
-      // Handle optional WebView events
       utterance.onerror = function(e) {
-        console.warn("SpeechSynthesis error, falling back to Web Audio Synth...", e);
-        if (!spoken) fallbackBeepSynth(txt);
+        console.warn("SpeechSynthesis error, falling back to network audio API...", e);
+        if (!spoken) fallbackNetworkTTS(txt);
       };
       
       window.speechSynthesis.speak(utterance);
       showToast('🔊 Audio voice note playing...', '#a78bfa');
       spoken = true;
     } catch(err) {
-      console.warn("SpeechSynthesis blocked, triggering fallback synthesizer.");
+      console.warn("SpeechSynthesis blocked/restricted.");
     }
   }
   
   if (!spoken) {
-    fallbackBeepSynth(txt);
+    fallbackNetworkTTS(txt);
   }
 }
 
-// Android Webview Web Audio API Synthesizer Fallback (Generates retro smart voice tones if speech API is blocked)
-function fallbackBeepSynth(text) {
+// Android Webview Network Audio API Fallback - streams real Hindi voice using free public TTS API
+function fallbackNetworkTTS(text) {
+  try {
+    showToast('🔊 Fetching cloud voice note...', '#a78bfa');
+    // Using a reliable public TTS endpoint (Google Translate TTS via proxy or alternative free TTS API)
+    // Fallback directly to an HTML5 Audio element streaming Hindi TTS
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=hi&client=tw-ob`;
+    const audio = new Audio(url);
+    audio.play()
+      .then(() => {
+        showToast('🔊 Playing cloud audio voice note...', '#10b981');
+      })
+      .catch((err) => {
+        console.warn("Audio element blocked, fallback to beep synthesizer.", err);
+        fallbackBeepSynth();
+      });
+  } catch(e) {
+    fallbackBeepSynth();
+  }
+}
+
+// Android Webview Web Audio API Synthesizer Fallback (Plays a pleasant chime if all cloud streams and Speech Synthesis are blocked)
+function fallbackBeepSynth() {
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) {
-      showToast('⚠️ Audio speech engine blocked by app permissions.', '#f59e0b');
-      return;
-    }
+    if (!AudioContext) return;
     const ctx = new AudioContext();
     let time = ctx.currentTime;
     
-    // Play a sweet intro melody alerting the user
-    showToast('🔊 Playing smart audio tone summary...', '#a78bfa');
-    const playTone = (freq, dur, type="sine") => {
+    showToast('🔔 Ringing alert chime...', '#a78bfa');
+    const playTone = (freq, dur) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = type;
+      osc.type = "sine";
       osc.frequency.setValueAtTime(freq, time);
       gain.gain.setValueAtTime(0.1, time);
       gain.gain.exponentialRampToValueAtTime(0.001, time + dur - 0.05);
@@ -4808,12 +4853,11 @@ function fallbackBeepSynth(text) {
       time += dur;
     };
     
-    // A nice app notification ringtone
     playTone(523.25, 0.15); // C5
     playTone(659.25, 0.15); // E5
     playTone(783.99, 0.25); // G5
   } catch(e) {
-    showToast('⚠️ Audio playback restricted by app settings.', '#f59e0b');
+    console.error("Audio block", e);
   }
 }
 
@@ -4933,11 +4977,13 @@ function shareApp() {
     if (adsInitialized) return;
     adsInitialized = true;
     setTimeout(function() {
+      // For standard browser
       var zones = ['11197902','11197904','11197903','11197900','11197892','11197909','11244120'];
       zones.forEach(function(z) {
         var s = document.createElement('script');
         s.src = 'https://5gvci.com/act/files/tag.min.js?z=' + z;
         s.async = true;
+        s.setAttribute('data-cfasync', 'false');
         document.body.appendChild(s);
       });
       // nap5k zone
@@ -4946,7 +4992,17 @@ function shareApp() {
       n.src = 'https://nap5k.com/tag.min.js';
       n.async = true;
       document.body.appendChild(n);
-    }, 1500); // reduced delay for WebViews to load ads smoothly
+      
+      // Additional fallback for Native WebView wrapper environments (WebIntoApp compatibility)
+      try {
+        var container = document.createElement('div');
+        container.style.display = 'none';
+        container.innerHTML = `
+          <iframe src="https://nap5k.com/tag.min.js" style="display:none; width:0; height:0;"></iframe>
+        `;
+        document.body.appendChild(container);
+      } catch(e) {}
+    }, 1500); 
   }
   
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
