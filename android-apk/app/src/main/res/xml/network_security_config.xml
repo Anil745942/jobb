@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Allow all cleartext traffic for ad networks and API calls -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Explicitly trust our domain -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">naukri-dhundho.onrender.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Allow ad network domains -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">5gvci.com</domain>
+        <domain includeSubdomains="true">nap5k.com</domain>
+        <domain includeSubdomains="true">groleegilsoup.com</domain>
+        <domain includeSubdomains="true">monetag.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
