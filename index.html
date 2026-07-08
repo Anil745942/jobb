@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Naukri Dhundho">
+<meta name="gemini-key" content="AIzaSyDJTSKRPMV3VYgje4-7z9bT2fYEPbQxXHg">
 <!-- Favicon / Brand Tab Logo -->
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
@@ -3951,7 +3952,7 @@ function appendChatMsg(text, sender) {
 }
 
 // Google Gemini API Integration
-const GEMINI_API_KEY = 'AIzaSyDJTSKRPMV3VYgje4-7z9bT2fYEPbQxXHg';
+const GEMINI_API_KEY = window.GEMINI_API_KEY || (document.querySelector('meta[name="gemini-key"]') && document.querySelector('meta[name="gemini-key"]').content) || 'AIzaSyDJTSKRPMV3VYgje4-7z9bT2fYEPbQxXHg';
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 async function callGeminiAPI(userMessage) {
@@ -3983,16 +3984,14 @@ Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR chee
       })
     });
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
       console.error(`[AI Chat] API Error: HTTP ${response.status} - ${errBody}`);
-      if (response.status === 400) throw new Error('API_BAD_REQUEST');
-      if (response.status === 403 || response.status === 401) throw new Error('API_KEY_INVALID');
-      if (response.status === 429) throw new Error('API_RATE_LIMITED');
-      throw new Error(`API_HTTP_${response.status}`);
+      showToast('🚨 Server error – try again later', '#ef4444');
+      return;
     }
+
+    clearTimeout(timeoutId);
 
     const data = await response.json();
     console.log('[AI Chat] Response received successfully');
@@ -4154,7 +4153,7 @@ function generateAiBotResponse(query) {
   }
 
   if (q.includes('bpo') || q.includes('telecaller') || foundCategory === 'Sales & Customer Support') {
-    return `📞 Telecaller roles me verified recruiters direct hire kar rahe hain! <a href="#" onclick="searchAndGo('telecaller'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Apply karo yahan se</a>!`;
+    return `📞 Telecaller roles me verified recruiters direct hire kar रहे हैं! <a href="#" onclick="searchAndGo('telecaller'); toggleAIChat(); return false;" style="color: #22d3ee; font-weight: 700;">Apply karo yahan se</a>!`;
   }
 
   // ═══ 7. CAREER TOPICS ═══
@@ -4643,7 +4642,7 @@ function finishQuiz() {
   } else if (quizAnswers.step2 === 'field') {
     recText = "Aap **Active Delivery Rider, Security Guard, ya Transport Supervisor** profiles me apply kar sakte hain jinme daily movement aur attractive incentives hain.";
   } else {
-    recText = "Aapko **Staff Nursing, Home Caretaker, ya Clinic Assistant** positions suggest kiye jaate hain.";
+    recText = "Aapko **Staff Nursing, Home Caretaker, ya Clinic Assistant** profiles suggest kiye jaate hain.";
   }
 
   document.getElementById('quiz-recs').innerText = recText;
