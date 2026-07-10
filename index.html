@@ -2502,7 +2502,7 @@ const SYNONYMS = {
   'guard':'security',  'security':'guard',  'watchman':'security guard',
   'chowkidar':'security guard', 'chauffeur':'driver',  'driver':'chauffeur',
   'rider':'delivery', 'delivery':'rider',  'swiggy':'delivery',  'zomato':'delivery',
-  'milkman':'delivery milk supply dairy', 'milk':'milkman delivery dairy',
+  'milkman':'delivery milk dairy', 'milk':'delivery milk dairy',
   'uber':'driver cab', 'ola':'driver cab', 'cleaner':'housekeeping',
   'housekeeping':'cleaner', 'sweeper':'housekeeping', 'safai':'housekeeping',
   'chef':'cook', 'cook':'chef', 'khana':'cook kitchen',
@@ -2900,7 +2900,19 @@ function fetchSimulatedGoogleJobs(query, location) {
     
     
     // Dynamic Global Title Generation
-    if (cleanQ.includes('security') || cleanQ.includes('guard') || cleanQ.includes('watchman')) {
+    if (cleanQ.includes('milk') || cleanQ.includes('dairy') || cleanQ.includes('milkman')) {
+      const templates = [
+        `Milk Delivery Executive`,
+        `Dairy Distributor Helper`,
+        `Milk Collection Center Incharge`,
+        `Hyperlocal Milk Delivery Rider`,
+        `Dairy Farm Assistant`
+      ];
+      title = templates[Math.floor(randomSeed * templates.length)];
+      cat = 'Delivery & Logistics';
+      skills = ['Bike Riding', 'Punctuality', 'Customer Dealing', 'Accounting Basics'].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 6000) + 15000;
+    } else if (cleanQ.includes('security') || cleanQ.includes('guard') || cleanQ.includes('watchman')) {
       const templates = [
         `Senior Security Guard - Grade ${i}`,
         `Night Duty Security Watchman`,
