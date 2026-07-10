@@ -2671,7 +2671,9 @@ function renderActiveFilteredJobs(isAppend = false) {
   const speed = document.getElementById('ss-speed');
   const q = (document.getElementById('js')?.value||'').trim();
   
-  const slice = currentFilteredJobs.slice(0, currentLimit);
+  // Only get the new items to render if we are appending
+  const startIdx = isAppend ? currentLimit - 10 : 0;
+  const slice = currentFilteredJobs.slice(startIdx, currentLimit);
   
   if(rc) {
     const isGoogle = currentFilteredJobs.some(x => x.isGoogleResult);
@@ -2687,7 +2689,8 @@ function renderActiveFilteredJobs(isAppend = false) {
   slice.forEach((j, i) => {
     html += jobCardHTML(j, false, q);
     // Insert a banner ad after every 3rd job card
-    if ((i + 1) % 3 === 0 && i < slice.length - 1) {
+    const globalIndex = startIdx + i;
+    if ((globalIndex + 1) % 3 === 0 && globalIndex < currentLimit - 1) {
       html += `<div class="ad-banner-slot card" style="padding:16px 20px;text-align:center;margin-bottom:14px;background:rgba(124,58,237,0.05);border:1px dashed rgba(124,58,237,.25);border-radius:18px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;">
         <div style="text-align:left;">
           <div style="font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#a78bfa;font-weight:700;margin-bottom:2px;">Sponsored Career Tip</div>
@@ -2697,10 +2700,19 @@ function renderActiveFilteredJobs(isAppend = false) {
       </div>`;
     }
   });
-  el.innerHTML = html;
+  if (isAppend) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    // Append children to avoid resetting innerHTML (which breaks listeners)
+    while (tempDiv.firstChild) {
+      el.appendChild(tempDiv.firstChild);
+    }
+  } else {
+    el.innerHTML = html;
+  }
 
   // GSAP animation for newly rendered cards
-  gsap.fromTo("#jlist .jcard", 
+  gsap.fromTo(isAppend ? "#jlist .jcard:nth-last-child(-n+" + slice.length + ")" : "#jlist .jcard", 
     { opacity: 0, y: 30 }, 
     { 
       duration: 0.5, 
