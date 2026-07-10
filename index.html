@@ -4042,7 +4042,7 @@ function appendChatMsg(text, sender) {
 
 // Google Gemini API Integration
 const GEMINI_API_KEY = window.GEMINI_API_KEY || (document.querySelector('meta[name="gemini-key"]') && document.querySelector('meta[name="gemini-key"]').content) || 'AIzaSyDJTSKRPMV3VYgje4-7z9bT2fYEPbQxXHg';
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 async function callGeminiAPI(userMessage) {
   const systemPrompt = `Tum ek friendly aur helpful AI assistant ho jiska naam "Naukri Dhundho AI Dost" hai. Tum Hinglish (Hindi + English mix) mein baat karte ho.
@@ -4077,7 +4077,7 @@ Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR chee
       const errBody = await response.text().catch(() => '');
       console.error(`[AI Chat] API Error: HTTP ${response.status} - ${errBody}`);
       showToast('🚨 Server error – try again later', '#ef4444');
-      return;
+      throw new Error(`API_ERROR_HTTP_${response.status}`);
     }
 
     clearTimeout(timeoutId);
