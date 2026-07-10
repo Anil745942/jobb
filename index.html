@@ -2748,13 +2748,13 @@ function renderJobs(immediate = false){
       const t0=performance.now();
       let arr=filterJobs();
       
-      // Google search fallback: If user searched something and database has fewer than 2 relevant results,
-      // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
+      // Google search fallback: Always generate dynamic jobs for any search query
+      // to ensure relevant results appear immediately on first search
       let isGoogleFallback = false;
-      if (q && arr.length < 2) {
+      if (q) {
         isGoogleFallback = true;
         
-        // Trigger asynchronous real-time AI Web & Map search block via Gemini 2.0 API!
+        // Trigger asynchronous real-time AI Web & Map search block via Gemini API
         const searchPrompt = `Search terms: "${q}" in location: "${l || 'Chandigarh, India'}".
         Search the web, Wikipedia, and Google Maps info for this query. Generate 6 realistic job openings for this role in this location.
         Return ONLY a JSON array of objects with exactly this structure:
