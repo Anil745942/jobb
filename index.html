@@ -2898,8 +2898,6 @@ function fetchSimulatedGoogleJobs(query, location) {
     let skills = [...techSkills];
     let sal = Math.floor(Math.random() * 50000) + 40000;
     
-    // Custom logic to handle real location query names using Google Maps Style matching
-    let area = loc.charAt(0).toUpperCase() + loc.slice(1);
     
     // Dynamic Global Title Generation
     if (cleanQ.includes('security') || cleanQ.includes('guard') || cleanQ.includes('watchman')) {
