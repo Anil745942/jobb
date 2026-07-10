@@ -2502,6 +2502,7 @@ const SYNONYMS = {
   'guard':'security',  'security':'guard',  'watchman':'security guard',
   'chowkidar':'security guard', 'chauffeur':'driver',  'driver':'chauffeur',
   'rider':'delivery', 'delivery':'rider',  'swiggy':'delivery',  'zomato':'delivery',
+  'milkman':'delivery milk supply dairy', 'milk':'milkman delivery dairy',
   'uber':'driver cab', 'ola':'driver cab', 'cleaner':'housekeeping',
   'housekeeping':'cleaner', 'sweeper':'housekeeping', 'safai':'housekeeping',
   'chef':'cook', 'cook':'chef', 'khana':'cook kitchen',
@@ -2735,17 +2736,17 @@ function renderJobs(){
       const t0=performance.now();
       let arr=filterJobs();
       
-      // Google search fallback: If user searched something and database has fewer than 5 results,
+      // Google search fallback: If user searched something and database has fewer than 2 relevant results,
       // fetch/generate realistic jobs from Google / LinkedIn / Indeed APIs dynamically!
       let isGoogleFallback = false;
-      if (q) {
+      if (q && arr.length < 2) {
         isGoogleFallback = true;
         const googleJobs = fetchSimulatedGoogleJobs(q, l);
         // Combine them: Database matches + Google Search Results
         const combined = [...arr];
         googleJobs.forEach(gj => {
           gj.searchScore = computeSearchScore(gj, q);
-          if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
+          if (gj.searchScore > 0 && !combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
             combined.push(gj);
           }
         });
@@ -2896,17 +2897,36 @@ function fetchSimulatedGoogleJobs(query, location) {
       // General match
       const titleWords = query.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       const templates = [
-        `${titleWords} Expert`,
-        `Associate ${titleWords} Lead`,
-        `Senior ${titleWords} Consultant`,
-        `${titleWords} Operations Head`,
-        `Junior ${titleWords} Executive`,
-        `${titleWords} Coordinator`
+        `${titleWords} Executive`,
+        `Senior ${titleWords} Specialist`,
+        `${titleWords} Supervisor`,
+        `Assistant ${titleWords} Manager`,
+        `${titleWords} Service Executive`,
+        `Professional ${titleWords}`
       ];
       title = templates[Math.floor(randomSeed * templates.length)];
-      cat = CATS[Math.floor(randomSeed * CATS.length)];
-      skills = cat.includes('Software') ? [...techSkills].sort(() => 0.5 - Math.random()).slice(0, 3) : [...localSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
-      sal = cat.includes('Software') ? Math.floor(Math.random() * 60000) + 45000 : Math.floor(Math.random() * 10000) + 14000;
+      
+      // Determine logical category from query keywords
+      if (cleanQ.includes('milk') || cleanQ.includes('dairy') || cleanQ.includes('delivery') || cleanQ.includes('boy')) {
+        cat = 'Delivery & Logistics';
+      } else if (cleanQ.includes('cook') || cleanQ.includes('kitchen') || cleanQ.includes('hotel') || cleanQ.includes('helper')) {
+        cat = 'Cook & Kitchen';
+      } else if (cleanQ.includes('clean') || cleanQ.includes('housekeep') || cleanQ.includes('safai')) {
+        cat = 'Housekeeping & Cleaning';
+      } else if (cleanQ.includes('drive') || cleanQ.includes('cab') || cleanQ.includes('car')) {
+        cat = 'Driver & Transport';
+      } else if (cleanQ.includes('teach') || cleanQ.includes('school') || cleanQ.includes('tutor')) {
+        cat = 'Education & Training';
+      } else if (cleanQ.includes('sale') || cleanQ.includes('call') || cleanQ.includes('support')) {
+        cat = 'Sales & Customer Support';
+      } else if (cleanQ.includes('construction') || cleanQ.includes('mason') || cleanQ.includes('labour')) {
+        cat = 'Construction & Labour';
+      } else {
+        cat = 'Delivery & Logistics'; // Default safe category
+      }
+      
+      skills = [...localSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
+      sal = Math.floor(Math.random() * 8000) + 15000;
     }
 
     const company = companies[Math.floor(Math.random() * companies.length)];
