@@ -2727,7 +2727,7 @@ function renderActiveFilteredJobs(isAppend = false) {
   );
 }
 
-function renderJobs(){
+function renderJobs(immediate = false){
   if (searchTimeoutId) clearTimeout(searchTimeoutId);
   const q=(document.getElementById('js')?.value||'').trim();
   const l=(document.getElementById('jl')?.value||'').trim();
@@ -2743,7 +2743,7 @@ function renderJobs(){
     showSkeletonLoader(4);
   }
 
-  searchTimeoutId = setTimeout(() => {
+  const performSearch = () => {
     try {
       const t0=performance.now();
       let arr=filterJobs();
@@ -2871,7 +2871,13 @@ function renderJobs(){
       renderActiveFilteredJobs();
       if(speed) speed.innerHTML=`<span class="dot-r"></span> Error loaded fallback index`;
     }
-  }, q ? 350 : 0); // Simulated API latency
+  };
+
+  if (immediate) {
+    performSearch();
+  } else {
+    searchTimeoutId = setTimeout(performSearch, q ? 350 : 0); // Simulated API latency
+  }
 }
 
 // ── SIMULATED GOOGLE JOBS API GENERATOR ──
@@ -3485,7 +3491,7 @@ document.addEventListener('click', e => {
 
   // ── Search & Filters ──
   if (action === 'heroSearch') { heroSearch(); return; }
-  if (action === 'renderJobs') { renderJobs(); return; }
+  if (action === 'renderJobs') { renderJobs(true); return; }
   if (action === 'clrFilters') { clrFilters(); return; }
   if (action === 'openFilterDrawer') { openFilterDrawer(); return; }
   if (action === 'closeFilterDrawer') { closeFilterDrawer(); return; }
@@ -3642,7 +3648,7 @@ function heroSearch(){
   const loc=document.getElementById('hl').value;
   if(kw) saveRecent(kw);
   showTab('jobs');
-  setTimeout(()=>{document.getElementById('js').value=kw;document.getElementById('jl').value=loc;renderJobs();},80);
+  setTimeout(()=>{document.getElementById('js').value=kw;document.getElementById('jl').value=loc;renderJobs(true);},80);
 }
 
 // ══════ SAVE ══════
