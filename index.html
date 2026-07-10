@@ -2474,16 +2474,22 @@ function buildCatPills(){
 }
 function pillarFilter(cat, el){
   filterCat=cat;
+  // Clear search box when switching category so results match the selected category
+  const jsInput = document.getElementById('js');
+  if(jsInput) jsInput.value = '';
   document.querySelectorAll('#cat-pills .qcat').forEach(b=>b.classList.remove('act'));
   el.classList.add('act');
-  renderJobs();
+  renderJobs(true);
 }
 function qFilter(cat){
   filterCat=cat;
   showTab('jobs');
   setTimeout(()=>{
+    // Clear search box when switching category from home page
+    const jsInput = document.getElementById('js');
+    if(jsInput) jsInput.value = '';
     document.querySelectorAll('#cat-pills .qcat').forEach(b=>{b.classList.toggle('act',b.textContent.trim().includes(cat.split('&')[0].trim())||cat==='');});
-    renderJobs();
+    renderJobs(true);
   },80);
 }
 
@@ -4094,7 +4100,6 @@ Yaad rakh: Tu sirf job bot nahi hai, tu ek COMPLETE AI assistant hai jo HAR chee
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
       console.error(`[AI Chat] API Error: HTTP ${response.status} - ${errBody}`);
-      showToast('🚨 Server error – try again later', '#ef4444');
       throw new Error(`API_ERROR_HTTP_${response.status}`);
     }
 
