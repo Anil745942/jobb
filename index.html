@@ -2814,7 +2814,7 @@ function renderJobs(){
         const combined = [...arr];
         googleJobs.forEach(gj => {
           gj.searchScore = computeSearchScore(gj, q);
-          if (gj.searchScore > 0 && !combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
+          if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
             combined.push(gj);
           }
         });
