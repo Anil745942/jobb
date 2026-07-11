@@ -3474,8 +3474,11 @@ function acSelect(val,inputId,dropId){
   document.getElementById(inputId).value=val;
   document.getElementById(dropId).classList.remove('show');
   // If it's a jobs page input, render immediately
-  if(inputId==='js'||inputId==='jl') renderJobs();
-  if(inputId==='hs'||inputId==='hl'){/* hero — wait for search click */}
+  if(inputId==='js'||inputId==='jl') renderJobs(true);
+  if(inputId==='hs'||inputId==='hl'){
+    // Auto-search on hero selection
+    heroSearch();
+  }
 }
 function escAttr(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 
