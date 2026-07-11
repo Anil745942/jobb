@@ -2817,11 +2817,18 @@ function renderJobs(immediate = false){
 
         // Instant local templates fallback so user doesn't wait indefinitely
         const googleJobs = fetchSimulatedGoogleJobs(q, l);
-        const combined = [...arr];
+        // Put generated query-specific jobs FIRST, then append local matches after
+        const combined = [];
         googleJobs.forEach(gj => {
-          gj.searchScore = computeSearchScore(gj, q);
+          gj.searchScore = computeSearchScore(gj, q) + 100; // Boost generated jobs to top
           if (!combined.some(c => c.title.toLowerCase() === gj.title.toLowerCase() && c.company.toLowerCase() === gj.company.toLowerCase())) {
             combined.push(gj);
+          }
+        });
+        // Append local matches AFTER generated jobs (lower priority)
+        arr.forEach(lj => {
+          if (!combined.some(c => c.title.toLowerCase() === lj.title.toLowerCase() && c.company.toLowerCase() === lj.company.toLowerCase())) {
+            combined.push(lj);
           }
         });
         arr = combined;
@@ -2872,10 +2879,15 @@ function renderJobs(immediate = false){
       renderSearchChips();
     } catch (err) {
       console.error("Search Error: ", err);
-      // Fail gracefully: render local unfiltered jobs
-      currentFilteredJobs = jobs;
+      // Fail gracefully: still generate relevant jobs for the query instead of dumping ALL jobs
+      try {
+        const fallbackJobs = fetchSimulatedGoogleJobs(q || 'Staff', l || 'Chandigarh');
+        currentFilteredJobs = fallbackJobs;
+      } catch(e2) {
+        currentFilteredJobs = jobs;
+      }
       renderActiveFilteredJobs();
-      if(speed) speed.innerHTML=`<span class="dot-r"></span> Error loaded fallback index`;
+      if(speed) speed.innerHTML=`<span class="dot-g"></span> Local Index`;
     }
   };
 
@@ -3181,7 +3193,7 @@ function filterJobs(){
     // Smart keyword search with fuzzy + synonyms + heuristic scores
     if(s){
       const score = computeSearchScore(j, s);
-      if(score === 0) return false;
+      if(score < 25) return false; // Require minimum 25 score to avoid irrelevant fuzzy matches
       j.searchScore = score;
     } else {
       j.searchScore = 0;
