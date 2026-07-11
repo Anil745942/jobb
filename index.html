@@ -2623,10 +2623,9 @@ window.addEventListener('scroll', () => {
 });
 
 function loadMoreInfiniteJobs() {
-  if (currentLimit >= currentFilteredJobs.length && !currentFilteredJobs[0]?.isGoogleResult) {
-    // If we've run out of local database listings and it's not a google search query,
-    // we can dynamically fetch new generated jobs for their selected location or keywords
-    const q = (document.getElementById('js')?.value||'').trim() || 'Staff';
+  if (currentLimit >= currentFilteredJobs.length) {
+    // If we've run out of matching listings, dynamically fetch new generated jobs for the SAME active keyword and location
+    const q = (document.getElementById('js')?.value||'').trim();
     const l = (document.getElementById('jl')?.value||'').trim() || 'Chandigarh';
     isInfiniteLoading = true;
     
@@ -2635,11 +2634,12 @@ function loadMoreInfiniteJobs() {
     const loadSpinner = document.createElement('div');
     loadSpinner.id = 'inf-spinner';
     loadSpinner.className = 'card p4 flex jc ic';
-    loadSpinner.innerHTML = `<span class="dot" style="margin-right:8px;background:#7c3aed;"></span> <span class="xs muted">Loading more hyperlocal matching jobs...</span>`;
+    loadSpinner.innerHTML = `<span class="dot" style="margin-right:8px;background:#7c3aed;"></span> <span class="xs muted">Loading more matching jobs...</span>`;
     el.appendChild(loadSpinner);
 
     setTimeout(() => {
-      const extraJobs = fetchSimulatedGoogleJobs(q, l);
+      // Generate query-specific matching jobs
+      const extraJobs = fetchSimulatedGoogleJobs(q || 'Staff', l);
       currentFilteredJobs = [...currentFilteredJobs, ...extraJobs];
       
       const spinner = document.getElementById('inf-spinner');
@@ -3000,7 +3000,9 @@ function fetchSimulatedGoogleJobs(query, location) {
       title = templates[Math.floor(randomSeed * templates.length)];
       
       // Determine logical category from query keywords
-      if (cleanQ.includes('milk') || cleanQ.includes('dairy') || cleanQ.includes('delivery') || cleanQ.includes('boy')) {
+      if (cleanQ.includes('react') || cleanQ.includes('software') || cleanQ.includes('developer') || cleanQ.includes('coder') || cleanQ.includes('program') || cleanQ.includes('it') || cleanQ.includes('web')) {
+        cat = 'Software Engineering';
+      } else if (cleanQ.includes('milk') || cleanQ.includes('dairy') || cleanQ.includes('delivery') || cleanQ.includes('boy')) {
         cat = 'Delivery & Logistics';
       } else if (cleanQ.includes('cook') || cleanQ.includes('kitchen') || cleanQ.includes('hotel') || cleanQ.includes('helper')) {
         cat = 'Cook & Kitchen';
@@ -3015,11 +3017,16 @@ function fetchSimulatedGoogleJobs(query, location) {
       } else if (cleanQ.includes('construction') || cleanQ.includes('mason') || cleanQ.includes('labour')) {
         cat = 'Construction & Labour';
       } else {
-        cat = 'Delivery & Logistics'; // Default safe category
+        cat = 'Software Engineering'; // If it matched isTech but fell through, or default to tech/delivery smartly
       }
       
-      skills = [...localSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
-      sal = Math.floor(Math.random() * 8000) + 15000;
+      if (cat === 'Software Engineering') {
+        skills = [...techSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
+        sal = Math.floor(Math.random() * 30000) + 40000;
+      } else {
+        skills = [...localSkills].sort(() => 0.5 - Math.random()).slice(0, 3);
+        sal = Math.floor(Math.random() * 8000) + 15000;
+      }
     }
 
     const company = companies[Math.floor(Math.random() * companies.length)];
