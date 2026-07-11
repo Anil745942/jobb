@@ -3645,7 +3645,7 @@ function clrFilters(){
   currentSort='relevance';
   document.querySelectorAll('.ss-sort button').forEach((b,i)=>b.classList.toggle('act',i===0));
   document.querySelectorAll('#cat-pills .qcat').forEach((b,i)=>b.classList.toggle('act',i===0));
-  renderJobs();
+  renderJobs(true);
   closeFilterDrawer();
 }
 
