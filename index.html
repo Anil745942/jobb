@@ -1020,7 +1020,7 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
     <div style="font-size:11px;font-weight:700;color:var(--t);">Download Naukri Dhundho App</div>
     <div style="font-size:10px;color:var(--m);">Install official APK for 10x faster job matching & direct HR call</div>
   </div>
-  <a href="Naukri Dhundho 1.0.zip" download="Naukri Dhundho 1.0.zip" style="background:linear-gradient(135deg,#7c3aed,#6366f1);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;text-align:center;">Download App</a>
+  <a href="Naukri Dhundho.apk" download="Naukri Dhundho.apk" style="background:linear-gradient(135deg,#7c3aed,#6366f1);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;text-align:center;">Download APK</a>
   <button data-action="dismissInstallBanner" style="background:none;border:none;color:var(--m);cursor:pointer;font-size:16px;padding:4px;">✕</button>
 </div>
 
@@ -1798,7 +1798,7 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
         <a href="#" style="width:32px;height:32px;border-radius:10px;background:rgba(244,63,94,.12);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:transform .2s;" title="YouTube">▶️</a>
       </div>
     </div>
-    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Job Seekers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" data-action="showTab" data-tab="jobs" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">Browse All Jobs</a><a href="#" data-action="showTab" data-tab="dashboard" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">My Dashboard</a><a href="#" data-action="toggleAIChat" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">AI Career Advisor</a><a href="Naukri Dhundho 1.0.zip" download="Naukri Dhundho 1.0.zip" style="font-size:12px;color:#a78bfa;text-decoration:none;font-weight:bold;transition:color .2s;">📲 Download Android App</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Resume Builder</a></div></div>
+    <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Job Seekers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" data-action="showTab" data-tab="jobs" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">Browse All Jobs</a><a href="#" data-action="showTab" data-tab="dashboard" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">My Dashboard</a><a href="#" data-action="toggleAIChat" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">AI Career Advisor</a><a href="Naukri Dhundho.apk" download="Naukri Dhundho.apk" style="font-size:12px;color:#a78bfa;text-decoration:none;font-weight:bold;transition:color .2s;">📲 Download Android App</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Resume Builder</a></div></div>
     <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">For Employers</div><div style="display:flex;flex-direction:column;gap:8px;"><a href="#" data-action="showTab" data-tab="employer" style="font-size:12px;color:var(--m);text-decoration:none;transition:color .2s;">Post a Job</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Pricing Plans</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">Bulk Hiring</a><a href="#" style="font-size:12px;color:var(--m);text-decoration:none;">HR Dashboard</a></div></div>
     <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--m);margin-bottom:12px;">Support & Legal</div><div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--m);"><span>📞 +91 98765 00001</span><span>📧 support@naukridhundho.in</span><a href="#" data-action="showTab" data-tab="about" style="font-size:12px;color:var(--m);text-decoration:none;">About Us</a><a href="#" data-action="showTab" data-tab="contact" style="font-size:12px;color:var(--m);text-decoration:none;">Contact Us</a><a href="#" data-action="showTab" data-tab="privacy" style="font-size:12px;color:var(--m);text-decoration:none;">Privacy Policy</a><a href="#" data-action="showTab" data-tab="terms" style="font-size:12px;color:var(--m);text-decoration:none;">Terms & Conditions</a><a href="#" data-action="showTab" data-tab="disclaimer" style="font-size:12px;color:var(--m);text-decoration:none;">Disclaimer</a></div></div>
   </div>
@@ -2207,6 +2207,11 @@ let jobs = [
   {id:'j110',title:'Home Caretaker & Female Nurse assistant',company:'Arogya Home Healthcare',location:'Mohali Phase 5',area:'Mohali',cat:'Healthcare & Nursing',type:'Full-time',exp:'No Experience',sal:23000,desc:'Assisting elderly female patients with food, medicine reminders. Friendly and neat-clean work approach required.',hr:'Dr. R. K. Mittal',ph:'+91 89000 99110',skills:['Compassion','Elderly Care','Hygiene'],urgent:true,match:95}
 ];
 
+function installApp() {
+  // Fallback direct download
+  window.location.href = 'Naukri Dhundho.apk';
+}
+
 let applications = [{id:'a1',jobId:'j17',jt:'React JS Developer',co:'Software Unicorns',cover:'2 saal ka React exp hai',status:'SHORTLISTED',date:'2026-06-12'}];
 let saved = [];
 let users = [
@@ -2233,7 +2238,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 function installApp() {
   // Fallback direct download
-  window.location.href = 'Naukri Dhundho 1.0.zip';
+  window.location.href = 'Naukri Dhundho.apk';
 }
 
 // ══════ FILTER DRAWER (Mobile) ══════
