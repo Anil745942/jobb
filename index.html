@@ -1828,10 +1828,11 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
   <div class="mbox" style="max-width:400px; padding:24px;">
     <button data-action="closeM" data-modal="m-login" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--m);cursor:pointer;font-size:20px;">✕</button>
     
-    <!-- Modal Toggle Tabs -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:20px;margin-top:10px;">
-      <button id="auth-tab-login" onclick="toggleAuthMode('login')" style="background:var(--b);border:none;color:#fff;border-radius:8px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;">Login</button>
-      <button id="auth-tab-signup" onclick="toggleAuthMode('signup')" style="background:none;border:none;color:var(--m);border-radius:8px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;">Sign Up</button>
+    <!-- Auth Options Tabs -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:20px;margin-top:10px;gap:2px;">
+      <button id="auth-tab-login" onclick="toggleAuthMode('login')" style="background:var(--b);border:none;color:#fff;border-radius:8px;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Login</button>
+      <button id="auth-tab-otp" onclick="toggleAuthMode('otp')" style="background:none;border:none;color:var(--m);border-radius:8px;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">OTP Login</button>
+      <button id="auth-tab-signup" onclick="toggleAuthMode('signup')" style="background:none;border:none;color:var(--m);border-radius:8px;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">Sign Up</button>
     </div>
 
     <!-- Login Form -->
@@ -1846,7 +1847,26 @@ footer{background:rgba(0,0,0,.5);border-top:1px solid var(--b);padding:36px 24px
       </div>
       <button class="btn w100" type="submit" style="padding:12px;">Sign In →</button>
       <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--m);">
-        Accout nahi hai? <a href="#" onclick="toggleAuthMode('signup');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Sign Up karein</a>
+        Account nahi hai? <a href="#" onclick="toggleAuthMode('signup');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Sign Up karein</a>
+      </div>
+    </form>
+
+    <!-- OTP Login Form -->
+    <form id="auth-form-otp" onsubmit="handleOtpSubmit(event)" style="display:none;">
+      <div style="margin-bottom:14px;" id="otp-phone-container">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Mobile / WhatsApp Number</label>
+        <div style="display:flex;gap:8px;">
+          <input type="tel" id="otp-phone" placeholder="+91 98765 43210" style="flex:1;">
+          <button type="button" class="btn" onclick="sendOtpCode()" style="font-size:11px;padding:8px 12px;white-space:nowrap;">Send OTP 📲</button>
+        </div>
+      </div>
+      <div style="margin-bottom:18px;display:none;" id="otp-code-container">
+        <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:700;color:var(--m);">Enter 4-Digit OTP Code</label>
+        <input type="text" id="otp-code" placeholder="1234" maxlength="4" style="width:100%;letter-spacing:8px;text-align:center;font-weight:bold;font-size:16px;">
+      </div>
+      <button class="btn w100" type="submit" id="otp-submit-btn" disabled style="padding:12px;opacity:0.4;">Verify & Sign In ⚡</button>
+      <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--m);">
+        Standard login chahiye? <a href="#" onclick="toggleAuthMode('login');return false;" style="color:#7c3aed;font-weight:700;text-decoration:none;">Password se login karein</a>
       </div>
     </form>
 
@@ -3885,24 +3905,90 @@ function saveUsersDB(db) {
 function toggleAuthMode(mode) {
   const loginForm = document.getElementById('auth-form-login');
   const signupForm = document.getElementById('auth-form-signup');
+  const otpForm = document.getElementById('auth-form-otp');
   const loginTab = document.getElementById('auth-tab-login');
   const signupTab = document.getElementById('auth-tab-signup');
+  const otpTab = document.getElementById('auth-tab-otp');
+
+  // Reset tab active styles
+  [loginTab, signupTab, otpTab].forEach(t => {
+    if(t) {
+      t.style.background = 'none';
+      t.style.color = 'var(--m)';
+    }
+  });
 
   if (mode === 'login') {
-    loginForm.style.display = 'block';
-    signupForm.style.display = 'none';
-    loginTab.style.background = 'var(--b)';
-    loginTab.style.color = '#fff';
-    signupTab.style.background = 'none';
-    signupTab.style.color = 'var(--m)';
-  } else {
-    loginForm.style.display = 'none';
-    signupForm.style.display = 'block';
-    signupTab.style.background = 'var(--b)';
-    signupTab.style.color = '#fff';
-    loginTab.style.background = 'none';
-    loginTab.style.color = 'var(--m)';
+    if(loginForm) loginForm.style.display = 'block';
+    if(signupForm) signupForm.style.display = 'none';
+    if(otpForm) otpForm.style.display = 'none';
+    if(loginTab) {
+      loginTab.style.background = 'var(--b)';
+      loginTab.style.color = '#fff';
+    }
+  } else if (mode === 'signup') {
+    if(loginForm) loginForm.style.display = 'none';
+    if(signupForm) signupForm.style.display = 'block';
+    if(otpForm) otpForm.style.display = 'none';
+    if(signupTab) {
+      signupTab.style.background = 'var(--b)';
+      signupTab.style.color = '#fff';
+    }
+  } else if (mode === 'otp') {
+    if(loginForm) loginForm.style.display = 'none';
+    if(signupForm) signupForm.style.display = 'none';
+    if(otpForm) otpForm.style.display = 'block';
+    if(otpTab) {
+      otpTab.style.background = 'var(--b)';
+      otpTab.style.color = '#fff';
+    }
   }
+}
+
+function sendOtpCode() {
+  const phone = document.getElementById('otp-phone').value.trim();
+  if(!phone || phone.length < 10) {
+    showToast('⚠️ Please enter a valid 10-digit mobile number!', '#f59e0b');
+    return;
+  }
+  showToast('📩 OTP Code: 4321 sent to ' + phone + ' via SMS/WhatsApp!', '#7c3aed');
+  
+  // Show code container
+  const codeCont = document.getElementById('otp-code-container');
+  const submitBtn = document.getElementById('otp-submit-btn');
+  if(codeCont) codeCont.style.display = 'block';
+  if(submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+  }
+}
+
+function handleOtpSubmit(e) {
+  e.preventDefault();
+  const code = document.getElementById('otp-code').value.trim();
+  const phone = document.getElementById('otp-phone').value.trim();
+  
+  if(code !== '4321') {
+    showToast('❌ Galat OTP Code enter kiya hai bhai!', '#f43f5e');
+    return;
+  }
+  
+  // Mock login user matching phone or create temp user
+  const db = getUsersDB();
+  let user = db.find(u => u.ph === phone || u.email.includes('alex')); // Fallback mock matches
+  if(!user) {
+    user = { name: 'User_' + phone.substring(phone.length - 4), role: 'CANDIDATE' };
+  }
+  
+  login(user.name, user.role);
+  showToast('🎉 OTP verified successfully! Account logged in.', '#10b981');
+  
+  // Reset form state
+  document.getElementById('otp-code-container').style.display = 'none';
+  document.getElementById('otp-submit-btn').disabled = true;
+  document.getElementById('otp-submit-btn').style.opacity = '0.4';
+  document.getElementById('otp-phone').value = '';
+  document.getElementById('otp-code').value = '';
 }
 
 function handleContactSubmit(e) {
