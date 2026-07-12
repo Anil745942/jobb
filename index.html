@@ -2227,14 +2227,11 @@ let deferredPrompt = null;
 
 // ══════ APK / PWA INSTALL ══════
 window.addEventListener('DOMContentLoaded', () => {
-  // Show APK download banner after 4 seconds for mobile web users
-  setTimeout(() => {
-    const banner = document.getElementById('install-banner');
-    const isDismissed = localStorage.getItem('apk_banner_dismissed');
-    if (banner && !isDismissed) {
-      banner.classList.add('show');
-    }
-  }, 4000);
+  // Show APK download banner instantly for every user on every visit/device
+  const banner = document.getElementById('install-banner');
+  if (banner) {
+    banner.classList.add('show');
+  }
 });
 function installApp() {
   // Fallback direct download
